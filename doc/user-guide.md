@@ -1,5 +1,15 @@
-# PixRAW
+# PixRAW User Guide
 
+## Table of Contents
+- [PixRAW User Guide](#pixraw-user-guide)
+    - [Table of Contents](#table-of-contents)
+    - [About PixRAW](#about-pixraw)
+    - [What is Photo Culling?](#what-is-photo-culling)
+    - [Important PixRAW Concepts](#important-pixraw-concepts)
+    - [PixRAW Workflow](#pixraw-workflow)
+    - [Keyboard Shortcuts](#keyboard-shortcuts)
+
+## About PixRAW
 PixRAW is a simple and easy to use RAW photo viewer and culling software application that is open source, specifically for the Linux platform and aimed at hobbyist and enthusiast photographers.
 
 The primary goal of PixRAW is to be very simple and easy to use by providing a very intuitive and user-friendly user interface that provides an excellent user experience right out of the box.
@@ -13,6 +23,7 @@ Photo culling software falls into two major categories: AI-powered platforms, wh
 
 ## Important PixRAW Concepts
 
+### View Mode
 PixRAW offers two view modes to help you work efficiently:
 * **Grid View:** Displays all the photos in the folder in a grid layout.
 * **Full Screen View:** Displays only one photo at a time for close inspection.
@@ -37,7 +48,7 @@ The basic workflow in PixRAW is as follows:
 3. **Export your keepers:** Copy the selected photos to a destination folder of your choice.
 
 ### 1. Open a Folder
-When you launch PixRAW you are greeted with the home screen. It contains a single button that allows you to open a folder. Click on it and you are greeted with a standard Linux file / folder picker dialog box. Select the folder that contains your RAW photos.
+When you launch PixRAW you are greeted with the home screen. It contains a single button that allows you to open a folder. Click on it, and you are greeted with a standard Linux file / folder picker dialog box. Select the folder that contains your RAW photos.
 
 <img src="images/pixraw-start-screen.png" alt="PixRAW Home Screen" width="600">
 
@@ -85,4 +96,4 @@ PixRAW makes navigating and selecting photos very easy and fast using some keybo
 
 * Enter key: toggles between grid view and full screen.
 * Left and Right Arrow keys: Change the currently highlighted photo in gridview and navigate between photos in full screen view.
-* Spacebar key: Select or deselect a "keeper" photo.
+* Space-bar key: Select or deselect a "keeper" photo.

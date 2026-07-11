@@ -2,7 +2,26 @@
 
 PixRAW is a simple and easy to use RAW photo viewer and culling desktop application that is open source, specifically for the Linux platform and aimed at hobbyist and enthusiast photographers.
 
-## The Philosophy
+## Table of Contents
+- [PixRAW](#pixraw)
+    - [Table of Contents](#table-of-contents)
+    - [About The Project](#about-the-project)
+    - [Usage](#usage)
+    - [Roadmap](#roadmap)
+    - [Contributing](#contributing)
+    - [License](#license)
+    - [Acknowledgments](#acknowledgments)
+    - [Limitation of Liability](#limitation-of-liability)
+
+## About The Project
+
+### Key Features
+
+*   **Zero-Config Workflow:** No databases, no catalog importing, and no metadata syncing. Simply open a folder on your drive or SD card and start culling immediately.
+*   **Broad Camera Support:** Built-in compatibility with RAW files from a wide variety of camera manufacturers.
+*   **Clean and Modern UI:** A beautiful, minimal layout designed to keep your focus entirely on the image.
+
+### The Philosophy
 
 The primary goal of PixRAW is to be very simple and easy to use by providing a very intuitive and user-friendly user interface that provides an excellent user experience right out of the box.
 
@@ -10,11 +29,15 @@ While existing Linux photography tools are incredibly powerful, they often suffe
 
 Photo culling software generally falls into two categories: automated AI platforms and traditional speed-viewers. **PixRAW is a manual speed-viewer.** It renders RAW files instantly so you can make your own creative selections without lag, clutter, or setup time.
 
-## Key Features
+### Built With
 
-*   **Zero-Config Workflow:** No databases, no catalog importing, and no metadata syncing. Simply open a folder on your drive or SD card and start culling immediately.
-*   **Broad Camera Support:** Built-in compatibility with RAW files from a wide variety of camera manufacturers.
-*   **Modern, Clean UI:** A beautiful, minimal layout designed to keep your focus entirely on the image.
+* Build on Fedora Linux 44
+* Flutter 3.44.5
+* LibRaw 0.22.1
+
+## Usage
+
+See the [User Guide](doc/user-guide.md) for detailed usage information.
 
 ### Installation
 
@@ -32,9 +55,6 @@ cd pixraw-1.0.0
 ```
 ./pixraw
 ```
-
-## Usage
-See the [User Guide](doc/user-guide.md) for detailed information.
 
 ## Roadmap
 
