@@ -8,17 +8,21 @@ import 'package:pixraw/raw_photo.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'about_dialog.dart';
+import 'copy_dialog.dart';
 import 'lazy_thumbnail_card.dart';
 
 class MoveLeftIntent extends Intent {
   const MoveLeftIntent();
 }
+
 class MoveRightIntent extends Intent {
   const MoveRightIntent();
 }
+
 class ToggleViewIntent extends Intent {
   const ToggleViewIntent();
 }
+
 class ToggleSelectedIntent extends Intent {
   const ToggleSelectedIntent();
 }
@@ -83,12 +87,14 @@ class _MainWindowState extends State<MainWindow> {
     WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToSelected());
   }
 
-void _toggleSelectedPhoto() {
-  setState(() {
-    final current = rawPhotoPaths[currentSelection];
-    rawPhotoPaths[currentSelection] = current.copyWith(selected: !current.selected);
-  });
-}
+  void _toggleSelectedPhoto() {
+    setState(() {
+      final current = rawPhotoPaths[currentSelection];
+      rawPhotoPaths[currentSelection] = current.copyWith(
+        selected: !current.selected,
+      );
+    });
+  }
 
   Future<void> selectFolder() async {
     String? selectedDirectory = await FilePicker.getDirectoryPath();
@@ -128,13 +134,15 @@ void _toggleSelectedPhoto() {
           if (directory != null)
             IconButton(
               icon: const Icon(Icons.file_copy_rounded),
-              onPressed: () {},
+              onPressed: rawPhotoPaths.where((p) => p.selected).isEmpty ? null : () {
+                _showCopyDialog(context);
+              },
             ),
 
           IconButton(
             icon: const Icon(Icons.help),
-            onPressed: ()=> _dialogBuilder(context),
-          )
+            onPressed: () => _showAboutDialog(context),
+          ),
         ],
       ),
       // 1. Wrap the changing area in an AnimatedSwitcher
@@ -160,37 +168,50 @@ void _toggleSelectedPhoto() {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   IconButton(
-                    icon: gridView ? const Icon(Icons.grid_view_rounded) : const Icon(Icons.grid_view),
+                    icon: gridView
+                        ? const Icon(Icons.grid_view_rounded)
+                        : const Icon(Icons.grid_view),
                     tooltip: 'Grid View',
                     iconSize: 15,
                     color: gridView
                         ? Theme.of(context).colorScheme.primary
                         : Theme.of(context).colorScheme.secondary,
-                    onPressed: directory==null ? null : () {
-                      setState(() {
-                        gridView = true;
-                      });
-                    },
+                    onPressed: directory == null
+                        ? null
+                        : () {
+                            setState(() {
+                              gridView = true;
+                            });
+                          },
                   ),
                   IconButton(
-                    icon: gridView ? const Icon(Icons.image_outlined) : const Icon(Icons.image_rounded),
+                    icon: gridView
+                        ? const Icon(Icons.image_outlined)
+                        : const Icon(Icons.image_rounded),
                     tooltip: 'Single Photo View',
                     iconSize: 15,
                     color: gridView
                         ? Theme.of(context).colorScheme.secondary
                         : Theme.of(context).colorScheme.primary,
-                    onPressed: directory==null ? null : () {
-                      setState(() {
-                        gridView = false;
-                      });
-                    },
+                    onPressed: directory == null
+                        ? null
+                        : () {
+                            setState(() {
+                              gridView = false;
+                            });
+                          },
                   ),
                   SizedBox(width: 10),
-                  rawPhotoPaths.isEmpty
-                      ? Text('0 photos.')
-                      : Text(
-                          '${currentSelection + 1} of ${rawPhotoPaths.length} photos.',
-                        ),
+                  Expanded(
+                    child: rawPhotoPaths.isEmpty
+                        ? Text('0 photos.')
+                        : Text(
+                            '${currentSelection + 1} of ${rawPhotoPaths.length} photos.',
+                          ),
+                  ),
+                  Text(
+                    '${rawPhotoPaths.where((p) => p.selected).length} photos selected',
+                  ),
                 ],
               ),
             ),
@@ -200,11 +221,21 @@ void _toggleSelectedPhoto() {
     );
   }
 
-  Future<void> _dialogBuilder(BuildContext context) {
+  Future<void> _showAboutDialog(BuildContext context) {
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
         return PRAboutDialog();
+      },
+    );
+  }
+
+  Future<void> _showCopyDialog(BuildContext context) {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return CopyDialog(selectedPhotos: rawPhotoPaths.where((p) => p.selected).toList(),);
       },
     );
   }
@@ -254,7 +285,10 @@ void _toggleSelectedPhoto() {
           onInvoke: (_) => _toggleSelectedPhoto(),
         ),
       },
-      child: gridView ? _buildPhotoGrid() : _buildSinglePhotoView(),
+      child: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 200),
+        child: gridView ? _buildPhotoGrid() : _buildSinglePhotoView(),
+      ),
     );
   }
 
@@ -262,7 +296,7 @@ void _toggleSelectedPhoto() {
     return Center(
       child: PRawImage(
         rawPhoto: rawPhotoPaths[currentSelection],
-        cacheWidth: null,
+        cacheWidth: MediaQuery.of(context).size.width.toInt(),
         onChanged: (bool? value) {
           _toggleSelectedPhoto();
         },
@@ -302,7 +336,7 @@ void _toggleSelectedPhoto() {
               rawPhoto: rawPhotoPaths[index],
               highlighted: index == currentSelection,
               onChanged: (bool? value) {
-                if(currentSelection != index) {
+                if (currentSelection != index) {
                   setState(() {
                     currentSelection = index;
                   });

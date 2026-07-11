@@ -1,23 +1,20 @@
 # PixRAW
 
-## About PixRAW
-
 PixRAW is a simple and easy to use RAW photo viewer and culling software application that is open source, specifically for the Linux platform and aimed at hobbyist and enthusiast photographers.
 
-The primary goal of PixRAW is to be very simple and easy to use by providing a very intuitive and user friendly user interface that provides an excellent user experience right out of the box. Simplicity is the ultimate sophistication after all.
+The primary goal of PixRAW is to be very simple and easy to use by providing a very intuitive and user-friendly user interface that provides an excellent user experience right out of the box.
 
-Hobbyists don't shoot 4,000 photos a weekend like wedding pros do, so they don't need hyper-complex batch automation. However, they *do* care about their time and want a delightful creative experience.
+## The Philosophy
 
-While the existing Linux tools are incredibly powerful, they suffer from a classic open-source problem: **feature bloat and a steep learning curve.** The target audience for PixRAW - hobbyists and enthusiasts - is heavily underserved on Linux right now.
+While existing Linux photography tools are incredibly powerful, they often suffer from **feature bloat and a steep learning curve**. Hobbyists rarely shoot 4,000 photos a weekend like wedding professionals do, meaning they don't need complex batch automation or bloated catalogs.
 
-Photo culling is the process of sorting through a collection of photos to keep the best ones and remove duplicates, blurry shots, or unwanted images. It helps save time, reduce clutter, and leaves you with a polished selection of your strongest photos.
+Photo culling software generally falls into two categories: automated AI platforms and traditional speed-viewers. **PixRAW is a manual speed-viewer.** It renders RAW files instantly so you can make your own creative selections without lag, clutter, or setup time.
 
-Photo culling software falls into two major categories: **AI-powered platforms**, which automate the detection of blurry images, duplicates, and closed eyes; and **traditional/manual speed-viewers**, which render raw files instantly so you can make your own selections without lag. PixRAW falls into this last category.
+## Key Features
 
-### Features
-- Support for RAW files from a wide variety of cameras.
-- A "Zero-Config" Workflow: No importing, no databases, no catalogs. A user can just open the app, point it at a folder on their SD card or hard drive, and start viewing images instantly.
-- Modern, Clean UI: A beautiful, distraction-free interface without clutter.
+*   **Zero-Config Workflow:** No databases, no catalog importing, and no metadata syncing. Simply open a folder on your drive or SD card and start culling immediately.
+*   **Broad Camera Support:** Built-in compatibility with RAW files from a wide variety of camera manufacturers.
+*   **Modern, Clean UI:** A beautiful, minimal layout designed to keep your focus entirely on the image.
 
 ### Installation
 
@@ -50,19 +47,12 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ## Acknowledgments
 
-We would like to thank the authors of the LibRaw package which provided the ability for this application to read RAW files. 
+PixRAW is made possible thanks to the incredible work of the open-source photography community:
 
-The LibRaw package is copyright (C) 2008-2026 LibRaw LLC
-
-LibRaw uses code from Dave Coffin?s dcraw.c utility (without RESTRICTED/GPL2 code):
-
-Copyright 1997-2018 by Dave Coffin, dcoffin a cybercom o net
-LibRaw uses DCB demosaic code by Jaceck Gozdz distributed under BSD license:
-
-Copyright (C) 2010, Jacek Gozdz (cuniek@kft.umcs.lublin.pl)
-LibRaw uses Roland Karlsson?s X3F tools source code, licensed under BSD license:
-
-Copyright (c) 2010, Roland Karlsson (roland@proxel.se)
+*   **LibRaw:** Provides the robust engine for reading RAW files. Copyright © 2008-2026 LibRaw LLC.
+*   **dcraw.c:** LibRaw utilizes core code from Dave Coffin's `dcraw.c` utility (without RESTRICTED/GPL2 code). Copyright © 1997-2018 Dave Coffin.
+*   **DCB Demosaic:** LibRaw utilizes DCB demosaic code by Jacek Gozdz. Distributed under the BSD license. Copyright © 2010 Jacek Gozdz.
+*   **X3F Tools:** LibRaw utilizes Roland Karlsson's X3F tools source code. Distributed under the BSD license. Copyright © 2010 Roland Karlsson.
 
 ## Limitation of Liability
 

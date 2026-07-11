@@ -68,6 +68,7 @@ class RawPhotoLoader {
       );
       final dartBytes = Uint8List.fromList(nativeBytes);
       flutterLibRawBindings.libraw_close(ptr);
+
       return RawPhotoResult(bytes: dartBytes, hasError: false);
     } catch (err) {
       print(err);

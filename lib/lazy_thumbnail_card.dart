@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_libraw/flutter_libraw.dart';
@@ -25,6 +27,11 @@ class LazyThumbnailCard extends StatefulWidget {
 }
 
 class _LazyThumbnailCardState extends State<LazyThumbnailCard> {
+  final paleYellow = Color.from(
+    alpha: 1.0, red: 255, green: 251, blue: 242,
+
+  );
+
   bool highlighted = false;
 
   @override
@@ -42,13 +49,15 @@ class _LazyThumbnailCardState extends State<LazyThumbnailCard> {
         highlighted = widget.highlighted;
       });
     }
+
+
   }
 
   @override
   Widget build(BuildContext context) {
     return Card(
       clipBehavior: Clip.antiAlias,
-      color: highlighted ? Colors.blueAccent : null,
+      color: highlighted ? Colors.blueAccent : (widget.rawPhoto.selected ? Colors.black45 : null),
       child: InkWell(
         onTap: widget.onTap,
         onDoubleTap: widget.onDoubleTap,
