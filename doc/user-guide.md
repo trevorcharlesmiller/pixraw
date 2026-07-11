@@ -76,7 +76,9 @@ Click on the folder icon button in the copy dialog to select the destination fol
 
 Once the copy completes, click on the Close button to dismiss the dialog.
 
-> **Warning:** Currently PixRAW will overwrite a file with the same name that already exists in the destination folder.
+> **Tip:** If a file with the same name already exists in the destination folder, PixRAW will prompt you to either overwrite it or skip it.
+
+> **Tip:** You can cancel copying files at any time during the copy process by clicking on the Cancel button. If files are actively being copied, PixRAW will wait for the current file to finish copying before halting the process and no further files will be copied.
 
 ## Keyboard Shortcuts
 PixRAW makes navigating and selecting photos very easy and fast using some keyboard shortcuts:
