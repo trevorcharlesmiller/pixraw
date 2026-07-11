@@ -49,13 +49,13 @@ You can select which photo is the currently highlighted photo with a single clic
 You can toggle between grid view and full screen view by double-clicking on any photo at any time. 
 In full screen view, you can use the left and right arrow keys to navigate between photos.
 
-<img src="images/pixraw-full-screen.png" alt="PixRAW Full Screen Layout" width="600">
+<img src="images/pixraw-full-screen-view.png" alt="PixRAW Full Screen Layout" width="600">
 
 ### 3. Copy Selected Photos
 Once you have made your selections you are ready to copy them over to the folder of your choice.
 
 Click on the copy button (only enabled when you have a photo selected).
-<img src="images/pixraw-fcopy-button.png" alt="PixRAW Copy Button" >
+<img src="images/pixraw-copy-button.png" alt="PixRAW Copy Button" >
 
 This will bring up the copy dialog. 
 
