@@ -140,7 +140,7 @@ class _CopyDialogState extends State<CopyDialog> {
       }
 
       progressNotifier.value = (i + 1) / totalFiles;
-      await Future.delayed(const Duration(milliseconds: 300));
+      await Future.delayed(const Duration(milliseconds: 10));
     }
   }
 }

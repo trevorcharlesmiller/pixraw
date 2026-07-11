@@ -1,10 +1,10 @@
 # PixRAW
 
-PixRAW is a simple and easy to use RAW photo viewer and culling software application that is open source, specifically for the Linux platform and aimed at hobbyist and enthusiast photographers.
-
-The primary goal of PixRAW is to be very simple and easy to use by providing a very intuitive and user-friendly user interface that provides an excellent user experience right out of the box.
+PixRAW is a simple and easy to use RAW photo viewer and culling desktop application that is open source, specifically for the Linux platform and aimed at hobbyist and enthusiast photographers.
 
 ## The Philosophy
+
+The primary goal of PixRAW is to be very simple and easy to use by providing a very intuitive and user-friendly user interface that provides an excellent user experience right out of the box.
 
 While existing Linux photography tools are incredibly powerful, they often suffer from **feature bloat and a steep learning curve**. Hobbyists rarely shoot 4,000 photos a weekend like wedding professionals do, meaning they don't need complex batch automation or bloated catalogs.
 
@@ -18,6 +18,20 @@ Photo culling software generally falls into two categories: automated AI platfor
 
 ### Installation
 
+1. Unpack the distribution archive you downloaded to the directory of your choice
+```
+tar -xzf pixraw-1.0.0.tar.gz
+```
+
+2. CD into the newly created pixraw-1.0.0 directory
+```
+cd pixraw-1.0.0
+```
+
+3. Run the binary program
+```
+./pixraw
+```
 
 ## Usage
 See the [User Guide](doc/user-guide.md) for detailed information.
