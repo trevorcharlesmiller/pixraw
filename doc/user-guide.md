@@ -26,7 +26,7 @@ To toggle between these views you can use the toggle view buttons located in the
 ### Selected vs. Current Photo
 PixRAW makes an important distinction between these two states:
 * **Selected Photos:** These are the "keepers" you have chosen to copy or export. These will have checkbox that is checked.
-* **Current Photo:** This is the current photo you are aon. In **Grid View**, it is highlighted in blue; in **Full Screen View**, it is the photo currently displayed on the screen.
+* **Current Photo:** This is the current photo you are on. In **Grid View**, it is highlighted in blue; in **Full Screen View**, it is the photo currently displayed on the screen.
 
 ## PixRAW Workflow
 
@@ -43,14 +43,14 @@ When you launch PixRAW you are greeted with the home screen. It contains a singl
 
 If you would like to choose a different folder you can use the Open Folder icon button located at the top left of the application window.
 
-<img src="images/pixraw-open-folder-button.png" alt="PixRAW Open Folder Button" width="600">
+<img src="images/pixraw-open-folder-button.png" alt="PixRAW Open Folder Button">
 
 ### 2. Cull Photos
 Once you have opened a folder, all the RAW photos in that folder will be displayed in the grid view in PixRAW.
 
 <img src="images/pixraw-gridview.png" alt="PixRAW Grid View Layout" width="600">
 
-You can toggle photos by clicking on the little checkbox in the bottom left corner of each photo. 
+You can select and deselect photos by clicking on the little checkbox in the bottom left corner of each photo. 
 You can select which photo is the currently highlighted photo with a single click on any photo in grid view.
 
 > **Tip:** You can quickly move the highlight to a different photo using the left and right arrow keys on the keyboard.
