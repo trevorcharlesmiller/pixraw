@@ -7,11 +7,21 @@ import 'package:pixraw/raw_image.dart';
 import 'package:pixraw/raw_photo.dart';
 import 'package:window_manager/window_manager.dart';
 
+import 'about_dialog.dart';
 import 'lazy_thumbnail_card.dart';
 
-class MoveLeftIntent extends Intent { const MoveLeftIntent(); }
-class MoveRightIntent extends Intent { const MoveRightIntent(); }
-class ToggleViewIntent extends Intent { const ToggleViewIntent(); }
+class MoveLeftIntent extends Intent {
+  const MoveLeftIntent();
+}
+class MoveRightIntent extends Intent {
+  const MoveRightIntent();
+}
+class ToggleViewIntent extends Intent {
+  const ToggleViewIntent();
+}
+class ToggleSelectedIntent extends Intent {
+  const ToggleSelectedIntent();
+}
 
 class MainWindow extends StatefulWidget {
   const MainWindow({super.key});
@@ -39,11 +49,12 @@ class _MainWindowState extends State<MainWindow> {
   List<RawPhoto> rawPhotoPaths = [];
   int currentSelection = 0;
   bool gridView = true;
+  int _currentCrossAxisCount = 6;
   final ScrollController _gridScrollController = ScrollController();
 
   @override
   void dispose() {
-    _gridScrollController.dispose(); // Always dispose your controllers
+    _gridScrollController.dispose();
     super.dispose();
   }
 
@@ -51,8 +62,8 @@ class _MainWindowState extends State<MainWindow> {
     if (currentSelection > 0) {
       setState(() {
         currentSelection--;
-        _scrollToSelected();
       });
+      WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToSelected());
     }
   }
 
@@ -60,14 +71,27 @@ class _MainWindowState extends State<MainWindow> {
     if (currentSelection < rawPhotoPaths.length - 1) {
       setState(() {
         currentSelection++;
-        _scrollToSelected();
       });
+      WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToSelected());
     }
   }
 
+  void _toggleGridView() {
+    setState(() {
+      gridView = !gridView;
+    });
+    WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToSelected());
+  }
+
+void _toggleSelectedPhoto() {
+  setState(() {
+    final current = rawPhotoPaths[currentSelection];
+    rawPhotoPaths[currentSelection] = current.copyWith(selected: !current.selected);
+  });
+}
+
   Future<void> selectFolder() async {
-    String? selectedDirectory =
-        await FilePicker.getDirectoryPath(); // Note: updated to the standard FilePicker syntax
+    String? selectedDirectory = await FilePicker.getDirectoryPath();
 
     if (selectedDirectory != null) {
       final selectedDir = Directory(selectedDirectory);
@@ -101,12 +125,16 @@ class _MainWindowState extends State<MainWindow> {
         ),
         title: Text(directory?.absolute.path ?? appName),
         actions: [
-          // Only show the app bar folder button if a path is already loaded
           if (directory != null)
             IconButton(
               icon: const Icon(Icons.file_copy_rounded),
-              onPressed: (){},
+              onPressed: () {},
             ),
+
+          IconButton(
+            icon: const Icon(Icons.help),
+            onPressed: ()=> _dialogBuilder(context),
+          )
         ],
       ),
       // 1. Wrap the changing area in an AnimatedSwitcher
@@ -115,23 +143,69 @@ class _MainWindowState extends State<MainWindow> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(child: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 100), // How long the fade takes
-              switchInCurve: Curves.easeIn, // Smooth acceleration
-              switchOutCurve: Curves.easeOut, // Smooth deceleration
-              // 2. Pass your conditional layout as the child
-              child: directory == null
-                  ? _buildEmptyState() // Shown when app opens
-                  : _buildMainView(), // Shown once directory is picked
-            ),),
+            Expanded(
+              child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 100),
+                switchInCurve: Curves.easeIn,
+                switchOutCurve: Curves.easeOut,
+                child: directory == null
+                    ? _buildEmptyState() // Shown when app opens
+                    : _buildMainView(), // Shown once directory is selected
+              ),
+            ),
             SizedBox(
-              height: 30,
-              child: rawPhotoPaths.isEmpty ? Text('0 photos.') :
-                Text('${currentSelection+1} of ${rawPhotoPaths.length} photos.'),
+              height: 35,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  IconButton(
+                    icon: gridView ? const Icon(Icons.grid_view_rounded) : const Icon(Icons.grid_view),
+                    tooltip: 'Grid View',
+                    iconSize: 15,
+                    color: gridView
+                        ? Theme.of(context).colorScheme.primary
+                        : Theme.of(context).colorScheme.secondary,
+                    onPressed: directory==null ? null : () {
+                      setState(() {
+                        gridView = true;
+                      });
+                    },
+                  ),
+                  IconButton(
+                    icon: gridView ? const Icon(Icons.image_outlined) : const Icon(Icons.image_rounded),
+                    tooltip: 'Single Photo View',
+                    iconSize: 15,
+                    color: gridView
+                        ? Theme.of(context).colorScheme.secondary
+                        : Theme.of(context).colorScheme.primary,
+                    onPressed: directory==null ? null : () {
+                      setState(() {
+                        gridView = false;
+                      });
+                    },
+                  ),
+                  SizedBox(width: 10),
+                  rawPhotoPaths.isEmpty
+                      ? Text('0 photos.')
+                      : Text(
+                          '${currentSelection + 1} of ${rawPhotoPaths.length} photos.',
+                        ),
+                ],
+              ),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  Future<void> _dialogBuilder(BuildContext context) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return PRAboutDialog();
+      },
     );
   }
 
@@ -145,66 +219,106 @@ class _MainWindowState extends State<MainWindow> {
           style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
         ),
         style: ElevatedButton.styleFrom(
-          // Pads the button out so it feels substantial in the empty center space
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-          // Uses the primary blue color you configured in your MaterialApp
           backgroundColor: Theme.of(context).colorScheme.primary,
           foregroundColor: Theme.of(context).colorScheme.onPrimary,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(
-              12,
-            ), // Sleek, modern rounded corners
+            borderRadius: BorderRadius.circular(12),
           ),
         ),
       ),
     );
   }
 
-Widget _buildMainView() {
-    //return gridView ? _buildPhotoGrid() : _buildSinglePhotoView();
-  return FocusableActionDetector(
-    autofocus: true, // Grabs focus initially so arrows work right away
-    shortcuts: const <ShortcutActivator, Intent>{
-      // Map Arrow Left to our MoveLeftIntent
-      SingleActivator(LogicalKeyboardKey.arrowLeft): MoveLeftIntent(),
-      // Map Arrow Right to our MoveRightIntent
-      SingleActivator(LogicalKeyboardKey.arrowRight): MoveRightIntent(),
-      SingleActivator(LogicalKeyboardKey.enter): ToggleViewIntent(),
-    },
-    actions: <Type, Action<Intent>>{
-      // Define what happens when the intents are triggered
-      MoveLeftIntent: CallbackAction<MoveLeftIntent>(onInvoke: (_) => _selectPrevious()),
-      MoveRightIntent: CallbackAction<MoveRightIntent>(onInvoke: (_) => _selectNext()),
-      ToggleViewIntent: CallbackAction<ToggleViewIntent>(
-        onInvoke: (_) => setState(() {
-          gridView = !gridView;
-        }),
-      ),
-    },
-    child:  gridView ? _buildPhotoGrid() : _buildSinglePhotoView(),
-  );
-}
+  Widget _buildMainView() {
+    return FocusableActionDetector(
+      autofocus: true, // Grabs focus initially so arrows work right away
+      shortcuts: const <ShortcutActivator, Intent>{
+        SingleActivator(LogicalKeyboardKey.arrowLeft): MoveLeftIntent(),
+        SingleActivator(LogicalKeyboardKey.arrowRight): MoveRightIntent(),
+        SingleActivator(LogicalKeyboardKey.enter): ToggleViewIntent(),
+        SingleActivator(LogicalKeyboardKey.space): ToggleSelectedIntent(),
+      },
+      actions: <Type, Action<Intent>>{
+        // Define what happens when the intents are triggered
+        MoveLeftIntent: CallbackAction<MoveLeftIntent>(
+          onInvoke: (_) => _selectPrevious(),
+        ),
+        MoveRightIntent: CallbackAction<MoveRightIntent>(
+          onInvoke: (_) => _selectNext(),
+        ),
+        ToggleViewIntent: CallbackAction<ToggleViewIntent>(
+          onInvoke: (_) => _toggleGridView(),
+        ),
+        ToggleSelectedIntent: CallbackAction<ToggleSelectedIntent>(
+          onInvoke: (_) => _toggleSelectedPhoto(),
+        ),
+      },
+      child: gridView ? _buildPhotoGrid() : _buildSinglePhotoView(),
+    );
+  }
 
-Widget _buildSinglePhotoView() {
-  return Center(child: PRawImage(rawPhoto: rawPhotoPaths[currentSelection],));
-}
+  Widget _buildSinglePhotoView() {
+    return Center(
+      child: PRawImage(
+        rawPhoto: rawPhotoPaths[currentSelection],
+        cacheWidth: null,
+        onChanged: (bool? value) {
+          _toggleSelectedPhoto();
+        },
+        onDoubleTap: () {
+          _toggleGridView();
+        },
+      ),
+    );
+  }
 
   // Your optimized lazy-loading photo grid
   Widget _buildPhotoGrid() {
-    return GridView.builder(
-      key: const ValueKey('photo_grid'),
-      controller: _gridScrollController,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 6,
-        crossAxisSpacing: 8,
-        mainAxisSpacing: 8,
-      ),
-      itemCount: rawPhotoPaths.length,
-      itemBuilder: (context, index) {
-        // GridView.builder lazily instantiates this widget ONLY when visible
-        return LazyThumbnailCard(
-          rawPhoto: rawPhotoPaths[index],
-          highlighted: index==currentSelection,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final int crossAxisCount = (constraints.maxWidth / 250).floor().clamp(
+          1,
+          999,
+        );
+        if (_currentCrossAxisCount != crossAxisCount) {
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            _currentCrossAxisCount = crossAxisCount;
+          });
+        }
+
+        return GridView.builder(
+          key: const ValueKey('photo_grid'),
+          controller: _gridScrollController,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: crossAxisCount,
+            crossAxisSpacing: 8,
+            mainAxisSpacing: 8,
+          ),
+          itemCount: rawPhotoPaths.length,
+          itemBuilder: (context, index) {
+            // GridView.builder lazily instantiates this widget ONLY when visible
+            return LazyThumbnailCard(
+              rawPhoto: rawPhotoPaths[index],
+              highlighted: index == currentSelection,
+              onChanged: (bool? value) {
+                if(currentSelection != index) {
+                  setState(() {
+                    currentSelection = index;
+                  });
+                }
+                _toggleSelectedPhoto();
+              },
+              onTap: () {
+                setState(() {
+                  currentSelection = index;
+                });
+              },
+              onDoubleTap: () {
+                _toggleGridView();
+              },
+            );
+          },
         );
       },
     );
@@ -220,12 +334,13 @@ Widget _buildSinglePhotoView() {
     final currentScrollOffset = position.pixels;
 
     // 2. Math to calculate card dimensions dynamically
-    const int crossAxisCount = 6;
+    int crossAxisCount = _currentCrossAxisCount;
     const double spacing = 8.0;
 
     // Calculate width of one item based on total grid width
     final double gridWidth = position.context.storageContext.size!.width;
-    final double itemWidth = (gridWidth - (spacing * (crossAxisCount - 1))) / crossAxisCount;
+    final double itemWidth =
+        (gridWidth - (spacing * (crossAxisCount - 1))) / crossAxisCount;
 
     // By default, a square delegate makes height equal to width
     final double itemHeight = itemWidth;

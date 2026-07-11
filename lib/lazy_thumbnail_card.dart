@@ -7,15 +7,24 @@ import 'package:pixraw/raw_photo.dart';
 class LazyThumbnailCard extends StatefulWidget {
   final RawPhoto rawPhoto;
   final bool highlighted;
+  final ValueChanged<bool?>? onChanged;
+  final VoidCallback onTap;
+  final VoidCallback onDoubleTap;
 
-  const LazyThumbnailCard({super.key, required this.rawPhoto, required this.highlighted});
+  const LazyThumbnailCard({
+    super.key,
+    required this.rawPhoto,
+    required this.highlighted,
+    required this.onChanged,
+    required this.onTap,
+    required this.onDoubleTap,
+  });
 
   @override
   State<LazyThumbnailCard> createState() => _LazyThumbnailCardState();
 }
 
 class _LazyThumbnailCardState extends State<LazyThumbnailCard> {
-
   bool highlighted = false;
 
   @override
@@ -35,10 +44,21 @@ class _LazyThumbnailCardState extends State<LazyThumbnailCard> {
     }
   }
 
+  @override
   Widget build(BuildContext context) {
     return Card(
+      clipBehavior: Clip.antiAlias,
       color: highlighted ? Colors.blueAccent : null,
-      child: PRawImage(rawPhoto: widget.rawPhoto,),
+      child: InkWell(
+        onTap: widget.onTap,
+        onDoubleTap: widget.onDoubleTap,
+        child: PRawImage(
+          rawPhoto: widget.rawPhoto,
+          cacheWidth: 280,
+          onChanged: widget.onChanged,
+          onDoubleTap: widget.onDoubleTap,
+        ),
+      ),
     );
   }
 }

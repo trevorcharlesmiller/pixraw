@@ -4,8 +4,17 @@ import 'package:pixraw/raw_photo.dart';
 
 class PRawImage extends StatefulWidget {
   final RawPhoto rawPhoto;
+  final int? cacheWidth;
+  final ValueChanged<bool?>? onChanged;
+  final VoidCallback onDoubleTap;
 
-  const PRawImage({super.key, required this.rawPhoto});
+  const PRawImage({
+    super.key,
+    required this.rawPhoto,
+    this.cacheWidth,
+    required this.onChanged,
+    required this.onDoubleTap
+  });
 
   @override
   State<PRawImage> createState() => _PRawImageState();
@@ -30,13 +39,8 @@ class _PRawImageState extends State<PRawImage> {
       setState(() {
         fileName = p.basename(widget.rawPhoto.filePath);
       });
-      oldWidget.rawPhoto.close();
       _loadPRawImage();
     }
-  }
-
-  void _cleanupNativeResources() {
-    widget.rawPhoto.close();
   }
 
   void _loadPRawImage() {
@@ -46,48 +50,64 @@ class _PRawImageState extends State<PRawImage> {
   }
 
   @override
-  void dispose() {
-    _cleanupNativeResources();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsetsGeometry.all(10),
       child: FutureBuilder<RawPhotoResult>(
         key: ValueKey(widget.rawPhoto.filePath),
         future: thumbnail,
-        builder:
-            (BuildContext context, AsyncSnapshot<RawPhotoResult> snapshot) {
-              if (snapshot.hasData) {
-                final renderStopwatch = Stopwatch()..start();
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  renderStopwatch.stop();
-                  print('🖼️ Flutter render completed in ${renderStopwatch.elapsedMilliseconds}ms');
-                });
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
+        builder: (BuildContext context, AsyncSnapshot<RawPhotoResult> snapshot) {
+          if (snapshot.hasData) {
+            final renderStopwatch = Stopwatch()..start();
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              renderStopwatch.stop();
+              //print('🖼️ Flutter render completed in ${renderStopwatch.elapsedMilliseconds}ms');
+            });
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: Center(
+                    child: GestureDetector(
+                      onDoubleTap: widget.onDoubleTap,
                       child: Image.memory(
                         snapshot.data!.bytes!,
-                        cacheWidth: 500,
+                        cacheWidth: widget.cacheWidth,
                         fit: BoxFit.contain,
                       ),
                     ),
-                    SizedBox(height: 10),
-                    Text(fileName, style: TextStyle(fontSize: 12)),
+                  ),
+                ),
+                SizedBox(height: 10),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(fileName, style: TextStyle(fontSize: 12)),
+                    ),
+                    SizedBox(width: 10),
+                    Checkbox(
+                      value: widget.rawPhoto.selected,
+                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+
+                      // 2. Adjusts the compact density to maximum negative values to remove padding
+                      visualDensity: const VisualDensity(
+                        horizontal: VisualDensity.minimumDensity,
+                        vertical: VisualDensity.minimumDensity,
+                      ),
+                      onChanged: widget.onChanged,
+                    ),
                   ],
-                );
-              } else if (snapshot.hasError) {
-                return const Center(
-                  child: Icon(Icons.broken_image, color: Colors.red),
-                );
-              } else {
-                return Center(child: CircularProgressIndicator.adaptive());
-              }
-            },
+                ),
+              ],
+            );
+          } else if (snapshot.hasError) {
+            return const Center(
+              child: Icon(Icons.broken_image, color: Colors.red),
+            );
+          } else {
+            return Center(child: CircularProgressIndicator.adaptive());
+          }
+        },
       ),
     );
   }
