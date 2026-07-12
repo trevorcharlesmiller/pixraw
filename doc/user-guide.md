@@ -61,10 +61,10 @@ Once you have opened a folder, all the RAW photos in that folder will be display
 
 <img src="images/pixraw-gridview.png" alt="PixRAW Grid View Layout" width="600">
 
-You can select and deselect photos by clicking on the little checkbox in the bottom left corner of each photo. 
+You can select and deselect photos by clicking on the little checkbox in the bottom right corner of each photo. 
 You can select which photo is the currently highlighted photo with a single click on any photo in grid view.
 
-> **Tip:** You can quickly move the highlight to a different photo using the left and right arrow keys on the keyboard.
+> **Tip:** You can quickly move the highlight to a different photo using the left and right arrow keys on the keyboard. You can use the space-bar key to select or de-select a photo.
 
 You can toggle between grid view and full screen view by double-clicking on any photo at any time within either of the views. In full screen view, you can use the left and right arrow keys to navigate between photos.
 
@@ -73,7 +73,7 @@ You can toggle between grid view and full screen view by double-clicking on any 
 ### 3. Copy Selected Photos
 Once you have made your selections you are ready to copy them over to the folder of your choice.
 
-Click on the copy button (only enabled when you have a photo selected).
+Click on the copy button in the top right of the application window. (only enabled when you have a photo selected).
 
 <img src="images/pixraw-copy-button.png" alt="PixRAW Copy Button" >
 

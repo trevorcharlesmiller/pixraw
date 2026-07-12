@@ -1,8 +1,4 @@
-import 'dart:ui';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_libraw/flutter_libraw.dart';
 import 'package:pixraw/raw_image.dart';
 import 'package:pixraw/raw_photo.dart';
 
@@ -55,9 +51,10 @@ class _LazyThumbnailCardState extends State<LazyThumbnailCard> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return Card(
       clipBehavior: Clip.antiAlias,
-      color: highlighted ? Colors.blueAccent : (widget.rawPhoto.selected ? Colors.black45 : null),
+      color: highlighted ? Colors.blueAccent : (widget.rawPhoto.selected ? colorScheme.primaryContainer : null),
       child: InkWell(
         onTap: widget.onTap,
         onDoubleTap: widget.onDoubleTap,

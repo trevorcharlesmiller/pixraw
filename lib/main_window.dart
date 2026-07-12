@@ -9,23 +9,8 @@ import 'package:window_manager/window_manager.dart';
 
 import 'about_dialog.dart';
 import 'copy_dialog.dart';
+import 'intents.dart';
 import 'lazy_thumbnail_card.dart';
-
-class MoveLeftIntent extends Intent {
-  const MoveLeftIntent();
-}
-
-class MoveRightIntent extends Intent {
-  const MoveRightIntent();
-}
-
-class ToggleViewIntent extends Intent {
-  const ToggleViewIntent();
-}
-
-class ToggleSelectedIntent extends Intent {
-  const ToggleSelectedIntent();
-}
 
 class MainWindow extends StatefulWidget {
   const MainWindow({super.key});
@@ -81,19 +66,23 @@ class _MainWindowState extends State<MainWindow> {
   }
 
   void _toggleGridView() {
-    setState(() {
-      gridView = !gridView;
-    });
-    WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToSelected());
+    if(rawPhotoPaths.isNotEmpty) {
+      setState(() {
+        gridView = !gridView;
+      });
+      WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToSelected());
+    }
   }
 
   void _toggleSelectedPhoto() {
-    setState(() {
-      final current = rawPhotoPaths[currentSelection];
-      rawPhotoPaths[currentSelection] = current.copyWith(
-        selected: !current.selected,
-      );
-    });
+    if(rawPhotoPaths.isNotEmpty) {
+      setState(() {
+        final current = rawPhotoPaths[currentSelection];
+        rawPhotoPaths[currentSelection] = current.copyWith(
+          selected: !current.selected,
+        );
+      });
+    }
   }
 
   Future<void> selectFolder() async {
@@ -113,10 +102,11 @@ class _MainWindowState extends State<MainWindow> {
           .toList();
 
       setState(() {
+        currentSelection = 0;
         directory = selectedDir;
         rawPhotoPaths = paths;
       });
-
+      WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToSelected());
       await windowManager.setTitle("$appName - $selectedDirectory");
     }
   }
@@ -126,13 +116,19 @@ class _MainWindowState extends State<MainWindow> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
+          tooltip: 'Open folder',
           icon: const Icon(Icons.folder_rounded),
           onPressed: selectFolder,
         ),
-        title: Text(directory?.absolute.path ?? appName),
+        title: Text(
+            directory?.absolute.path ?? appName,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
         actions: [
           if (directory != null)
             IconButton(
+              tooltip: 'Copy selected photos',
               icon: const Icon(Icons.file_copy_rounded),
               onPressed: rawPhotoPaths.where((p) => p.selected).isEmpty ? null : () {
                 _showCopyDialog(context);
@@ -141,6 +137,7 @@ class _MainWindowState extends State<MainWindow> {
 
           IconButton(
             icon: const Icon(Icons.help),
+            tooltip: 'About PixRAW',
             onPressed: () => _showAboutDialog(context),
           ),
         ],
@@ -176,13 +173,9 @@ class _MainWindowState extends State<MainWindow> {
                     color: gridView
                         ? Theme.of(context).colorScheme.primary
                         : Theme.of(context).colorScheme.secondary,
-                    onPressed: directory == null
+                    onPressed: directory == null || rawPhotoPaths.isEmpty
                         ? null
-                        : () {
-                            setState(() {
-                              gridView = true;
-                            });
-                          },
+                        : _toggleGridView,
                   ),
                   IconButton(
                     icon: gridView
@@ -193,24 +186,51 @@ class _MainWindowState extends State<MainWindow> {
                     color: gridView
                         ? Theme.of(context).colorScheme.secondary
                         : Theme.of(context).colorScheme.primary,
-                    onPressed: directory == null
+                    onPressed: directory == null || rawPhotoPaths.isEmpty
                         ? null
-                        : () {
-                            setState(() {
-                              gridView = false;
-                            });
-                          },
+                        : _toggleGridView,
                   ),
                   SizedBox(width: 10),
                   Expanded(
                     child: rawPhotoPaths.isEmpty
-                        ? Text('0 photos.')
+                        ? Text('0 photos')
                         : Text(
-                            '${currentSelection + 1} of ${rawPhotoPaths.length} photos.',
+                            '${currentSelection + 1} of ${rawPhotoPaths.length} photos',
                           ),
                   ),
                   Text(
                     '${rawPhotoPaths.where((p) => p.selected).length} photos selected',
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.library_add_check_rounded),
+                    tooltip: 'Select all photos',
+                    iconSize: 15,
+                    onPressed: rawPhotoPaths.isEmpty
+                        ||  (rawPhotoPaths.where((p) => p.selected).length == rawPhotoPaths.length) ? null : (){
+                      setState(() {
+                        for(int i = 0; i < rawPhotoPaths.length; i++) {
+                          final current = rawPhotoPaths[i];
+                          rawPhotoPaths[i] = current.copyWith(
+                            selected: true,
+                          );
+                        }
+                      });
+                    }
+                  ),
+                  IconButton(
+                      icon: const Icon(Icons.deselect),
+                      tooltip: 'Clear selected photos',
+                      iconSize: 15,
+                      onPressed: rawPhotoPaths.where((p) => p.selected).isEmpty ? null : (){
+                        setState(() {
+                          for(int i = 0; i < rawPhotoPaths.length; i++) {
+                            final current = rawPhotoPaths[i];
+                            rawPhotoPaths[i] = current.copyWith(
+                              selected: false,
+                            );
+                          }
+                        });
+                      }
                   ),
                 ],
               ),
@@ -349,6 +369,9 @@ class _MainWindowState extends State<MainWindow> {
                 });
               },
               onDoubleTap: () {
+                setState(() {
+                  currentSelection = index;
+                });
                 _toggleGridView();
               },
             );

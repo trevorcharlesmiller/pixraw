@@ -82,7 +82,12 @@ class _PRawImageState extends State<PRawImage> {
                 Row(
                   children: [
                     Expanded(
-                      child: Text(fileName, style: TextStyle(fontSize: 12)),
+                      child: Text(
+                          fileName,
+                          style: TextStyle(fontSize: 12),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
                     SizedBox(width: 10),
                     Checkbox(
