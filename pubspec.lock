@@ -115,7 +115,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "821279f482ba572732aad6ff33ad403f9f81b40b"
+      resolved-ref: "2295134430a7d2c39c7d12b490c96afb7e2d3faa"
       url: "https://github.com/trevorcharlesmiller/flutter-libraw.git"
     source: git
     version: "0.0.2"

@@ -6,7 +6,10 @@ PixRAW is a simple and easy to use RAW photo viewer and culling desktop applicat
 - [PixRAW](#pixraw)
     - [Table of Contents](#table-of-contents)
     - [About The Project](#about-the-project)
+    - [Getting Started](#getting-started)
     - [Usage](#usage)
+    - [Troubleshooting](#troubleshooting)
+    - [FAQ](#faq)
     - [Roadmap](#roadmap)
     - [Contributing](#contributing)
     - [License](#license)
@@ -31,13 +34,25 @@ Photo culling software generally falls into two categories: automated AI platfor
 
 ### Built With
 
-* Build on Fedora Linux 44
+* Built on Fedora Linux 44
 * Flutter 3.44.5
 * LibRaw 0.22.1
 
-## Usage
+## Getting Started
 
-See the [User Guide](doc/user-guide.md) for detailed usage information.
+### Prerequisites
+
+LibRaw requires LibJPEG to be installed on your system. This can easily be installed through your package manager.
+
+#### Fedora / RHEL / CentOS
+```
+sudo dnf install libjpeg-turbo
+```
+
+#### Ubuntu / Debian / Mint
+```
+sudo apt-get install libjpeg62
+```
 
 ### Installation
 
@@ -55,6 +70,33 @@ cd pixraw-1.0.0
 ```
 ./pixraw
 ```
+
+## Usage
+
+See the [User Guide](doc/user-guide.md) for detailed usage information.
+
+## Troubleshooting
+
+If you get the following error message it means that LibRaw is unable to locate LibJPEG, and it likely is not on the library path:
+```
+libjpeg.so.62: cannot open shared object file: No such file or directory
+```
+
+1. Ensure that you have LibJPEG installed see - [Prerequisites](#prerequisites)
+2. You may need to include /usr/lib64 in your library path. The quickest and easiest way is to launch PixRAW with the following command:
+```
+LD_LIBRARY_PATH=/usr/lib64:$LD_LIBRARY_PATH ./pixraw
+```
+
+## FAQ
+
+### Are there RPM or DEB packages available for PixRAW?
+
+Not at this stage, although we are keen to do this so it is on our roadmap.
+
+### Is PixRAW available as a Snap package or Flatpak?
+
+Not yet but we are actively working on this as a high priority.
 
 ## Roadmap
 

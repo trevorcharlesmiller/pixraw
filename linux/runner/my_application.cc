@@ -1,5 +1,7 @@
 #include "my_application.h"
 #include <filesystem>
+#include <iostream>
+#include <string>
 using namespace std;
 using namespace std::filesystem;
 
@@ -29,10 +31,17 @@ static void my_application_activate(GApplication* application) {
       GTK_WINDOW(gtk_application_window_new(GTK_APPLICATION(application)));
 
   // --- ADD THIS ICON LOGIC ---
-  const string iconFilename = "assets/icon.png";
-  path execDir = canonical(read_symlink("/proc/self/exe")).parent_path();
-  path iconPath = execDir / "data/flutter_assets" / iconFilename;
-  gtk_window_set_icon_from_file(GTK_WINDOW(window), iconPath.c_str(), NULL);
+  if (g_file_test("assets/icon.png", G_FILE_TEST_EXISTS)) {
+    gtk_window_set_icon_from_file(GTK_WINDOW(window), "assets/icon.png", NULL);
+  }
+  else {
+    path execDir = canonical(read_symlink("/proc/self/exe")).parent_path();
+    path iconPath = execDir / "data/flutter_assets/assets/icon.png";
+    if (exists(iconPath)) {
+      gtk_window_set_icon_from_file(GTK_WINDOW(window), iconPath.c_str(), NULL);
+    }
+
+  }
   // ---------------------------
 
   // Use a header bar when running in GNOME as this is the common style used

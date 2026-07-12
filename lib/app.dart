@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:pixraw/libraw_error.dart';
 import 'package:pixraw/main_window.dart';
 
 class PixRawApp extends StatelessWidget {
-  const PixRawApp({super.key});
+  final String? libRawLoadError;
+  const PixRawApp({super.key, required this.libRawLoadError});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +25,7 @@ class PixRawApp extends StatelessWidget {
         ),
       ),
       themeMode: ThemeMode.system,
-      home: MainWindow(),
+      home: libRawLoadError==null ? MainWindow() : LibRawError(errorMessage: libRawLoadError!,),
     );
   }
 }
