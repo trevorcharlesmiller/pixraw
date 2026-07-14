@@ -2,19 +2,30 @@
 
 PixRAW is a simple and easy to use RAW photo viewer and culling desktop application that is open source, specifically for the Linux platform and aimed at hobbyist and enthusiast photographers.
 
+<img src="doc/images/pixraw-highlighted.png" alt="PixRAW Grid View Layout" width="600">
+
 ## Table of Contents
 - [PixRAW](#pixraw)
-    - [Table of Contents](#table-of-contents)
-    - [About The Project](#about-the-project)
-    - [Getting Started](#getting-started)
-    - [Usage](#usage)
-    - [Troubleshooting](#troubleshooting)
-    - [FAQ](#faq)
-    - [Roadmap](#roadmap)
-    - [Contributing](#contributing)
-    - [License](#license)
-    - [Acknowledgments](#acknowledgments)
-    - [Limitation of Liability](#limitation-of-liability)
+  - [Table of Contents](#table-of-contents)
+  - [About The Project](#about-the-project)
+    - [Key Features](#key-features)
+    - [The Philosophy](#the-philosophy)
+    - [Built With](#built-with)
+  - [Getting Started](#getting-started)
+    - [Prerequisites](#prerequisites)
+      - [Fedora / RHEL / CentOS](#fedora--rhel--centos)
+      - [Ubuntu / Debian / Mint](#ubuntu--debian--mint)
+    - [Installation](#installation)
+  - [Usage](#usage)
+  - [Troubleshooting](#troubleshooting)
+  - [FAQ](#faq)
+    - [Are there RPM or DEB packages available for PixRAW?](#are-there-rpm-or-deb-packages-available-for-pixraw)
+    - [Is PixRAW available as a Snap package or Flatpak?](#is-pixraw-available-as-a-snap-package-or-flatpak)
+  - [Roadmap](#roadmap)
+  - [Contributing](#contributing)
+  - [License](#license)
+  - [Acknowledgments](#acknowledgments)
+  - [Limitation of Liability](#limitation-of-liability)
 
 ## About The Project
 
