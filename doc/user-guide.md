@@ -2,12 +2,17 @@
 
 ## Table of Contents
 - [PixRAW User Guide](#pixraw-user-guide)
-    - [Table of Contents](#table-of-contents)
-    - [About PixRAW](#about-pixraw)
-    - [What is Photo Culling?](#what-is-photo-culling)
-    - [Important PixRAW Concepts](#important-pixraw-concepts)
-    - [PixRAW Workflow](#pixraw-workflow)
-    - [Keyboard Shortcuts](#keyboard-shortcuts)
+  - [Table of Contents](#table-of-contents)
+  - [About PixRAW](#about-pixraw)
+  - [What is Photo Culling?](#what-is-photo-culling)
+  - [Important PixRAW Concepts](#important-pixraw-concepts)
+    - [View Mode](#view-mode)
+    - [Selected vs. Current Photo](#selected-vs-current-photo)
+  - [PixRAW Workflow](#pixraw-workflow)
+    - [1. Open a Folder](#1-open-a-folder)
+    - [2. Cull Photos](#2-cull-photos)
+    - [3. Copy Selected Photos](#3-copy-selected-photos)
+  - [Keyboard Shortcuts](#keyboard-shortcuts)
 
 ## About PixRAW
 PixRAW is a simple and easy to use RAW photo viewer and culling desktop application that is open source, specifically for the Linux platform and aimed at hobbyist and enthusiast photographers.
@@ -36,8 +41,8 @@ To toggle between these views you can use the toggle view buttons located in the
 
 ### Selected vs. Current Photo
 PixRAW makes an important distinction between these two states:
-* **Selected Photos:** These are the "keepers" you have chosen to copy or export. These will have checkbox that is checked.
-* **Current Photo:** This is the current photo you are on. In **Grid View**, it is highlighted in blue; in **Full Screen View**, it is the photo currently displayed on the screen.
+* **Selected Photos:** These are the "keepers" you have chosen to copy or export. These will have checkbox that is checked and be highlighted in a pale blue.
+* **Current Photo:** This is the current photo you are on. In **Grid View**, it is highlighted in bright blue; in **Full Screen View**, it is the photo currently displayed on the screen.
 
 ## PixRAW Workflow
 
@@ -64,9 +69,11 @@ Once you have opened a folder, all the RAW photos in that folder will be display
 You can select and deselect photos by clicking on the little checkbox in the bottom right corner of each photo. 
 You can select which photo is the currently highlighted photo with a single click on any photo in grid view.
 
-> **Tip:** You can quickly move the highlight to a different photo using the left and right arrow keys on the keyboard. You can use the space-bar key to select or de-select a photo.
+> **Tip:** You can quickly move the highlight to a different photo using the left and right arrow keys on the keyboard. 
+> **Tip:** You can use the space-bar key to select or de-select a photo.
 
 You can toggle between grid view and full screen view by double-clicking on any photo at any time within either of the views. In full screen view, you can use the left and right arrow keys to navigate between photos.
+
 
 <img src="images/pixraw-full-screen-view.png" alt="PixRAW Full Screen Layout" width="600">
 

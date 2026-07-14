@@ -16,6 +16,7 @@ dependencies:
     git:
       url: https://github.com/trevorcharlesmiller/flutter-libraw.git
   path: ^1.9.1
+  url_launcher: ^6.3.2
 
 dev_dependencies:
   flutter_test:

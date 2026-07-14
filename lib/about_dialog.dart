@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PRAboutDialog extends StatelessWidget {
   const PRAboutDialog({super.key});
 
+  Future<void> _launchUrl(Uri url) async {
+    if (!await launchUrl(url)) {
+
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final Uri _url = Uri.parse('https://pixraw.app');
     return AlertDialog(
       title: const Text('About PixRAW'),
       content: Column(
@@ -28,7 +36,11 @@ class PRAboutDialog extends StatelessWidget {
           ),
           SizedBox(height: 20,),
           Text('PixRAW is open source software distributed under the MIT License.'),
-          SizedBox(height: 20,),
+          SizedBox(height: 15,),
+          TextButton(onPressed: () async {
+            await _launchUrl(_url);
+          }, child: Text('https://pixraw.app', style: TextStyle(color: Colors.blue),),),
+          SizedBox(height: 15,),
           Text('Keyboard Shortcuts', style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),),
           SizedBox(height: 7,),
           Row(
