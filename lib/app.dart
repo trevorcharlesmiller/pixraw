@@ -13,12 +13,14 @@ class PixRawApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
+        fontFamily: 'Nunito',
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.blue, // Change this to your preferred color
           brightness: Brightness.light, // Or Brightness.dark for dark mode
         ),
       ),
       darkTheme: ThemeData(
+        fontFamily: 'Nunito',
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.blue,
           brightness: Brightness.dark,
