@@ -21,7 +21,7 @@ class PRAboutDialog extends StatelessWidget {
         children: [
           Row(
             children: [
-              Image.asset('assets/icon.png', height: 100,),
+              Image.asset('assets/icon-128.png', height: 100,),
               SizedBox(width: 15,),
               Expanded(child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
