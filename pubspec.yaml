@@ -26,4 +26,10 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - assets/icon.png
+    - assets/icon-128.png
+  fonts:
+    - family: Nunito # This is the name you will use in your code
+      fonts:
+        - asset: assets/fonts/Nunito-Regular.ttf
+        - asset: assets/fonts/Nunito-Bold.ttf
+          weight: 700
