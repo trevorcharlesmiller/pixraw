@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:pixraw/raw_photo.dart';
+import 'package:pixraw/model/raw_photo.dart';
 
 class CopyDialog extends StatefulWidget {
   final List<RawPhoto> selectedPhotos;

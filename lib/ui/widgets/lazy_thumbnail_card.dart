@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:pixraw/raw_image.dart';
-import 'package:pixraw/raw_photo.dart';
+import 'package:pixraw/ui/widgets/raw_image.dart';
+import 'package:pixraw/model/raw_photo.dart';
 
 class LazyThumbnailCard extends StatefulWidget {
   final RawPhoto rawPhoto;
