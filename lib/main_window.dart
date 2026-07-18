@@ -1,8 +1,10 @@
 import 'dart:io';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart' as p;
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:pixraw/state/app_config_notifier.dart';
 import 'package:pixraw/ui/dialog/settings_dialog.dart';
 import 'package:pixraw/ui/widgets/raw_image.dart';
 import 'package:pixraw/model/raw_photo.dart';
@@ -13,14 +15,14 @@ import 'ui/dialog/copy_dialog.dart';
 import 'intents.dart';
 import 'ui/widgets/lazy_thumbnail_card.dart';
 
-class MainWindow extends StatefulWidget {
+class MainWindow extends ConsumerStatefulWidget {
   const MainWindow({super.key});
 
   @override
-  State<MainWindow> createState() => _MainWindowState();
+  ConsumerState<MainWindow> createState() => _MainWindowState();
 }
 
-class _MainWindowState extends State<MainWindow> {
+class _MainWindowState extends ConsumerState<MainWindow> with WindowListener {
   static const appName = 'PixRAW';
   static const rawExtensions = {
     '.cr2',
@@ -43,7 +45,14 @@ class _MainWindowState extends State<MainWindow> {
   final ScrollController _gridScrollController = ScrollController();
 
   @override
+  void initState() {
+    super.initState();
+    windowManager.addListener(this);
+  }
+
+  @override
   void dispose() {
+    windowManager.removeListener(this);
     _gridScrollController.dispose();
     super.dispose();
   }
@@ -435,5 +444,17 @@ class _MainWindowState extends State<MainWindow> {
         curve: Curves.easeInOut,
       );
     }
+  }
+
+  @override
+  void onWindowMaximize() {
+    final notifier = ref.read(appConfigProvider.notifier);
+    notifier.toggleFullScreen(true);
+  }
+
+  @override
+  void onWindowUnmaximize() {
+    final notifier = ref.read(appConfigProvider.notifier);
+    notifier.toggleFullScreen(false);
   }
 }
