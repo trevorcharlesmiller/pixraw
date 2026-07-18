@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:path/path.dart' as p;
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:pixraw/ui/dialog/settings_dialog.dart';
 import 'package:pixraw/ui/widgets/raw_image.dart';
 import 'package:pixraw/model/raw_photo.dart';
 import 'package:window_manager/window_manager.dart';
@@ -136,6 +137,11 @@ class _MainWindowState extends State<MainWindow> {
             ),
 
           IconButton(
+            icon: const Icon(Icons.settings),
+            tooltip: 'App Settings',
+            onPressed: () => _showSettingsDialog(context),
+          ),
+          IconButton(
             icon: const Icon(Icons.help),
             tooltip: 'About PixRAW',
             onPressed: () => _showAboutDialog(context),
@@ -246,6 +252,14 @@ class _MainWindowState extends State<MainWindow> {
       context: context,
       builder: (BuildContext context) {
         return PRAboutDialog();
+      },
+    );
+  }
+  Future<void> _showSettingsDialog(BuildContext context) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return SettingsDialog();
       },
     );
   }
