@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pixraw/state/app_config_notifier.dart';
 import 'package:pixraw/ui/widgets/libraw_error.dart';
 import 'package:pixraw/main_window.dart';
 
-class PixRawApp extends StatelessWidget {
+class PixRawApp extends ConsumerWidget {
   final String? libRawLoadError;
   const PixRawApp({super.key, required this.libRawLoadError});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final config = ref.watch(appConfigProvider);
+
     return MaterialApp(
       title: 'PixRAW',
       debugShowCheckedModeBanner: false,
@@ -26,7 +30,7 @@ class PixRawApp extends StatelessWidget {
           brightness: Brightness.dark,
         ),
       ),
-      themeMode: ThemeMode.system,
+      themeMode: config.themeMode,
       home: libRawLoadError==null ? MainWindow() : LibRawError(errorMessage: libRawLoadError!,),
     );
   }
