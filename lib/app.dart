@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pixraw/libraw_error.dart';
+import 'package:pixraw/ui/widgets/libraw_error.dart';
 import 'package:pixraw/main_window.dart';
 
 class PixRawApp extends StatelessWidget {

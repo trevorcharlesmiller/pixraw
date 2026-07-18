@@ -3,14 +3,14 @@ import 'package:flutter/services.dart';
 import 'package:path/path.dart' as p;
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:pixraw/raw_image.dart';
-import 'package:pixraw/raw_photo.dart';
+import 'package:pixraw/ui/widgets/raw_image.dart';
+import 'package:pixraw/model/raw_photo.dart';
 import 'package:window_manager/window_manager.dart';
 
-import 'about_dialog.dart';
-import 'copy_dialog.dart';
+import 'ui/dialog/about_dialog.dart';
+import 'ui/dialog/copy_dialog.dart';
 import 'intents.dart';
-import 'lazy_thumbnail_card.dart';
+import 'ui/widgets/lazy_thumbnail_card.dart';
 
 class MainWindow extends StatefulWidget {
   const MainWindow({super.key});
