@@ -2,6 +2,8 @@ import 'package:path/path.dart' as p;
 import 'package:flutter/material.dart';
 import 'package:pixraw/model/raw_photo.dart';
 
+import '../../raw/raw_photo_loader.dart';
+
 class PRawImage extends StatefulWidget {
   final RawPhoto rawPhoto;
   final int? cacheWidth;

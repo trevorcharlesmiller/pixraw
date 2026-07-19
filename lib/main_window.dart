@@ -8,11 +8,12 @@ import 'package:pixraw/state/app_config_notifier.dart';
 import 'package:pixraw/ui/dialog/settings_dialog.dart';
 import 'package:pixraw/ui/widgets/raw_image.dart';
 import 'package:pixraw/model/raw_photo.dart';
+import 'package:pixraw/util/raw_utils.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'ui/dialog/about_dialog.dart';
 import 'ui/dialog/copy_dialog.dart';
-import 'intents.dart';
+import 'ui/intents.dart';
 import 'ui/widgets/lazy_thumbnail_card.dart';
 
 class MainWindow extends ConsumerStatefulWidget {
@@ -24,18 +25,6 @@ class MainWindow extends ConsumerStatefulWidget {
 
 class _MainWindowState extends ConsumerState<MainWindow> with WindowListener {
   static const appName = 'PixRAW';
-  static const rawExtensions = {
-    '.cr2',
-    '.cr3',
-    '.nef',
-    '.arw',
-    '.dng',
-    '.orf',
-    '.rw2',
-    '.pef',
-    '.raf',
-    '.gpr',
-  };
 
   Directory? directory;
   List<RawPhoto> rawPhotoPaths = [];

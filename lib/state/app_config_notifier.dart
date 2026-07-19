@@ -41,5 +41,4 @@ class AppConfigNotifier extends Notifier<AppConfig> {
   }
 }
 
-// 4. Expose the config
 final appConfigProvider = NotifierProvider<AppConfigNotifier, AppConfig>(AppConfigNotifier.new);
