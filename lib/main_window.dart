@@ -4,15 +4,18 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart' as p;
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:pixraw/model/raw_photos.dart';
 import 'package:pixraw/state/app_config_notifier.dart';
+import 'package:pixraw/state/raw_photos_notifier.dart';
 import 'package:pixraw/ui/dialog/settings_dialog.dart';
 import 'package:pixraw/ui/widgets/raw_image.dart';
 import 'package:pixraw/model/raw_photo.dart';
+import 'package:pixraw/util/raw_utils.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'ui/dialog/about_dialog.dart';
 import 'ui/dialog/copy_dialog.dart';
-import 'intents.dart';
+import 'ui/intents.dart';
 import 'ui/widgets/lazy_thumbnail_card.dart';
 
 class MainWindow extends ConsumerStatefulWidget {
@@ -24,22 +27,7 @@ class MainWindow extends ConsumerStatefulWidget {
 
 class _MainWindowState extends ConsumerState<MainWindow> with WindowListener {
   static const appName = 'PixRAW';
-  static const rawExtensions = {
-    '.cr2',
-    '.cr3',
-    '.nef',
-    '.arw',
-    '.dng',
-    '.orf',
-    '.rw2',
-    '.pef',
-    '.raf',
-    '.gpr',
-  };
 
-  Directory? directory;
-  List<RawPhoto> rawPhotoPaths = [];
-  int currentSelection = 0;
   bool gridView = true;
   int _currentCrossAxisCount = 6;
   final ScrollController _gridScrollController = ScrollController();
@@ -58,25 +46,19 @@ class _MainWindowState extends ConsumerState<MainWindow> with WindowListener {
   }
 
   void _selectPrevious() {
-    if (currentSelection > 0) {
-      setState(() {
-        currentSelection--;
-      });
+    if (ref.read(rawPhotosProvider.notifier).selectPrevious()) {
       WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToSelected());
     }
   }
 
   void _selectNext() {
-    if (currentSelection < rawPhotoPaths.length - 1) {
-      setState(() {
-        currentSelection++;
-      });
+    if (ref.read(rawPhotosProvider.notifier).selectNext()) {
       WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToSelected());
     }
   }
 
   void _toggleGridView() {
-    if(rawPhotoPaths.isNotEmpty) {
+    if(ref.read(rawPhotosProvider).rawPhotoPaths.isNotEmpty) {
       setState(() {
         gridView = !gridView;
       });
@@ -85,14 +67,7 @@ class _MainWindowState extends ConsumerState<MainWindow> with WindowListener {
   }
 
   void _toggleSelectedPhoto() {
-    if(rawPhotoPaths.isNotEmpty) {
-      setState(() {
-        final current = rawPhotoPaths[currentSelection];
-        rawPhotoPaths[currentSelection] = current.copyWith(
-          selected: !current.selected,
-        );
-      });
-    }
+    ref.read(rawPhotosProvider.notifier).toggleCurrentPhotoSelected();
   }
 
   Future<void> selectFolder() async {
@@ -100,22 +75,7 @@ class _MainWindowState extends ConsumerState<MainWindow> with WindowListener {
 
     if (selectedDirectory != null) {
       final selectedDir = Directory(selectedDirectory);
-
-      List<RawPhoto> paths = await selectedDir
-          .list(recursive: false, followLinks: false)
-          .where((entity) {
-            if (entity is! File) return false;
-            final ext = p.extension(entity.path).toLowerCase();
-            return rawExtensions.contains(ext);
-          })
-          .map((file) => RawPhoto(filePath: file.path))
-          .toList();
-
-      setState(() {
-        currentSelection = 0;
-        directory = selectedDir;
-        rawPhotoPaths = paths;
-      });
+      await ref.read(rawPhotosProvider.notifier).setSelectedDirectory(selectedDir);
       WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToSelected());
       await windowManager.setTitle("$appName - $selectedDirectory");
     }
@@ -123,6 +83,7 @@ class _MainWindowState extends ConsumerState<MainWindow> with WindowListener {
 
   @override
   Widget build(BuildContext context) {
+    RawPhotos rawPhotos = ref.watch(rawPhotosProvider);
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -131,16 +92,16 @@ class _MainWindowState extends ConsumerState<MainWindow> with WindowListener {
           onPressed: selectFolder,
         ),
         title: Text(
-            directory?.absolute.path ?? appName,
+          rawPhotos.directory?.absolute.path ?? appName,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
         ),
         actions: [
-          if (directory != null)
+          if (rawPhotos.directory != null)
             IconButton(
               tooltip: 'Copy selected photos',
               icon: const Icon(Icons.file_copy_rounded),
-              onPressed: rawPhotoPaths.where((p) => p.selected).isEmpty ? null : () {
+              onPressed: rawPhotos.rawPhotoPaths.where((p) => p.selected).isEmpty ? null : () {
                 _showCopyDialog(context);
               },
             ),
@@ -168,7 +129,7 @@ class _MainWindowState extends ConsumerState<MainWindow> with WindowListener {
                 duration: const Duration(milliseconds: 100),
                 switchInCurve: Curves.easeIn,
                 switchOutCurve: Curves.easeOut,
-                child: directory == null
+                child: rawPhotos.directory == null
                     ? _buildEmptyState() // Shown when app opens
                     : _buildMainView(), // Shown once directory is selected
               ),
@@ -188,7 +149,7 @@ class _MainWindowState extends ConsumerState<MainWindow> with WindowListener {
                     color: gridView
                         ? Theme.of(context).colorScheme.primary
                         : Theme.of(context).colorScheme.secondary,
-                    onPressed: directory == null || rawPhotoPaths.isEmpty
+                    onPressed: rawPhotos.directory == null || rawPhotos.rawPhotoPaths.isEmpty
                         ? null
                         : _toggleGridView,
                   ),
@@ -201,50 +162,36 @@ class _MainWindowState extends ConsumerState<MainWindow> with WindowListener {
                     color: gridView
                         ? Theme.of(context).colorScheme.secondary
                         : Theme.of(context).colorScheme.primary,
-                    onPressed: directory == null || rawPhotoPaths.isEmpty
+                    onPressed: rawPhotos.directory == null || rawPhotos.rawPhotoPaths.isEmpty
                         ? null
                         : _toggleGridView,
                   ),
                   SizedBox(width: 10),
                   Expanded(
-                    child: rawPhotoPaths.isEmpty
+                    child: rawPhotos.rawPhotoPaths.isEmpty
                         ? Text('0 photos')
                         : Text(
-                            '${currentSelection + 1} of ${rawPhotoPaths.length} photos',
+                            '${rawPhotos.currentPhoto + 1} of ${rawPhotos.rawPhotoPaths.length} photos',
                           ),
                   ),
                   Text(
-                    '${rawPhotoPaths.where((p) => p.selected).length} photos selected',
+                    '${rawPhotos.rawPhotoPaths.where((p) => p.selected).length} photos selected',
                   ),
                   IconButton(
                     icon: const Icon(Icons.library_add_check_rounded),
                     tooltip: 'Select all photos',
                     iconSize: 15,
-                    onPressed: rawPhotoPaths.isEmpty
-                        ||  (rawPhotoPaths.where((p) => p.selected).length == rawPhotoPaths.length) ? null : (){
-                      setState(() {
-                        for(int i = 0; i < rawPhotoPaths.length; i++) {
-                          final current = rawPhotoPaths[i];
-                          rawPhotoPaths[i] = current.copyWith(
-                            selected: true,
-                          );
-                        }
-                      });
+                    onPressed: rawPhotos.rawPhotoPaths.isEmpty
+                        ||  (rawPhotos.rawPhotoPaths.where((p) => p.selected).length == rawPhotos.rawPhotoPaths.length) ? null : (){
+                      ref.read(rawPhotosProvider.notifier).selectAllPhotos();
                     }
                   ),
                   IconButton(
                       icon: const Icon(Icons.deselect),
                       tooltip: 'Clear selected photos',
                       iconSize: 15,
-                      onPressed: rawPhotoPaths.where((p) => p.selected).isEmpty ? null : (){
-                        setState(() {
-                          for(int i = 0; i < rawPhotoPaths.length; i++) {
-                            final current = rawPhotoPaths[i];
-                            rawPhotoPaths[i] = current.copyWith(
-                              selected: false,
-                            );
-                          }
-                        });
+                      onPressed: rawPhotos.rawPhotoPaths.where((p) => p.selected).isEmpty ? null : (){
+                        ref.read(rawPhotosProvider.notifier).unSelectAllPhotos();
                       }
                   ),
                 ],
@@ -278,7 +225,7 @@ class _MainWindowState extends ConsumerState<MainWindow> with WindowListener {
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
-        return CopyDialog(selectedPhotos: rawPhotoPaths.where((p) => p.selected).toList(),);
+        return CopyDialog(selectedPhotos: ref.read(rawPhotosProvider).rawPhotoPaths.where((p) => p.selected).toList(),);
       },
     );
   }
@@ -333,9 +280,10 @@ class _MainWindowState extends ConsumerState<MainWindow> with WindowListener {
   }
 
   Widget _buildSinglePhotoView() {
+    RawPhotos rawPhotos = ref.read(rawPhotosProvider);
     return Center(
       child: PRawImage(
-        rawPhoto: rawPhotoPaths[currentSelection],
+        rawPhoto: rawPhotos.rawPhotoPaths[rawPhotos.currentPhoto],
         cacheWidth: MediaQuery.of(context).size.width.toInt(),
         onChanged: (bool? value) {
           _toggleSelectedPhoto();
@@ -349,6 +297,7 @@ class _MainWindowState extends ConsumerState<MainWindow> with WindowListener {
 
   // Your optimized lazy-loading photo grid
   Widget _buildPhotoGrid() {
+    RawPhotos rawPhotos = ref.read(rawPhotosProvider);
     return LayoutBuilder(
       builder: (context, constraints) {
         final int crossAxisCount = (constraints.maxWidth / 250).floor().clamp(
@@ -369,29 +318,23 @@ class _MainWindowState extends ConsumerState<MainWindow> with WindowListener {
             crossAxisSpacing: 8,
             mainAxisSpacing: 8,
           ),
-          itemCount: rawPhotoPaths.length,
+          itemCount: rawPhotos.rawPhotoPaths.length,
           itemBuilder: (context, index) {
             // GridView.builder lazily instantiates this widget ONLY when visible
             return LazyThumbnailCard(
-              rawPhoto: rawPhotoPaths[index],
-              highlighted: index == currentSelection,
+              rawPhoto: rawPhotos.rawPhotoPaths[index],
+              highlighted: index == rawPhotos.currentPhoto,
               onChanged: (bool? value) {
-                if (currentSelection != index) {
-                  setState(() {
-                    currentSelection = index;
-                  });
+                if (rawPhotos.currentPhoto != index) {
+                  ref.read(rawPhotosProvider.notifier).setSelectedPhoto(index);
                 }
                 _toggleSelectedPhoto();
               },
               onTap: () {
-                setState(() {
-                  currentSelection = index;
-                });
+                ref.read(rawPhotosProvider.notifier).setSelectedPhoto(index);
               },
               onDoubleTap: () {
-                setState(() {
-                  currentSelection = index;
-                });
+                ref.read(rawPhotosProvider.notifier).setSelectedPhoto(index);
                 _toggleGridView();
               },
             );
@@ -402,6 +345,7 @@ class _MainWindowState extends ConsumerState<MainWindow> with WindowListener {
   }
 
   void _scrollToSelected() {
+    RawPhotos rawPhotos = ref.read(rawPhotosProvider);
     // Ensure the grid view is active and the controller is attached
     if (!_gridScrollController.hasClients || !gridView) return;
 
@@ -424,7 +368,7 @@ class _MainWindowState extends ConsumerState<MainWindow> with WindowListener {
     final double rowHeight = itemHeight + spacing;
 
     // 3. Find target item's top and bottom position bounds
-    final int currentRow = currentSelection ~/ crossAxisCount;
+    final int currentRow = rawPhotos.currentPhoto ~/ crossAxisCount;
     final double itemTopY = currentRow * rowHeight;
     final double itemBottomY = itemTopY + itemHeight;
 
