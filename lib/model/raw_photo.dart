@@ -1,38 +1,20 @@
-import 'package:meta/meta.dart';
-
+import 'package:freezed_annotation/freezed_annotation.dart';
 import '../raw/raw_photo_loader.dart';
 
-@immutable
-class RawPhoto {
-  final String filePath;
-  final bool selected;
+part 'raw_photo.freezed.dart';
 
-  RawPhoto({required this.filePath, this.selected = false});
+@freezed
+abstract class RawPhoto with _$RawPhoto {
 
+  const RawPhoto._();
+
+  const factory RawPhoto({
+    required String filePath,
+    @Default(false) bool selected,
+  }) = _RawPhoto;
+
+  // Your custom method fits right in!
   Future<RawPhotoResult> loadThumbnail() {
     return RawPhotoLoader().loadRawPhotoThumbnail(filePath);
   }
-
-  RawPhoto copyWith({
-    String? filePath,
-    bool? selected,
-    RawPhotoLoader? loader,
-  }) {
-    return RawPhoto(
-      filePath: filePath ?? this.filePath,
-      selected: selected ?? this.selected,
-    );
-  }
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-    return other is RawPhoto &&
-        other.filePath == filePath &&
-        other.selected ==
-            selected; // Now this is safe because fields are final!
-  }
-
-  @override
-  int get hashCode => Object.hash(runtimeType, filePath, selected);
 }
