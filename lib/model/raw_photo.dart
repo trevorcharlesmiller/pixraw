@@ -13,7 +13,6 @@ abstract class RawPhoto with _$RawPhoto {
     @Default(false) bool selected,
   }) = _RawPhoto;
 
-  // Your custom method fits right in!
   Future<RawPhotoResult> loadThumbnail() {
     return RawPhotoLoader().loadRawPhotoThumbnail(filePath);
   }
