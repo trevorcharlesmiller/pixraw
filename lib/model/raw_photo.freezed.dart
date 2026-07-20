@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$RawPhoto {
 
- String get filePath; bool get selected;
+ String get filePath; bool get selected; bool get loaded; RawPhotoInfo get info;
 /// Create a copy of RawPhoto
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $RawPhotoCopyWith<RawPhoto> get copyWith => _$RawPhotoCopyWithImpl<RawPhoto>(thi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is RawPhoto&&(identical(other.filePath, filePath) || other.filePath == filePath)&&(identical(other.selected, selected) || other.selected == selected));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is RawPhoto&&(identical(other.filePath, filePath) || other.filePath == filePath)&&(identical(other.selected, selected) || other.selected == selected)&&(identical(other.loaded, loaded) || other.loaded == loaded)&&(identical(other.info, info) || other.info == info));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,filePath,selected);
+int get hashCode => Object.hash(runtimeType,filePath,selected,loaded,info);
 
 @override
 String toString() {
-  return 'RawPhoto(filePath: $filePath, selected: $selected)';
+  return 'RawPhoto(filePath: $filePath, selected: $selected, loaded: $loaded, info: $info)';
 }
 
 
@@ -45,11 +45,11 @@ abstract mixin class $RawPhotoCopyWith<$Res>  {
   factory $RawPhotoCopyWith(RawPhoto value, $Res Function(RawPhoto) _then) = _$RawPhotoCopyWithImpl;
 @useResult
 $Res call({
- String filePath, bool selected
+ String filePath, bool selected, bool loaded, RawPhotoInfo info
 });
 
 
-
+$RawPhotoInfoCopyWith<$Res> get info;
 
 }
 /// @nodoc
@@ -62,14 +62,25 @@ class _$RawPhotoCopyWithImpl<$Res>
 
 /// Create a copy of RawPhoto
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? filePath = null,Object? selected = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? filePath = null,Object? selected = null,Object? loaded = null,Object? info = null,}) {
   return _then(_self.copyWith(
 filePath: null == filePath ? _self.filePath : filePath // ignore: cast_nullable_to_non_nullable
 as String,selected: null == selected ? _self.selected : selected // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,loaded: null == loaded ? _self.loaded : loaded // ignore: cast_nullable_to_non_nullable
+as bool,info: null == info ? _self.info : info // ignore: cast_nullable_to_non_nullable
+as RawPhotoInfo,
   ));
 }
-
+/// Create a copy of RawPhoto
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$RawPhotoInfoCopyWith<$Res> get info {
+  
+  return $RawPhotoInfoCopyWith<$Res>(_self.info, (value) {
+    return _then(_self.copyWith(info: value));
+  });
+}
 }
 
 
@@ -151,10 +162,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String filePath,  bool selected)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String filePath,  bool selected,  bool loaded,  RawPhotoInfo info)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _RawPhoto() when $default != null:
-return $default(_that.filePath,_that.selected);case _:
+return $default(_that.filePath,_that.selected,_that.loaded,_that.info);case _:
   return orElse();
 
 }
@@ -172,10 +183,10 @@ return $default(_that.filePath,_that.selected);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String filePath,  bool selected)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String filePath,  bool selected,  bool loaded,  RawPhotoInfo info)  $default,) {final _that = this;
 switch (_that) {
 case _RawPhoto():
-return $default(_that.filePath,_that.selected);case _:
+return $default(_that.filePath,_that.selected,_that.loaded,_that.info);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -192,10 +203,10 @@ return $default(_that.filePath,_that.selected);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String filePath,  bool selected)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String filePath,  bool selected,  bool loaded,  RawPhotoInfo info)?  $default,) {final _that = this;
 switch (_that) {
 case _RawPhoto() when $default != null:
-return $default(_that.filePath,_that.selected);case _:
+return $default(_that.filePath,_that.selected,_that.loaded,_that.info);case _:
   return null;
 
 }
@@ -207,11 +218,13 @@ return $default(_that.filePath,_that.selected);case _:
 
 
 class _RawPhoto extends RawPhoto {
-  const _RawPhoto({required this.filePath, this.selected = false}): super._();
+  const _RawPhoto({required this.filePath, this.selected = false, this.loaded = false, this.info = const RawPhotoInfo()}): super._();
   
 
 @override final  String filePath;
 @override@JsonKey() final  bool selected;
+@override@JsonKey() final  bool loaded;
+@override@JsonKey() final  RawPhotoInfo info;
 
 /// Create a copy of RawPhoto
 /// with the given fields replaced by the non-null parameter values.
@@ -223,16 +236,16 @@ _$RawPhotoCopyWith<_RawPhoto> get copyWith => __$RawPhotoCopyWithImpl<_RawPhoto>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RawPhoto&&(identical(other.filePath, filePath) || other.filePath == filePath)&&(identical(other.selected, selected) || other.selected == selected));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RawPhoto&&(identical(other.filePath, filePath) || other.filePath == filePath)&&(identical(other.selected, selected) || other.selected == selected)&&(identical(other.loaded, loaded) || other.loaded == loaded)&&(identical(other.info, info) || other.info == info));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,filePath,selected);
+int get hashCode => Object.hash(runtimeType,filePath,selected,loaded,info);
 
 @override
 String toString() {
-  return 'RawPhoto(filePath: $filePath, selected: $selected)';
+  return 'RawPhoto(filePath: $filePath, selected: $selected, loaded: $loaded, info: $info)';
 }
 
 
@@ -243,11 +256,11 @@ abstract mixin class _$RawPhotoCopyWith<$Res> implements $RawPhotoCopyWith<$Res>
   factory _$RawPhotoCopyWith(_RawPhoto value, $Res Function(_RawPhoto) _then) = __$RawPhotoCopyWithImpl;
 @override @useResult
 $Res call({
- String filePath, bool selected
+ String filePath, bool selected, bool loaded, RawPhotoInfo info
 });
 
 
-
+@override $RawPhotoInfoCopyWith<$Res> get info;
 
 }
 /// @nodoc
@@ -260,15 +273,26 @@ class __$RawPhotoCopyWithImpl<$Res>
 
 /// Create a copy of RawPhoto
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? filePath = null,Object? selected = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? filePath = null,Object? selected = null,Object? loaded = null,Object? info = null,}) {
   return _then(_RawPhoto(
 filePath: null == filePath ? _self.filePath : filePath // ignore: cast_nullable_to_non_nullable
 as String,selected: null == selected ? _self.selected : selected // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,loaded: null == loaded ? _self.loaded : loaded // ignore: cast_nullable_to_non_nullable
+as bool,info: null == info ? _self.info : info // ignore: cast_nullable_to_non_nullable
+as RawPhotoInfo,
   ));
 }
 
-
+/// Create a copy of RawPhoto
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$RawPhotoInfoCopyWith<$Res> get info {
+  
+  return $RawPhotoInfoCopyWith<$Res>(_self.info, (value) {
+    return _then(_self.copyWith(info: value));
+  });
+}
 }
 
 // dart format on

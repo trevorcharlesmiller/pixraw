@@ -1,35 +1,35 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart' as p;
 import 'package:flutter/material.dart';
 import 'package:pixraw/model/raw_photo.dart';
 
-import '../../raw/raw_photo_loader.dart';
+import '../../model/raw_photo_load_result.dart';
+import '../../state/raw_photos_notifier.dart';
 
-class PRawImage extends StatefulWidget {
-  final RawPhoto rawPhoto;
+class PRawImage extends ConsumerStatefulWidget {
+  final int index;
   final int? cacheWidth;
   final ValueChanged<bool?>? onChanged;
   final VoidCallback onDoubleTap;
 
   const PRawImage({
     super.key,
-    required this.rawPhoto,
+    required this.index,
     this.cacheWidth,
     required this.onChanged,
     required this.onDoubleTap
   });
 
   @override
-  State<PRawImage> createState() => _PRawImageState();
+  ConsumerState<PRawImage> createState() => _PRawImageState();
 }
 
-class _PRawImageState extends State<PRawImage> {
-  late String fileName;
+class _PRawImageState extends ConsumerState<PRawImage> {
   late Future<RawPhotoResult> thumbnail;
 
   @override
   void initState() {
     super.initState();
-    fileName = p.basename(widget.rawPhoto.filePath);
     _loadPRawImage();
   }
 
@@ -37,34 +37,32 @@ class _PRawImageState extends State<PRawImage> {
   void didUpdateWidget(covariant PRawImage oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    if (oldWidget.rawPhoto.filePath != widget.rawPhoto.filePath) {
-      setState(() {
-        fileName = p.basename(widget.rawPhoto.filePath);
-      });
+    if (oldWidget.index != widget.index) {
       _loadPRawImage();
     }
   }
 
   void _loadPRawImage() {
     setState(() {
-      thumbnail = widget.rawPhoto.loadThumbnail();
+      thumbnail = ref.read(rawPhotosProvider.notifier).loadThumbnail(widget.index);
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    RawPhoto rawPhoto = ref.read(rawPhotosProvider).rawPhotoPaths[widget.index];
     return Padding(
       padding: EdgeInsetsGeometry.all(10),
       child: FutureBuilder<RawPhotoResult>(
-        key: ValueKey(widget.rawPhoto.filePath),
+        key: ValueKey(widget.index),
         future: thumbnail,
         builder: (BuildContext context, AsyncSnapshot<RawPhotoResult> snapshot) {
           if (snapshot.hasData) {
-            final renderStopwatch = Stopwatch()..start();
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              renderStopwatch.stop();
-              //print('🖼️ Flutter render completed in ${renderStopwatch.elapsedMilliseconds}ms');
-            });
+            // final renderStopwatch = Stopwatch()..start();
+            // WidgetsBinding.instance.addPostFrameCallback((_) {
+            //   renderStopwatch.stop();
+            //   print('🖼️ Flutter render completed in ${renderStopwatch.elapsedMilliseconds}ms');
+            // });
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -72,10 +70,13 @@ class _PRawImageState extends State<PRawImage> {
                   child: Center(
                     child: GestureDetector(
                       onDoubleTap: widget.onDoubleTap,
-                      child: Image.memory(
-                        snapshot.data!.bytes!,
-                        cacheWidth: widget.cacheWidth,
-                        fit: BoxFit.contain,
+                      child: RotatedBox(
+                        quarterTurns: snapshot.data!.quarterTurns,
+                        child: Image.memory(
+                          snapshot.data!.bytes!,
+                          cacheWidth: widget.cacheWidth,
+                          fit: BoxFit.contain,
+                        ),
                       ),
                     ),
                   ),
@@ -85,7 +86,7 @@ class _PRawImageState extends State<PRawImage> {
                   children: [
                     Expanded(
                       child: Text(
-                          fileName,
+                          p.basename(rawPhoto.filePath),
                           style: TextStyle(fontSize: 12),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -93,7 +94,7 @@ class _PRawImageState extends State<PRawImage> {
                     ),
                     SizedBox(width: 10),
                     Checkbox(
-                      value: widget.rawPhoto.selected,
+                      value: rawPhoto.selected,
                       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
 
                       // 2. Adjusts the compact density to maximum negative values to remove padding
@@ -112,7 +113,7 @@ class _PRawImageState extends State<PRawImage> {
               child: Icon(Icons.broken_image, color: Colors.red),
             );
           } else {
-            return Center(child: CircularProgressIndicator.adaptive());
+            return Container();
           }
         },
       ),

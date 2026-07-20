@@ -283,7 +283,7 @@ class _MainWindowState extends ConsumerState<MainWindow> with WindowListener {
     RawPhotos rawPhotos = ref.read(rawPhotosProvider);
     return Center(
       child: PRawImage(
-        rawPhoto: rawPhotos.rawPhotoPaths[rawPhotos.currentPhoto],
+        index: rawPhotos.currentPhoto,
         cacheWidth: MediaQuery.of(context).size.width.toInt(),
         onChanged: (bool? value) {
           _toggleSelectedPhoto();
@@ -322,6 +322,7 @@ class _MainWindowState extends ConsumerState<MainWindow> with WindowListener {
           itemBuilder: (context, index) {
             // GridView.builder lazily instantiates this widget ONLY when visible
             return LazyThumbnailCard(
+              index: index,
               rawPhoto: rawPhotos.rawPhotoPaths[index],
               highlighted: index == rawPhotos.currentPhoto,
               onChanged: (bool? value) {
