@@ -3,6 +3,7 @@ import 'package:pixraw/ui/widgets/raw_image.dart';
 import 'package:pixraw/model/raw_photo.dart';
 
 class LazyThumbnailCard extends StatefulWidget {
+  final int index;
   final RawPhoto rawPhoto;
   final bool highlighted;
   final ValueChanged<bool?>? onChanged;
@@ -11,6 +12,7 @@ class LazyThumbnailCard extends StatefulWidget {
 
   const LazyThumbnailCard({
     super.key,
+    required this.index,
     required this.rawPhoto,
     required this.highlighted,
     required this.onChanged,
@@ -59,7 +61,7 @@ class _LazyThumbnailCardState extends State<LazyThumbnailCard> {
         onTap: widget.onTap,
         onDoubleTap: widget.onDoubleTap,
         child: PRawImage(
-          rawPhoto: widget.rawPhoto,
+          index: widget.index,
           cacheWidth: 280,
           onChanged: widget.onChanged,
           onDoubleTap: widget.onDoubleTap,

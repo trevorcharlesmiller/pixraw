@@ -5,6 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pixraw/model/raw_photos.dart';
 
 import '../model/raw_photo.dart';
+import '../model/raw_photo_load_result.dart';
+import '../raw/raw_photo_loader.dart';
 import '../util/raw_utils.dart';
 
 class RawPhotosNotifier extends Notifier<RawPhotos> {
@@ -38,16 +40,13 @@ class RawPhotosNotifier extends Notifier<RawPhotos> {
 
   void toggleCurrentPhotoSelected() {
     if (state.rawPhotoPaths.isNotEmpty) {
-      // 1. Create a modifiable copy of the list
       final updatedPaths = List<RawPhoto>.from(state.rawPhotoPaths);
       final current = updatedPaths[state.currentPhoto];
 
-      // 2. Update the item
       updatedPaths[state.currentPhoto] = current.copyWith(
           selected: !current.selected
       );
 
-      // 3. Reassign the state using copyWith
       state = state.copyWith(rawPhotoPaths: updatedPaths);
     }
   }
@@ -80,13 +79,26 @@ class RawPhotosNotifier extends Notifier<RawPhotos> {
     })
         .map((file) => RawPhoto(filePath: file.path))
         .toList();
-
-    print('  ## Set state with $paths');
     state = state.copyWith(
       currentPhoto: 0,
       directory: selectedDir,
       rawPhotoPaths: paths
     );
+  }
+
+  Future<RawPhotoResult> loadThumbnail(int index) async {
+    RawPhotoResult result = await RawPhotoLoader().loadRawPhotoThumbnail(state.rawPhotoPaths[index]);
+    if (result.info != null && state.rawPhotoPaths.isNotEmpty) {
+      final updatedPaths = List<RawPhoto>.from(state.rawPhotoPaths);
+      final current = updatedPaths[state.currentPhoto];
+
+      updatedPaths[state.currentPhoto] = current.copyWith(
+          info: result.info!
+      );
+
+      state = state.copyWith(rawPhotoPaths: updatedPaths);
+    }
+    return result;
   }
 }
 
