@@ -1,0 +1,16 @@
+display_name: Pixraw
+package_name: pixraw
+maintainer:
+  name: Trevor
+  email: dev@pixraw.app
+priority: optional
+section: x11
+installed_size: 0
+icon: linux/packaging/app-pixraw.png
+categories:
+  - Graphics
+  - Utility
+dependencies:
+  - libgtk-3-0
+  - libblkid1
+  - liblzma5

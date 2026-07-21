@@ -1,0 +1,35 @@
+# distribute_options.yaml
+output: dist/
+
+releases:
+  - name: production
+    jobs:
+      - name: linux-deb
+        package:
+          platform: linux
+          target: deb
+          build_args:
+            release: true
+        linux:
+          desktop_file: linux/packaging/app.PixRAW.desktop
+          icon: linux/packaging/app-pixraw.png
+
+      - name: linux-rpm
+        package:
+          platform: linux
+          target: rpm
+          build_args:
+            release: true
+        linux:
+          desktop_file: linux/packaging/app.PixRAW.desktop
+          icon: linux/packaging/app-pixraw.png
+
+      - name: linux-appimage
+        package:
+          platform: linux
+          target: appimage
+          build_args:
+            release: true
+        linux:
+          desktop_file: linux/packaging/app.PixRAW.desktop
+          icon: linux/packaging/app-pixraw.png

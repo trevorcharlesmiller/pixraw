@@ -1,0 +1,15 @@
+display_name: Pixraw
+package_name: pixraw
+executable_name: pixraw
+maintainer:
+  name: Trevor
+  email: dev@pixraw.app
+license: MIT
+summary: Image viewer application
+group: Applications/Graphics
+icon: linux/packaging/app-pixraw.png
+categories:
+  - Graphics
+  - Utility
+dependencies:
+  - gtk3

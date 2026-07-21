@@ -32,7 +32,7 @@ flutter:
   assets:
     - assets/icon-128.png
   fonts:
-    - family: Nunito # This is the name you will use in your code
+    - family: Nunito
       fonts:
         - asset: assets/fonts/Nunito-Regular.ttf
         - asset: assets/fonts/Nunito-Bold.ttf

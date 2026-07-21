@@ -130,3 +130,7 @@ endif()
 install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/libs/libraw.so"
         DESTINATION "${INSTALL_BUNDLE_LIB_DIR}"
         COMPONENT Runtime)
+
+install(FILES "${CMAKE_CURRENT_SOURCE_DIR}/../LICENSE"
+        DESTINATION "${BUILD_BUNDLE_DIR}"
+        COMPONENT Runtime)

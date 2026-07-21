@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=PixRAW
+Comment=The photo culler for Linux
+Icon=app.PixRAW
+Exec=pixraw %U
+Terminal=false
+Categories=Utility;
