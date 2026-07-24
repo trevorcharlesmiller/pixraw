@@ -1,7 +1,7 @@
 name: pixraw
 description: "PixRAW is a simple and easy to use RAW photo viewer and culling desktop application."
 publish_to: 'none'
-version: 1.0.0+1
+version: 1.0.0
 environment:
   sdk: ^3.12.2
 

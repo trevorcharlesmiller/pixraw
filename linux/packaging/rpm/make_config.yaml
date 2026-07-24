@@ -1,5 +1,6 @@
 display_name: Pixraw
 package_name: pixraw
+app_name: pixraw
 executable_name: pixraw
 maintainer:
   name: Trevor
