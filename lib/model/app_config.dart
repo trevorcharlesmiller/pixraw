@@ -9,5 +9,7 @@ abstract class AppConfig with _$AppConfig {
     @Default(ThemeMode.system) ThemeMode themeMode,
     @Default(false) bool isFullScreen,
     @Default(false) bool isPanelOpen,
+    @Default(null) String? sourceDirectory,
+    @Default(null) String? targetDirectory,
   }) = _AppConfig;
 }

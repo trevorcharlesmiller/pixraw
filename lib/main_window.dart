@@ -70,13 +70,28 @@ class _MainWindowState extends ConsumerState<MainWindow> with WindowListener {
     ref.read(rawPhotosProvider.notifier).toggleCurrentPhotoSelected();
   }
 
+  Future<String?> getInitialDir() async {
+    final config = ref.watch(appConfigProvider);
+    Directory? dir;
+    if(config.sourceDirectory != null) {
+      dir = Directory(config.sourceDirectory!);
+      if(await dir.exists()) {
+        return dir.absolute.path;
+      }
+    }
+
+    return null;
+  }
+
   Future<void> selectFolder() async {
     String? selectedDirectory = await FilePicker.getDirectoryPath(
-        dialogTitle: 'Open Folder'
+        dialogTitle: 'Open Folder',
+      initialDirectory: await getInitialDir(),
     );
 
     if (selectedDirectory != null) {
       final selectedDir = Directory(selectedDirectory);
+      ref.read(appConfigProvider.notifier).setSourceDirectory(selectedDirectory);
       await ref.read(rawPhotosProvider.notifier).setSelectedDirectory(selectedDir);
       WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToSelected());
       await windowManager.setTitle("$appName - $selectedDirectory");

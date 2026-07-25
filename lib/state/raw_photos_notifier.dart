@@ -8,6 +8,7 @@ import '../model/raw_photo.dart';
 import '../model/raw_photo_load_result.dart';
 import '../raw/raw_photo_loader.dart';
 import '../util/raw_utils.dart';
+import 'app_config_notifier.dart';
 
 class RawPhotosNotifier extends Notifier<RawPhotos> {
 
