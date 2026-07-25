@@ -71,7 +71,9 @@ class _MainWindowState extends ConsumerState<MainWindow> with WindowListener {
   }
 
   Future<void> selectFolder() async {
-    String? selectedDirectory = await FilePicker.getDirectoryPath();
+    String? selectedDirectory = await FilePicker.getDirectoryPath(
+        dialogTitle: 'Open Folder'
+    );
 
     if (selectedDirectory != null) {
       final selectedDir = Directory(selectedDirectory);
