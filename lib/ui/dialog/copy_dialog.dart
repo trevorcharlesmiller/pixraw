@@ -20,7 +20,9 @@ class _CopyDialogState extends State<CopyDialog> {
   final progressNotifier = ValueNotifier<double>(0.0);
 
   Future<void> selectFolder() async {
-    String? selectedDirectory = await FilePicker.getDirectoryPath();
+    String? selectedDirectory = await FilePicker.getDirectoryPath(
+        dialogTitle: 'Destination'
+    );
 
     if (selectedDirectory != null) {
       setState(() {
