@@ -1,0 +1,4 @@
+# linux/packaging/zip/make_config.yaml
+display_name: Pixraw
+package_name: pixraw
+archive_name: pixraw-${app_version}

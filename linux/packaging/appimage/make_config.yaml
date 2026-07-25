@@ -1,0 +1,6 @@
+display_name: Pixraw
+package_name: pixraw
+icon: linux/packaging/app-pixraw.png
+categories:
+  - Graphics
+  - Utility
