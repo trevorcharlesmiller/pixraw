@@ -11,6 +11,7 @@ class AppConfigNotifier extends Notifier<AppConfig> {
   static const _infoPanelKey = 'is_panel_open';
   static const _srcDirKey = 'source_directory';
   static const _targetDirKey = 'target_directory';
+  static const _firstRunKey = 'is_first_run';
 
   @override
   AppConfig build() {
@@ -21,13 +22,15 @@ class AppConfigNotifier extends Notifier<AppConfig> {
     final isPanelOpen = prefs.getBool(_infoPanelKey) ?? false;
     final srcDir = prefs.getString(_srcDirKey);
     final targetDir = prefs.getString(_targetDirKey);
+    final isFirstRun = prefs.getBool(_firstRunKey) ?? true;
 
     return AppConfig(
       themeMode: ThemeMode.values[savedThemeIndex],
       isFullScreen: savedIsFullScreen,
       isPanelOpen: isPanelOpen,
       sourceDirectory: srcDir,
-      targetDirectory: targetDir
+      targetDirectory: targetDir,
+      isFirstRun: isFirstRun
     );
   }
 
@@ -58,6 +61,11 @@ class AppConfigNotifier extends Notifier<AppConfig> {
     if(targetDirectory != null) {
       ref.read(sharedPreferencesProvider).setString(_targetDirKey, targetDirectory);
     }
+  }
+
+  void setFirstRun(bool value) {
+    state = state.copyWith(isFirstRun: value);
+    ref.read(sharedPreferencesProvider).setBool(_firstRunKey, value);
   }
 }
 

@@ -8,6 +8,7 @@ import 'package:pixraw/model/raw_photos.dart';
 import 'package:pixraw/state/app_config_notifier.dart';
 import 'package:pixraw/state/raw_photos_notifier.dart';
 import 'package:pixraw/ui/dialog/settings_dialog.dart';
+import 'package:pixraw/ui/dialog/setup_wizard_dialog.dart';
 import 'package:pixraw/ui/widgets/raw_image.dart';
 import 'package:pixraw/model/raw_photo.dart';
 import 'package:pixraw/util/raw_utils.dart';
@@ -36,6 +37,14 @@ class _MainWindowState extends ConsumerState<MainWindow> with WindowListener {
   void initState() {
     super.initState();
     windowManager.addListener(this);
+
+    final config = ref.watch(appConfigProvider);
+    if(config.isFirstRun) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _showSetupWizardDialog(context);
+      });
+    }
+
   }
 
   @override
@@ -58,7 +67,7 @@ class _MainWindowState extends ConsumerState<MainWindow> with WindowListener {
   }
 
   void _toggleGridView() {
-    if(ref.read(rawPhotosProvider).rawPhotoPaths.isNotEmpty) {
+    if (ref.read(rawPhotosProvider).rawPhotoPaths.isNotEmpty) {
       setState(() {
         gridView = !gridView;
       });
@@ -73,9 +82,9 @@ class _MainWindowState extends ConsumerState<MainWindow> with WindowListener {
   Future<String?> getInitialDir() async {
     final config = ref.watch(appConfigProvider);
     Directory? dir;
-    if(config.sourceDirectory != null) {
+    if (config.sourceDirectory != null) {
       dir = Directory(config.sourceDirectory!);
-      if(await dir.exists()) {
+      if (await dir.exists()) {
         return dir.absolute.path;
       }
     }
@@ -85,14 +94,18 @@ class _MainWindowState extends ConsumerState<MainWindow> with WindowListener {
 
   Future<void> selectFolder() async {
     String? selectedDirectory = await FilePicker.getDirectoryPath(
-        dialogTitle: 'Open Folder',
+      dialogTitle: 'Open Folder',
       initialDirectory: await getInitialDir(),
     );
 
     if (selectedDirectory != null) {
       final selectedDir = Directory(selectedDirectory);
-      ref.read(appConfigProvider.notifier).setSourceDirectory(selectedDirectory);
-      await ref.read(rawPhotosProvider.notifier).setSelectedDirectory(selectedDir);
+      ref
+          .read(appConfigProvider.notifier)
+          .setSourceDirectory(selectedDirectory);
+      await ref
+          .read(rawPhotosProvider.notifier)
+          .setSelectedDirectory(selectedDir);
       WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToSelected());
       await windowManager.setTitle("$appName - $selectedDirectory");
     }
@@ -118,9 +131,12 @@ class _MainWindowState extends ConsumerState<MainWindow> with WindowListener {
             IconButton(
               tooltip: 'Copy selected photos',
               icon: const Icon(Icons.file_copy_rounded),
-              onPressed: rawPhotos.rawPhotoPaths.where((p) => p.selected).isEmpty ? null : () {
-                _showCopyDialog(context);
-              },
+              onPressed:
+                  rawPhotos.rawPhotoPaths.where((p) => p.selected).isEmpty
+                  ? null
+                  : () {
+                      _showCopyDialog(context);
+                    },
             ),
 
           IconButton(
@@ -166,7 +182,9 @@ class _MainWindowState extends ConsumerState<MainWindow> with WindowListener {
                     color: gridView
                         ? Theme.of(context).colorScheme.primary
                         : Theme.of(context).colorScheme.secondary,
-                    onPressed: rawPhotos.directory == null || rawPhotos.rawPhotoPaths.isEmpty
+                    onPressed:
+                        rawPhotos.directory == null ||
+                            rawPhotos.rawPhotoPaths.isEmpty
                         ? null
                         : _toggleGridView,
                   ),
@@ -179,7 +197,9 @@ class _MainWindowState extends ConsumerState<MainWindow> with WindowListener {
                     color: gridView
                         ? Theme.of(context).colorScheme.secondary
                         : Theme.of(context).colorScheme.primary,
-                    onPressed: rawPhotos.directory == null || rawPhotos.rawPhotoPaths.isEmpty
+                    onPressed:
+                        rawPhotos.directory == null ||
+                            rawPhotos.rawPhotoPaths.isEmpty
                         ? null
                         : _toggleGridView,
                   ),
@@ -198,18 +218,31 @@ class _MainWindowState extends ConsumerState<MainWindow> with WindowListener {
                     icon: const Icon(Icons.library_add_check_rounded),
                     tooltip: 'Select all photos',
                     iconSize: 15,
-                    onPressed: rawPhotos.rawPhotoPaths.isEmpty
-                        ||  (rawPhotos.rawPhotoPaths.where((p) => p.selected).length == rawPhotos.rawPhotoPaths.length) ? null : (){
-                      ref.read(rawPhotosProvider.notifier).selectAllPhotos();
-                    }
+                    onPressed:
+                        rawPhotos.rawPhotoPaths.isEmpty ||
+                            (rawPhotos.rawPhotoPaths
+                                    .where((p) => p.selected)
+                                    .length ==
+                                rawPhotos.rawPhotoPaths.length)
+                        ? null
+                        : () {
+                            ref
+                                .read(rawPhotosProvider.notifier)
+                                .selectAllPhotos();
+                          },
                   ),
                   IconButton(
-                      icon: const Icon(Icons.deselect),
-                      tooltip: 'Clear selected photos',
-                      iconSize: 15,
-                      onPressed: rawPhotos.rawPhotoPaths.where((p) => p.selected).isEmpty ? null : (){
-                        ref.read(rawPhotosProvider.notifier).unSelectAllPhotos();
-                      }
+                    icon: const Icon(Icons.deselect),
+                    tooltip: 'Clear selected photos',
+                    iconSize: 15,
+                    onPressed:
+                        rawPhotos.rawPhotoPaths.where((p) => p.selected).isEmpty
+                        ? null
+                        : () {
+                            ref
+                                .read(rawPhotosProvider.notifier)
+                                .unSelectAllPhotos();
+                          },
                   ),
                 ],
               ),
@@ -228,6 +261,7 @@ class _MainWindowState extends ConsumerState<MainWindow> with WindowListener {
       },
     );
   }
+
   Future<void> _showSettingsDialog(BuildContext context) {
     return showDialog<void>(
       context: context,
@@ -242,7 +276,23 @@ class _MainWindowState extends ConsumerState<MainWindow> with WindowListener {
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
-        return CopyDialog(selectedPhotos: ref.read(rawPhotosProvider).rawPhotoPaths.where((p) => p.selected).toList(),);
+        return CopyDialog(
+          selectedPhotos: ref
+              .read(rawPhotosProvider)
+              .rawPhotoPaths
+              .where((p) => p.selected)
+              .toList(),
+        );
+      },
+    );
+  }
+
+  Future<void> _showSetupWizardDialog(BuildContext context) {
+    return showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return SetupWizardDialog();
       },
     );
   }
