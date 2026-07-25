@@ -11,5 +11,6 @@ abstract class AppConfig with _$AppConfig {
     @Default(false) bool isPanelOpen,
     @Default(null) String? sourceDirectory,
     @Default(null) String? targetDirectory,
+    @Default(true) bool isFirstRun,
   }) = _AppConfig;
 }

@@ -22,7 +22,7 @@ class SettingsDialog extends ConsumerWidget {
           children: [
             // Theme Selector
             ListTile(
-              title: const Text('Theme Mode'),
+              title: const Text('Preferred Theme'),
               trailing: DropdownButton<ThemeMode>(
                 value: config.themeMode,
                 onChanged: (newMode) {

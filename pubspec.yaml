@@ -31,6 +31,9 @@ flutter:
   uses-material-design: true
   assets:
     - assets/icon-128.png
+    - assets/pixraw-mode.png
+    - assets/pixraw-dark.png
+    - assets/pixraw-light.png
   fonts:
     - family: Nunito
       fonts:
