@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$AppConfig {
 
- ThemeMode get themeMode; bool get isFullScreen; bool get isPanelOpen;
+ ThemeMode get themeMode; bool get isFullScreen; bool get isPanelOpen; String? get sourceDirectory; String? get targetDirectory;
 /// Create a copy of AppConfig
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $AppConfigCopyWith<AppConfig> get copyWith => _$AppConfigCopyWithImpl<AppConfig>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppConfig&&(identical(other.themeMode, themeMode) || other.themeMode == themeMode)&&(identical(other.isFullScreen, isFullScreen) || other.isFullScreen == isFullScreen)&&(identical(other.isPanelOpen, isPanelOpen) || other.isPanelOpen == isPanelOpen));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AppConfig&&(identical(other.themeMode, themeMode) || other.themeMode == themeMode)&&(identical(other.isFullScreen, isFullScreen) || other.isFullScreen == isFullScreen)&&(identical(other.isPanelOpen, isPanelOpen) || other.isPanelOpen == isPanelOpen)&&(identical(other.sourceDirectory, sourceDirectory) || other.sourceDirectory == sourceDirectory)&&(identical(other.targetDirectory, targetDirectory) || other.targetDirectory == targetDirectory));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,themeMode,isFullScreen,isPanelOpen);
+int get hashCode => Object.hash(runtimeType,themeMode,isFullScreen,isPanelOpen,sourceDirectory,targetDirectory);
 
 @override
 String toString() {
-  return 'AppConfig(themeMode: $themeMode, isFullScreen: $isFullScreen, isPanelOpen: $isPanelOpen)';
+  return 'AppConfig(themeMode: $themeMode, isFullScreen: $isFullScreen, isPanelOpen: $isPanelOpen, sourceDirectory: $sourceDirectory, targetDirectory: $targetDirectory)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $AppConfigCopyWith<$Res>  {
   factory $AppConfigCopyWith(AppConfig value, $Res Function(AppConfig) _then) = _$AppConfigCopyWithImpl;
 @useResult
 $Res call({
- ThemeMode themeMode, bool isFullScreen, bool isPanelOpen
+ ThemeMode themeMode, bool isFullScreen, bool isPanelOpen, String? sourceDirectory, String? targetDirectory
 });
 
 
@@ -62,12 +62,14 @@ class _$AppConfigCopyWithImpl<$Res>
 
 /// Create a copy of AppConfig
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? themeMode = null,Object? isFullScreen = null,Object? isPanelOpen = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? themeMode = null,Object? isFullScreen = null,Object? isPanelOpen = null,Object? sourceDirectory = freezed,Object? targetDirectory = freezed,}) {
   return _then(_self.copyWith(
 themeMode: null == themeMode ? _self.themeMode : themeMode // ignore: cast_nullable_to_non_nullable
 as ThemeMode,isFullScreen: null == isFullScreen ? _self.isFullScreen : isFullScreen // ignore: cast_nullable_to_non_nullable
 as bool,isPanelOpen: null == isPanelOpen ? _self.isPanelOpen : isPanelOpen // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,sourceDirectory: freezed == sourceDirectory ? _self.sourceDirectory : sourceDirectory // ignore: cast_nullable_to_non_nullable
+as String?,targetDirectory: freezed == targetDirectory ? _self.targetDirectory : targetDirectory // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 
@@ -152,10 +154,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( ThemeMode themeMode,  bool isFullScreen,  bool isPanelOpen)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( ThemeMode themeMode,  bool isFullScreen,  bool isPanelOpen,  String? sourceDirectory,  String? targetDirectory)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _AppConfig() when $default != null:
-return $default(_that.themeMode,_that.isFullScreen,_that.isPanelOpen);case _:
+return $default(_that.themeMode,_that.isFullScreen,_that.isPanelOpen,_that.sourceDirectory,_that.targetDirectory);case _:
   return orElse();
 
 }
@@ -173,10 +175,10 @@ return $default(_that.themeMode,_that.isFullScreen,_that.isPanelOpen);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( ThemeMode themeMode,  bool isFullScreen,  bool isPanelOpen)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( ThemeMode themeMode,  bool isFullScreen,  bool isPanelOpen,  String? sourceDirectory,  String? targetDirectory)  $default,) {final _that = this;
 switch (_that) {
 case _AppConfig():
-return $default(_that.themeMode,_that.isFullScreen,_that.isPanelOpen);case _:
+return $default(_that.themeMode,_that.isFullScreen,_that.isPanelOpen,_that.sourceDirectory,_that.targetDirectory);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -193,10 +195,10 @@ return $default(_that.themeMode,_that.isFullScreen,_that.isPanelOpen);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( ThemeMode themeMode,  bool isFullScreen,  bool isPanelOpen)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( ThemeMode themeMode,  bool isFullScreen,  bool isPanelOpen,  String? sourceDirectory,  String? targetDirectory)?  $default,) {final _that = this;
 switch (_that) {
 case _AppConfig() when $default != null:
-return $default(_that.themeMode,_that.isFullScreen,_that.isPanelOpen);case _:
+return $default(_that.themeMode,_that.isFullScreen,_that.isPanelOpen,_that.sourceDirectory,_that.targetDirectory);case _:
   return null;
 
 }
@@ -208,12 +210,14 @@ return $default(_that.themeMode,_that.isFullScreen,_that.isPanelOpen);case _:
 
 
 class _AppConfig implements AppConfig {
-  const _AppConfig({this.themeMode = ThemeMode.system, this.isFullScreen = false, this.isPanelOpen = false});
+  const _AppConfig({this.themeMode = ThemeMode.system, this.isFullScreen = false, this.isPanelOpen = false, this.sourceDirectory = null, this.targetDirectory = null});
   
 
 @override@JsonKey() final  ThemeMode themeMode;
 @override@JsonKey() final  bool isFullScreen;
 @override@JsonKey() final  bool isPanelOpen;
+@override@JsonKey() final  String? sourceDirectory;
+@override@JsonKey() final  String? targetDirectory;
 
 /// Create a copy of AppConfig
 /// with the given fields replaced by the non-null parameter values.
@@ -225,16 +229,16 @@ _$AppConfigCopyWith<_AppConfig> get copyWith => __$AppConfigCopyWithImpl<_AppCon
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AppConfig&&(identical(other.themeMode, themeMode) || other.themeMode == themeMode)&&(identical(other.isFullScreen, isFullScreen) || other.isFullScreen == isFullScreen)&&(identical(other.isPanelOpen, isPanelOpen) || other.isPanelOpen == isPanelOpen));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AppConfig&&(identical(other.themeMode, themeMode) || other.themeMode == themeMode)&&(identical(other.isFullScreen, isFullScreen) || other.isFullScreen == isFullScreen)&&(identical(other.isPanelOpen, isPanelOpen) || other.isPanelOpen == isPanelOpen)&&(identical(other.sourceDirectory, sourceDirectory) || other.sourceDirectory == sourceDirectory)&&(identical(other.targetDirectory, targetDirectory) || other.targetDirectory == targetDirectory));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,themeMode,isFullScreen,isPanelOpen);
+int get hashCode => Object.hash(runtimeType,themeMode,isFullScreen,isPanelOpen,sourceDirectory,targetDirectory);
 
 @override
 String toString() {
-  return 'AppConfig(themeMode: $themeMode, isFullScreen: $isFullScreen, isPanelOpen: $isPanelOpen)';
+  return 'AppConfig(themeMode: $themeMode, isFullScreen: $isFullScreen, isPanelOpen: $isPanelOpen, sourceDirectory: $sourceDirectory, targetDirectory: $targetDirectory)';
 }
 
 
@@ -245,7 +249,7 @@ abstract mixin class _$AppConfigCopyWith<$Res> implements $AppConfigCopyWith<$Re
   factory _$AppConfigCopyWith(_AppConfig value, $Res Function(_AppConfig) _then) = __$AppConfigCopyWithImpl;
 @override @useResult
 $Res call({
- ThemeMode themeMode, bool isFullScreen, bool isPanelOpen
+ ThemeMode themeMode, bool isFullScreen, bool isPanelOpen, String? sourceDirectory, String? targetDirectory
 });
 
 
@@ -262,12 +266,14 @@ class __$AppConfigCopyWithImpl<$Res>
 
 /// Create a copy of AppConfig
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? themeMode = null,Object? isFullScreen = null,Object? isPanelOpen = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? themeMode = null,Object? isFullScreen = null,Object? isPanelOpen = null,Object? sourceDirectory = freezed,Object? targetDirectory = freezed,}) {
   return _then(_AppConfig(
 themeMode: null == themeMode ? _self.themeMode : themeMode // ignore: cast_nullable_to_non_nullable
 as ThemeMode,isFullScreen: null == isFullScreen ? _self.isFullScreen : isFullScreen // ignore: cast_nullable_to_non_nullable
 as bool,isPanelOpen: null == isPanelOpen ? _self.isPanelOpen : isPanelOpen // ignore: cast_nullable_to_non_nullable
-as bool,
+as bool,sourceDirectory: freezed == sourceDirectory ? _self.sourceDirectory : sourceDirectory // ignore: cast_nullable_to_non_nullable
+as String?,targetDirectory: freezed == targetDirectory ? _self.targetDirectory : targetDirectory // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 

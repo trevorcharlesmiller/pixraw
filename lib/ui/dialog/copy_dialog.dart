@@ -1,17 +1,20 @@
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pixraw/model/raw_photo.dart';
 
-class CopyDialog extends StatefulWidget {
+import '../../state/app_config_notifier.dart';
+
+class CopyDialog extends ConsumerStatefulWidget {
   final List<RawPhoto> selectedPhotos;
   const CopyDialog({super.key, required this.selectedPhotos});
 
   @override
-  State<CopyDialog> createState() => _CopyDialogState();
+  ConsumerState<CopyDialog> createState() => _CopyDialogState();
 }
 
-class _CopyDialogState extends State<CopyDialog> {
+class _CopyDialogState extends ConsumerState<CopyDialog> {
   bool copying = false;
   bool complete = false;
   bool isCancelled = false;
@@ -19,10 +22,34 @@ class _CopyDialogState extends State<CopyDialog> {
 
   final progressNotifier = ValueNotifier<double>(0.0);
 
+  Future<String?> getInitialDir() async {
+    final config = ref.watch(appConfigProvider);
+    Directory? dir;
+    if(config.targetDirectory != null) {
+      dir = Directory(config.targetDirectory!);
+      if(await dir.exists()) {
+        return dir.absolute.path;
+      }
+    }
+
+    return null;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    final config = ref.watch(appConfigProvider);
+    setState(() {
+      destDir = config.targetDirectory;
+    });
+  }
+
   Future<void> selectFolder() async {
     String? selectedDirectory = await FilePicker.getDirectoryPath(
-        dialogTitle: 'Destination'
+      dialogTitle: 'Destination',
+      initialDirectory: await getInitialDir(),
     );
+    ref.read(appConfigProvider.notifier).setTargetDirectory(selectedDirectory);
 
     if (selectedDirectory != null) {
       setState(() {
