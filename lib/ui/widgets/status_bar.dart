@@ -3,15 +3,18 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart' as p;
 
 import '../../model/raw_photos.dart';
+import '../../state/app_config_notifier.dart';
 import '../../state/raw_photos_notifier.dart';
 
 class StatusBar extends ConsumerWidget {
-  final bool gridView;
-  const StatusBar({super.key, required this.gridView});
+
+  const StatusBar({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final config = ref.watch(appConfigProvider);
     RawPhotos rawPhotos = ref.watch(rawPhotosProvider);
+
     return SizedBox(
       height: 35,
       child: Row(
@@ -33,7 +36,7 @@ class StatusBar extends ConsumerWidget {
                     overflow: TextOverflow.ellipsis,
                   ),
                   SizedBox(width: 10),
-                  if(!gridView)
+                  if(!config.isGridView)
                     Checkbox(
                       value: rawPhotos.rawPhotoPaths[rawPhotos.currentPhoto].selected,
                       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,

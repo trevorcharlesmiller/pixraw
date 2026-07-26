@@ -9,7 +9,9 @@ import 'package:pixraw/state/raw_photos_notifier.dart';
 import 'package:pixraw/ui/dialog/settings_dialog.dart';
 import 'package:pixraw/ui/dialog/setup_wizard_dialog.dart';
 import 'package:pixraw/ui/widgets/raw_image.dart';
+import 'package:pixraw/ui/widgets/single_photo_view.dart';
 import 'package:pixraw/ui/widgets/status_bar.dart';
+import 'package:pixraw/ui/widgets/tool_bar.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'ui/dialog/about_dialog.dart';
@@ -27,7 +29,6 @@ class MainWindow extends ConsumerStatefulWidget {
 class _MainWindowState extends ConsumerState<MainWindow> with WindowListener {
   static const appName = 'PixRAW';
 
-  bool gridView = true;
   int _currentCrossAxisCount = 6;
   final ScrollController _gridScrollController = ScrollController();
 
@@ -66,9 +67,7 @@ class _MainWindowState extends ConsumerState<MainWindow> with WindowListener {
 
   void _toggleGridView() {
     if (ref.read(rawPhotosProvider).rawPhotoPaths.isNotEmpty) {
-      setState(() {
-        gridView = !gridView;
-      });
+      ref.read(appConfigProvider.notifier).toggleGridView();
       WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToSelected());
     }
   }
@@ -113,7 +112,6 @@ class _MainWindowState extends ConsumerState<MainWindow> with WindowListener {
   Widget build(BuildContext context) {
     RawPhotos rawPhotos = ref.watch(rawPhotosProvider);
     final config = ref.watch(appConfigProvider);
-    final configNotifier = ref.read(appConfigProvider.notifier);
 
     return Scaffold(
       body: Padding(
@@ -121,94 +119,7 @@ class _MainWindowState extends ConsumerState<MainWindow> with WindowListener {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-
-            //=================================================================================[Toolbar]
-            Card(
-              child: Padding(
-                padding: EdgeInsetsGeometry.all(3),
-                child: Row(
-                  children: [
-                    IconButton(
-                      tooltip: 'Open folder',
-                      icon: const Icon(Icons.folder_rounded),
-                      onPressed: selectFolder,
-                    ),
-                    SizedBox(
-                      height: 30,
-                      child: VerticalDivider(
-                        color: Colors.grey, // Ensure color is visible
-                        thickness: 1, // Explicitly set thickness
-                        width: 20, // Space allocated for the divider
-                      ),
-                    ),
-                    IconButton(
-                      icon: gridView
-                          ? const Icon(Icons.grid_view_rounded)
-                          : const Icon(Icons.grid_view),
-                      tooltip: 'Grid View',
-                      iconSize: 15,
-                      color: gridView
-                          ? Theme.of(context).colorScheme.primary
-                          : Theme.of(context).colorScheme.secondary,
-                      onPressed:
-                      rawPhotos.directory == null ||
-                          rawPhotos.rawPhotoPaths.isEmpty
-                          ? null
-                          : _toggleGridView,
-                    ),
-                    IconButton(
-                      icon: gridView
-                          ? const Icon(Icons.image_outlined)
-                          : const Icon(Icons.image_rounded),
-                      tooltip: 'Single Photo View',
-                      iconSize: 15,
-                      color: gridView
-                          ? Theme.of(context).colorScheme.secondary
-                          : Theme.of(context).colorScheme.primary,
-                      onPressed:
-                      rawPhotos.directory == null ||
-                          rawPhotos.rawPhotoPaths.isEmpty
-                          ? null
-                          : _toggleGridView,
-                    ),
-                    Expanded(child: Container(),),
-
-                    if (rawPhotos.directory != null)
-                      IconButton(
-                        tooltip: 'Copy selected photos',
-                        icon: const Icon(Icons.file_copy_rounded),
-                        onPressed:
-                        rawPhotos.rawPhotoPaths.where((p) => p.selected).isEmpty
-                            ? null
-                            : () {
-                          _showCopyDialog(context);
-                        },
-                      ),
-
-                    IconButton(
-                      onPressed: (){
-                        configNotifier.togglePanelOpen(!config.isPanelOpen);
-                      },
-                      icon: Icon(Icons.info_outline),
-                      color: config.isPanelOpen
-                          ? Theme.of(context).colorScheme.primary
-                          : Theme.of(context).colorScheme.secondary,
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.settings),
-                      tooltip: 'App Settings',
-                      onPressed: () => _showSettingsDialog(context),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.help),
-                      tooltip: 'About PixRAW',
-                      onPressed: () => _showAboutDialog(context),
-                    ),
-
-                  ],
-                ),
-              ),
-            ),
+            ToolBar(onSelectFolder: selectFolder, toggleGridView: _toggleGridView,),
 
             //=================================================================================[Main View]
             Expanded(child: Row(
@@ -256,44 +167,10 @@ class _MainWindowState extends ConsumerState<MainWindow> with WindowListener {
               ],
             ),),
 
-            StatusBar(gridView: gridView),
+            StatusBar(),
           ],
         ),
       ),
-    );
-  }
-
-  Future<void> _showAboutDialog(BuildContext context) {
-    return showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return PRAboutDialog();
-      },
-    );
-  }
-
-  Future<void> _showSettingsDialog(BuildContext context) {
-    return showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return SettingsDialog();
-      },
-    );
-  }
-
-  Future<void> _showCopyDialog(BuildContext context) {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return CopyDialog(
-          selectedPhotos: ref
-              .read(rawPhotosProvider)
-              .rawPhotoPaths
-              .where((p) => p.selected)
-              .toList(),
-        );
-      },
     );
   }
 
@@ -326,6 +203,7 @@ class _MainWindowState extends ConsumerState<MainWindow> with WindowListener {
   }
 
   Widget _buildMainView() {
+    final config = ref.watch(appConfigProvider);
     return FocusableActionDetector(
       autofocus: true, // Grabs focus initially so arrows work right away
       shortcuts: const <ShortcutActivator, Intent>{
@@ -351,23 +229,7 @@ class _MainWindowState extends ConsumerState<MainWindow> with WindowListener {
       },
       child: AnimatedSwitcher(
         duration: const Duration(milliseconds: 200),
-        child: gridView ? _buildPhotoGrid() : _buildSinglePhotoView(),
-      ),
-    );
-  }
-
-  Widget _buildSinglePhotoView() {
-    RawPhotos rawPhotos = ref.read(rawPhotosProvider);
-    return Center(
-      child: PRawImage(
-        index: rawPhotos.currentPhoto,
-        cacheWidth: MediaQuery.of(context).size.width.toInt(),
-        onChanged: (bool? value) {
-          _toggleSelectedPhoto();
-        },
-        onDoubleTap: () {
-          _toggleGridView();
-        },
+        child: config.isGridView ? _buildPhotoGrid() : SinglePhotoView(toggleGridView: _toggleGridView,),
       ),
     );
   }
@@ -423,9 +285,10 @@ class _MainWindowState extends ConsumerState<MainWindow> with WindowListener {
   }
 
   void _scrollToSelected() {
+    final config = ref.watch(appConfigProvider);
     RawPhotos rawPhotos = ref.read(rawPhotosProvider);
     // Ensure the grid view is active and the controller is attached
-    if (!_gridScrollController.hasClients || !gridView) return;
+    if (!_gridScrollController.hasClients || !config.isGridView) return;
 
     // 1. Get grid metrics from the controller
     final position = _gridScrollController.position;
