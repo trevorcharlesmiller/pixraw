@@ -6,16 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:pixraw/model/raw_photos.dart';
 import 'package:pixraw/state/app_config_notifier.dart';
 import 'package:pixraw/state/raw_photos_notifier.dart';
-import 'package:pixraw/ui/dialog/settings_dialog.dart';
 import 'package:pixraw/ui/dialog/setup_wizard_dialog.dart';
-import 'package:pixraw/ui/widgets/raw_image.dart';
+import 'package:pixraw/ui/widgets/info_panel.dart';
 import 'package:pixraw/ui/widgets/single_photo_view.dart';
 import 'package:pixraw/ui/widgets/status_bar.dart';
 import 'package:pixraw/ui/widgets/tool_bar.dart';
 import 'package:window_manager/window_manager.dart';
 
-import 'ui/dialog/about_dialog.dart';
-import 'ui/dialog/copy_dialog.dart';
 import 'ui/intents.dart';
 import 'ui/widgets/lazy_thumbnail_card.dart';
 
@@ -140,27 +137,7 @@ class _MainWindowState extends ConsumerState<MainWindow> with WindowListener {
                     child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       physics: const NeverScrollableScrollPhysics(),
-                      child: Card(
-                        child: Padding(
-                          padding: const EdgeInsets.all(15.0),
-                          child: SizedBox(
-                            width: 262,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    const Text(
-                                      'Image Info',
-                                    ),
-                                  ],
-                                ),
-                                const Divider(),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
+                      child: InfoPanel(),
                     ),
                   ),
                 ),
@@ -228,7 +205,7 @@ class _MainWindowState extends ConsumerState<MainWindow> with WindowListener {
         ),
       },
       child: AnimatedSwitcher(
-        duration: const Duration(milliseconds: 200),
+        duration: const Duration(milliseconds: 50),
         child: config.isGridView ? _buildPhotoGrid() : SinglePhotoView(toggleGridView: _toggleGridView,),
       ),
     );
