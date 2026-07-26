@@ -51,9 +51,7 @@ class _PRawImageState extends ConsumerState<PRawImage> {
   @override
   Widget build(BuildContext context) {
     RawPhoto rawPhoto = ref.read(rawPhotosProvider).rawPhotoPaths[widget.index];
-    return Padding(
-      padding: EdgeInsetsGeometry.all(10),
-      child: FutureBuilder<RawPhotoResult>(
+    return FutureBuilder<RawPhotoResult>(
         key: ValueKey(widget.index),
         future: thumbnail,
         builder: (BuildContext context, AsyncSnapshot<RawPhotoResult> snapshot) {
@@ -63,50 +61,16 @@ class _PRawImageState extends ConsumerState<PRawImage> {
             //   renderStopwatch.stop();
             //   print('🖼️ Flutter render completed in ${renderStopwatch.elapsedMilliseconds}ms');
             // });
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Center(
-                    child: GestureDetector(
-                      onDoubleTap: widget.onDoubleTap,
-                      child: RotatedBox(
-                        quarterTurns: snapshot.data!.quarterTurns,
-                        child: Image.memory(
-                          snapshot.data!.bytes!,
-                          cacheWidth: widget.cacheWidth,
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                    ),
-                  ),
+            return GestureDetector(
+              onDoubleTap: widget.onDoubleTap,
+              child: RotatedBox(
+                quarterTurns: snapshot.data!.quarterTurns,
+                child: Image.memory(
+                  snapshot.data!.bytes!,
+                  cacheWidth: widget.cacheWidth,
+                  fit: BoxFit.contain,
                 ),
-                SizedBox(height: 10),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                          p.basename(rawPhoto.filePath),
-                          style: TextStyle(fontSize: 12),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    SizedBox(width: 10),
-                    Checkbox(
-                      value: rawPhoto.selected,
-                      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-
-                      // 2. Adjusts the compact density to maximum negative values to remove padding
-                      visualDensity: const VisualDensity(
-                        horizontal: VisualDensity.minimumDensity,
-                        vertical: VisualDensity.minimumDensity,
-                      ),
-                      onChanged: widget.onChanged,
-                    ),
-                  ],
-                ),
-              ],
+              ),
             );
           } else if (snapshot.hasError) {
             return const Center(
@@ -116,7 +80,6 @@ class _PRawImageState extends ConsumerState<PRawImage> {
             return Container();
           }
         },
-      ),
-    );
+      );
   }
 }

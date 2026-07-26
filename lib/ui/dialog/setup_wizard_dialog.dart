@@ -30,10 +30,19 @@ class _SetupWizardDialogState extends ConsumerState<SetupWizardDialog> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('PERSONALIZE', style: TextStyle(fontSize: 14, color: colorScheme.secondary)),
-                  SizedBox(height: 10,),
-                  Text('Make it your own', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-                  SizedBox(height: 10,),
+                  Text(
+                    'PERSONALIZE',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: colorScheme.secondary,
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    'Make it your own',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 10),
                   Text(
                     'Choose your preferred look and feel.',
                     style: TextStyle(fontSize: 14),
@@ -41,7 +50,7 @@ class _SetupWizardDialogState extends ConsumerState<SetupWizardDialog> {
                 ],
               ),
             ),
-            SizedBox(width: 55,),
+            SizedBox(width: 55),
             Expanded(
               flex: 6,
               child: RadioGroup<ThemeMode>(
@@ -62,15 +71,17 @@ class _SetupWizardDialogState extends ConsumerState<SetupWizardDialog> {
                           title: Row(
                             children: [
                               Text('Automatic'),
-                              SizedBox(width: 5,),
+                              SizedBox(width: 5),
                               Tooltip(
-                                message: 'This will use the operating system setting.',
-                                  child: Icon(Icons.help_outline, size: 20,),),
+                                message:
+                                    'This will use the operating system setting.',
+                                preferBelow: false,
+                                verticalOffset: 20,
+                                child: Icon(Icons.help_outline, size: 20),
+                              ),
                             ],
                           ),
-                          trailing: Radio<ThemeMode>(
-                            value: ThemeMode.system,
-                          ),
+                          trailing: Radio<ThemeMode>(value: ThemeMode.system),
                         ),
                       ),
                     ),
@@ -80,9 +91,7 @@ class _SetupWizardDialogState extends ConsumerState<SetupWizardDialog> {
                         child: ListTile(
                           leading: Image.asset('assets/pixraw-dark.png'),
                           title: Text('Dark'),
-                          trailing: Radio<ThemeMode>(
-                            value: ThemeMode.dark,
-                          ),
+                          trailing: Radio<ThemeMode>(value: ThemeMode.dark),
                         ),
                       ),
                     ),
@@ -92,9 +101,7 @@ class _SetupWizardDialogState extends ConsumerState<SetupWizardDialog> {
                         child: ListTile(
                           leading: Image.asset('assets/pixraw-light.png'),
                           title: Text('Light'),
-                          trailing: Radio<ThemeMode>(
-                            value: ThemeMode.light,
-                          ),
+                          trailing: Radio<ThemeMode>(value: ThemeMode.light),
                         ),
                       ),
                     ),
