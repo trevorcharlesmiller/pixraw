@@ -10,8 +10,6 @@ import 'package:pixraw/state/raw_photos_notifier.dart';
 import 'package:pixraw/ui/dialog/settings_dialog.dart';
 import 'package:pixraw/ui/dialog/setup_wizard_dialog.dart';
 import 'package:pixraw/ui/widgets/raw_image.dart';
-import 'package:pixraw/model/raw_photo.dart';
-import 'package:pixraw/util/raw_utils.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'ui/dialog/about_dialog.dart';
@@ -115,104 +113,137 @@ class _MainWindowState extends ConsumerState<MainWindow> with WindowListener {
   Widget build(BuildContext context) {
     RawPhotos rawPhotos = ref.watch(rawPhotosProvider);
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          tooltip: 'Open folder',
-          icon: const Icon(Icons.folder_rounded),
-          onPressed: selectFolder,
-        ),
-        title: Text(
-          rawPhotos.directory?.absolute.path ?? appName,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
-        actions: [
-          if (rawPhotos.directory != null)
-            IconButton(
-              tooltip: 'Copy selected photos',
-              icon: const Icon(Icons.file_copy_rounded),
-              onPressed:
-                  rawPhotos.rawPhotoPaths.where((p) => p.selected).isEmpty
-                  ? null
-                  : () {
-                      _showCopyDialog(context);
-                    },
-            ),
-
-          IconButton(
-            icon: const Icon(Icons.settings),
-            tooltip: 'App Settings',
-            onPressed: () => _showSettingsDialog(context),
-          ),
-          IconButton(
-            icon: const Icon(Icons.help),
-            tooltip: 'About PixRAW',
-            onPressed: () => _showAboutDialog(context),
-          ),
-        ],
-      ),
-      // 1. Wrap the changing area in an AnimatedSwitcher
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 15),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
-              child: AnimatedSwitcher(
-                duration: const Duration(milliseconds: 100),
-                switchInCurve: Curves.easeIn,
-                switchOutCurve: Curves.easeOut,
-                child: rawPhotos.directory == null
-                    ? _buildEmptyState() // Shown when app opens
-                    : _buildMainView(), // Shown once directory is selected
-              ),
+            //=================================================================================[Toolbar]
+            Row(
+              children: [
+                IconButton(
+                  tooltip: 'Open folder',
+                  icon: const Icon(Icons.folder_rounded),
+                  onPressed: selectFolder,
+                ),
+                SizedBox(
+                  height: 30,
+                  child: VerticalDivider(
+                    color: Colors.grey, // Ensure color is visible
+                    thickness: 1, // Explicitly set thickness
+                    width: 20, // Space allocated for the divider
+                  ),
+                ),
+                IconButton(
+                  icon: gridView
+                      ? const Icon(Icons.grid_view_rounded)
+                      : const Icon(Icons.grid_view),
+                  tooltip: 'Grid View',
+                  iconSize: 15,
+                  color: gridView
+                      ? Theme.of(context).colorScheme.primary
+                      : Theme.of(context).colorScheme.secondary,
+                  onPressed:
+                  rawPhotos.directory == null ||
+                      rawPhotos.rawPhotoPaths.isEmpty
+                      ? null
+                      : _toggleGridView,
+                ),
+                IconButton(
+                  icon: gridView
+                      ? const Icon(Icons.image_outlined)
+                      : const Icon(Icons.image_rounded),
+                  tooltip: 'Single Photo View',
+                  iconSize: 15,
+                  color: gridView
+                      ? Theme.of(context).colorScheme.secondary
+                      : Theme.of(context).colorScheme.primary,
+                  onPressed:
+                  rawPhotos.directory == null ||
+                      rawPhotos.rawPhotoPaths.isEmpty
+                      ? null
+                      : _toggleGridView,
+                ),
+                Expanded(child: Container(),),
+
+                if (rawPhotos.directory != null)
+                  IconButton(
+                    tooltip: 'Copy selected photos',
+                    icon: const Icon(Icons.file_copy_rounded),
+                    onPressed:
+                    rawPhotos.rawPhotoPaths.where((p) => p.selected).isEmpty
+                        ? null
+                        : () {
+                      _showCopyDialog(context);
+                    },
+                  ),
+
+                IconButton(onPressed: (){}, icon: Icon(Icons.info_outline),),
+                IconButton(
+                  icon: const Icon(Icons.settings),
+                  tooltip: 'App Settings',
+                  onPressed: () => _showSettingsDialog(context),
+                ),
+                IconButton(
+                  icon: const Icon(Icons.help),
+                  tooltip: 'About PixRAW',
+                  onPressed: () => _showAboutDialog(context),
+                ),
+
+              ],
             ),
+            Expanded(
+              child: rawPhotos.directory == null
+                  ? _buildEmptyState() // Shown when app opens
+                  : _buildMainView(),
+            ),
+
             SizedBox(
               height: 35,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  IconButton(
-                    icon: gridView
-                        ? const Icon(Icons.grid_view_rounded)
-                        : const Icon(Icons.grid_view),
-                    tooltip: 'Grid View',
-                    iconSize: 15,
-                    color: gridView
-                        ? Theme.of(context).colorScheme.primary
-                        : Theme.of(context).colorScheme.secondary,
-                    onPressed:
-                        rawPhotos.directory == null ||
-                            rawPhotos.rawPhotoPaths.isEmpty
-                        ? null
-                        : _toggleGridView,
-                  ),
-                  IconButton(
-                    icon: gridView
-                        ? const Icon(Icons.image_outlined)
-                        : const Icon(Icons.image_rounded),
-                    tooltip: 'Single Photo View',
-                    iconSize: 15,
-                    color: gridView
-                        ? Theme.of(context).colorScheme.secondary
-                        : Theme.of(context).colorScheme.primary,
-                    onPressed:
-                        rawPhotos.directory == null ||
-                            rawPhotos.rawPhotoPaths.isEmpty
-                        ? null
-                        : _toggleGridView,
-                  ),
-                  SizedBox(width: 10),
+
                   Expanded(
-                    child: rawPhotos.rawPhotoPaths.isEmpty
-                        ? Text('0 photos')
-                        : Text(
-                            '${rawPhotos.currentPhoto + 1} of ${rawPhotos.rawPhotoPaths.length} photos',
+                    child: rawPhotos.rawPhotoPaths.isEmpty ? Container() :
+
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(
+                            p.basename(rawPhotos.rawPhotoPaths[rawPhotos.currentPhoto].filePath),
+                            style: TextStyle(fontSize: 12),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
+                          SizedBox(width: 10),
+                          if(!gridView)
+                            Checkbox(
+                              value: rawPhotos.rawPhotoPaths[rawPhotos.currentPhoto].selected,
+                              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              visualDensity: const VisualDensity(
+                                horizontal: VisualDensity.minimumDensity,
+                                vertical: VisualDensity.minimumDensity,
+                              ),
+                              onChanged: (bool? value){_toggleSelectedPhoto();},
+                            )
+                        ],
+                      )
+
                   ),
+
+                  rawPhotos.rawPhotoPaths.isEmpty
+                      ? Text('0')
+                      : Text(
+                    '${rawPhotos.currentPhoto + 1} of ${rawPhotos.rawPhotoPaths.length}',
+                  ),
+                  SizedBox(width: 5,),
+                  const Icon(Icons.image_outlined, size: 14,),
+                  SizedBox(width: 15,),
                   Text(
-                    '${rawPhotos.rawPhotoPaths.where((p) => p.selected).length} photos selected',
+                    '${rawPhotos.rawPhotoPaths.where((p) => p.selected).length} selected',
                   ),
                   IconButton(
                     icon: const Icon(Icons.library_add_check_rounded),
