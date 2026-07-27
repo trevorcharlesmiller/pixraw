@@ -247,6 +247,9 @@ class _MainWindowState extends ConsumerState<MainWindow> with WindowListener {
                 }
                 _toggleSelectedPhoto();
               },
+              onRatingChanged: (int? rating) {
+                ref.read(rawPhotosProvider.notifier).setRating(rating, index: index);
+              },
               onTap: () {
                 ref.read(rawPhotosProvider.notifier).setSelectedPhoto(index);
               },

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart' as p;
+import 'package:pixraw/ui/widgets/rating.dart';
 
 import '../../model/raw_photos.dart';
 import '../../state/app_config_notifier.dart';
@@ -26,6 +27,7 @@ class StatusBar extends ConsumerWidget {
               child: rawPhotos.rawPhotoPaths.isEmpty ? Container() :
 
               Row(
+                spacing: 10,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -35,7 +37,10 @@ class StatusBar extends ConsumerWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  SizedBox(width: 10),
+                  if(!config.isGridView)
+                    Rating(onChanged: (int? value){
+                      ref.read(rawPhotosProvider.notifier).setRating(value);
+                    }, rawPhoto: rawPhotos.rawPhotoPaths[rawPhotos.currentPhoto],),
                   if(!config.isGridView)
                     Checkbox(
                       value: rawPhotos.rawPhotoPaths[rawPhotos.currentPhoto].selected,
@@ -45,7 +50,8 @@ class StatusBar extends ConsumerWidget {
                         vertical: VisualDensity.minimumDensity,
                       ),
                       onChanged: (bool? value){ref.read(rawPhotosProvider.notifier).toggleCurrentPhotoSelected();},
-                    )
+                    ),
+
                 ],
               )
 

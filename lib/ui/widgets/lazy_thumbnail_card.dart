@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pixraw/ui/widgets/rating.dart';
 import 'package:pixraw/ui/widgets/raw_image.dart';
 import 'package:pixraw/model/raw_photo.dart';
 import 'package:path/path.dart' as p;
@@ -10,6 +11,7 @@ class LazyThumbnailCard extends StatefulWidget {
   final ValueChanged<bool?>? onChanged;
   final VoidCallback onTap;
   final VoidCallback onDoubleTap;
+  final ValueChanged<int>? onRatingChanged;
 
   const LazyThumbnailCard({
     super.key,
@@ -19,6 +21,7 @@ class LazyThumbnailCard extends StatefulWidget {
     required this.onChanged,
     required this.onTap,
     required this.onDoubleTap,
+    required this.onRatingChanged,
   });
 
   @override
@@ -64,6 +67,7 @@ class _LazyThumbnailCardState extends State<LazyThumbnailCard> {
         child: Padding(
           padding: EdgeInsetsGeometry.all(10),
           child: Column(
+            spacing: 5,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
@@ -72,7 +76,6 @@ class _LazyThumbnailCardState extends State<LazyThumbnailCard> {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
-              SizedBox(height: 5),
               Expanded(
                 child: Center(
                   child: PRawImage(
@@ -83,13 +86,13 @@ class _LazyThumbnailCardState extends State<LazyThumbnailCard> {
                   ),
                 ),
               ),
-              SizedBox(height: 5),
               Row(
+                spacing: 10,
                 children: [
+                  Rating(onChanged: widget.onRatingChanged, rawPhoto: widget.rawPhoto,),
                   Expanded(
                     child: Container(),
                   ),
-                  SizedBox(width: 10),
                   Checkbox(
                     value: widget.rawPhoto.selected,
                     materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
