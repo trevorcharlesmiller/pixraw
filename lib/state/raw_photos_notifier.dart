@@ -91,10 +91,11 @@ class RawPhotosNotifier extends Notifier<RawPhotos> {
     RawPhotoResult result = await RawPhotoLoader().loadRawPhotoThumbnail(state.rawPhotoPaths[index]);
     if (result.info != null && state.rawPhotoPaths.isNotEmpty) {
       final updatedPaths = List<RawPhoto>.from(state.rawPhotoPaths);
-      final current = updatedPaths[state.currentPhoto];
+      final current = updatedPaths[index];
 
-      updatedPaths[state.currentPhoto] = current.copyWith(
-          info: result.info!
+      updatedPaths[index] = current.copyWith(
+          info: result.info!,
+          loaded: true
       );
 
       state = state.copyWith(rawPhotoPaths: updatedPaths);

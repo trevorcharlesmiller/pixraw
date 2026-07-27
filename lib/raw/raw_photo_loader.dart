@@ -29,15 +29,12 @@ class RawPhotoLoader {
   }
 
   RawPhotoInfo loadPhotoInfo(Pointer<libraw_data_t> ptr) {
-    // print('Aperture: f${ptr.ref.other.aperture.toStringAsPrecision(2)}');
-    // print('Shutter: 1/${(1/ptr.ref.other.shutter).toStringAsFixed(0)}s');
-
     DateTime timestamp = DateTime.fromMillisecondsSinceEpoch(ptr.ref.other.timestamp*1000);
     String cameraMake = arrayToString(ptr.ref.idata.make);
     String cameraModel = arrayToString(ptr.ref.idata.model);
     String lens = arrayToString(ptr.ref.lens.Lens);
     double aperture = ptr.ref.other.aperture;
-    double shutter = (1/ptr.ref.other.shutter);
+    double shutter = (ptr.ref.other.shutter);
     int iso = ptr.ref.other.iso_speed.ceil();
     int focalLength = ptr.ref.other.focal_len.ceil();
     int width = ptr.ref.sizes.width;

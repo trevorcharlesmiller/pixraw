@@ -6,6 +6,7 @@ import 'package:path/path.dart' as p;
 
 import '../../model/raw_photos.dart';
 import '../../state/raw_photos_notifier.dart';
+import 'info_row.dart';
 
 const TextStyle labelStyle = TextStyle(
     fontSize: 9
@@ -14,6 +15,17 @@ const TextStyle labelStyle = TextStyle(
 class InfoPanel extends ConsumerWidget {
 
   const InfoPanel({super.key});
+
+  String formatShutter(double? shutter) {
+    if(shutter == null) {
+      return '';
+    } else
+    if(shutter < 1.0) {
+      return '1/${(1/shutter).toStringAsFixed(0)}s';
+    } else {
+      return '${(shutter).toStringAsFixed(2)}s';
+    }
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -28,211 +40,29 @@ class InfoPanel extends ConsumerWidget {
         child: SizedBox(
           width: 262,
           child: Column(
+            spacing: 5,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
                 'Image Info',
               ),
               const Divider(),
-              Row(
-                children: [
-                  SizedBox(
-                    width: 80,
-                    child: Text(
-                      'Filename',
-                      style: labelStyle,
-                    ),
-                  ),
+              InfoRow(label: 'Filename', value: p.basename(photo.filePath),),
+              InfoRow(label: 'Capture Date', value: photo.info.timestamp==null ? '' :
+                DateFormat.yMd().format(photo.info.timestamp!),),
+              InfoRow(label: 'Capture Time', value: photo.info.timestamp==null ? '' : DateFormat.jm().format(photo.info.timestamp!),),
+              InfoRow(label: 'Dimensions', value: '${photo.info.width} x ${photo.info.height}'),
+              InfoRow(label: 'Camera Make', value: photo.info.cameraMake==null ? '' :
+                photo.info.cameraMake!,),
+              InfoRow(label: 'Camera Model', value: photo.info.cameraModel==null ? '' :
+                photo.info.cameraModel!,),
+              InfoRow(label: 'Lens', value: photo.info.lens==null ? '' :
+                photo.info.lens!,),
+              InfoRow(label: 'ISO', value: photo.info.iso==null ? '' : '${photo.info.iso}',),
+              InfoRow(label: 'Aperture', value: photo.info.aperture==null ? '' : 'f${photo.info.aperture!.toStringAsPrecision(2)}',),
+              InfoRow(label: 'Shutter', value: photo.info.shutter==null ? '' : formatShutter(photo.info.shutter),),
+              InfoRow(label: 'Focal Length', value: photo.info.focalLength==null ? '' : '${photo.info.focalLength}mm'),
 
-                  Text(
-                    p.basename(photo.filePath),
-                    style: TextStyle(fontSize: 11),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ),
-
-              Row(
-                children: [
-                  SizedBox(
-                    width: 80,
-                    child: Text(
-                      'Capture Date',
-                      style: labelStyle,
-                    ),
-                  ),
-                  Text(
-                    photo.info.timestamp==null ? '' :
-                    DateFormat.yMd().format(photo.info.timestamp!),
-                    style: TextStyle(fontSize: 10),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ),
-
-              Row(
-                children: [
-                  SizedBox(
-                    width: 80,
-                    child: Text(
-                      'Capture Time',
-                      style: labelStyle,
-                    ),
-                  ),
-                  Text(
-                    photo.info.timestamp==null ? '' : DateFormat.jm().format(photo.info.timestamp!),
-                    style: TextStyle(fontSize: 10),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ),
-
-              Row(
-                children: [
-                  SizedBox(
-                    width: 80,
-                    child: Text(
-                      'Dimensions',
-                      style: labelStyle,
-                    ),
-                  ),
-                  Text(
-                    '${photo.info.width} x ${photo.info.height}',
-                    style: TextStyle(fontSize: 10),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ),
-
-              Row(
-                children: [
-                  SizedBox(
-                    width: 80,
-                    child: Text(
-                      'Camera Make',
-                      style: labelStyle,
-                    ),
-                  ),
-                  Text(
-                    photo.info.cameraMake==null ? '' :
-                    photo.info.cameraMake!,
-                    style: TextStyle(fontSize: 10),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ),
-
-              Row(
-                children: [
-                  SizedBox(
-                    width: 80,
-                    child: Text(
-                      'Camera Model',
-                      style: labelStyle,
-                    ),
-                  ),
-                  Text(
-                    photo.info.cameraModel==null ? '' :
-                    photo.info.cameraModel!,
-                    style: TextStyle(fontSize: 10),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ),
-
-              Row(
-                children: [
-                  SizedBox(
-                    width: 80,
-                    child: Text(
-                      'Lens',
-                      style: labelStyle,
-                    ),
-                  ),
-                  Text(
-                    photo.info.lens==null ? '' :
-                    photo.info.lens!,
-                    style: TextStyle(fontSize: 10),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ),
-
-              Row(
-                children: [
-                  SizedBox(
-                    width: 80,
-                    child: Text(
-                      'ISO',
-                      style: labelStyle,
-                    ),
-                  ),
-                  Text(
-                    photo.info.iso==null ? '' : '${photo.info.iso}',
-                    style: TextStyle(fontSize: 10),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  SizedBox(
-                    width: 80,
-                    child: Text(
-                      'Aperture',
-                      style: labelStyle,
-                    ),
-                  ),
-                  Text(
-                    photo.info.aperture==null ? '' : 'f${photo.info.aperture!.toStringAsPrecision(2)}',
-                    style: TextStyle(fontSize: 10),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  SizedBox(
-                    width: 80,
-                    child: Text(
-                      'Shutter',
-                      style: labelStyle,
-                    ),
-                  ),
-                  Text(
-                    photo.info.shutter==null ? '' : '${photo.info.shutter}s',
-                    style: TextStyle(fontSize: 10),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ),
-              Row(
-                children: [
-                  SizedBox(
-                    width: 80,
-                    child: Text(
-                      'Focal Length',
-                      style: labelStyle,
-                    ),
-                  ),
-                  Text(
-                    photo.info.focalLength==null ? '' : '${photo.info.focalLength}mm',
-                    style: TextStyle(fontSize: 10),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ),
             ],
           ),
         ),
