@@ -70,6 +70,20 @@ class RawPhotosNotifier extends Notifier<RawPhotos> {
     state = state.copyWith(rawPhotoPaths: updatedPaths);
   }
 
+  void setRating(int? rating, {int? index}) {
+    int i = index ?? state.currentPhoto;
+    if(state.rawPhotoPaths.isNotEmpty) {
+      final updatedPaths = List<RawPhoto>.from(state.rawPhotoPaths);
+      final current = updatedPaths[i];
+
+      updatedPaths[i] = current.copyWith(
+          rating: rating
+      );
+
+      state = state.copyWith(rawPhotoPaths: updatedPaths);
+    }
+  }
+
   Future<void> setSelectedDirectory(Directory selectedDir) async {
     List<RawPhoto> paths = await selectedDir
         .list(recursive: false, followLinks: false)
