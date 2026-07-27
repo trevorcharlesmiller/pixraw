@@ -67,6 +67,10 @@ class AppConfigNotifier extends Notifier<AppConfig> {
     state = state.copyWith(isFirstRun: value);
     ref.read(sharedPreferencesProvider).setBool(_firstRunKey, value);
   }
+
+  void toggleGridView() {
+    state = state.copyWith(isGridView: !state.isGridView);
+  }
 }
 
 final appConfigProvider = NotifierProvider<AppConfigNotifier, AppConfig>(AppConfigNotifier.new);

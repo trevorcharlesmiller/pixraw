@@ -29,9 +29,32 @@ class RawPhotoLoader {
   }
 
   RawPhotoInfo loadPhotoInfo(Pointer<libraw_data_t> ptr) {
+    DateTime timestamp = DateTime.fromMillisecondsSinceEpoch(ptr.ref.other.timestamp*1000);
+    String cameraMake = arrayToString(ptr.ref.idata.make);
+    String cameraModel = arrayToString(ptr.ref.idata.model);
+    String lens = arrayToString(ptr.ref.lens.Lens);
+    double aperture = ptr.ref.other.aperture;
+    double shutter = (ptr.ref.other.shutter);
+    int iso = ptr.ref.other.iso_speed.ceil();
+    int focalLength = ptr.ref.other.focal_len.ceil();
+    int width = ptr.ref.sizes.width;
+    int height = ptr.ref.sizes.height;
     int rawFlip = ptr.ref.sizes.flip;
     int flip = convertFlipToQuarterTurns(rawFlip);
-    return RawPhotoInfo(flip: flip);
+
+    return RawPhotoInfo(
+      timestamp: timestamp,
+      cameraMake: cameraMake,
+        cameraModel: cameraModel,
+        lens: lens,
+        aperture: aperture,
+        shutter: shutter,
+        iso: iso,
+        focalLength: focalLength,
+        width: width,
+        height: height,
+        flip: flip
+    );
   }
 
   Future<RawPhotoResult> loadRawPhotoThumbnail(RawPhoto rawPhoto) async {

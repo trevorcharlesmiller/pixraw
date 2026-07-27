@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../state/app_config_notifier.dart';
 
-
 class SettingsDialog extends ConsumerWidget {
   const SettingsDialog({super.key});
 

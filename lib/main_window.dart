@@ -1,19 +1,18 @@
 import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:path/path.dart' as p;
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:pixraw/model/raw_photos.dart';
 import 'package:pixraw/state/app_config_notifier.dart';
 import 'package:pixraw/state/raw_photos_notifier.dart';
-import 'package:pixraw/ui/dialog/settings_dialog.dart';
 import 'package:pixraw/ui/dialog/setup_wizard_dialog.dart';
-import 'package:pixraw/ui/widgets/raw_image.dart';
+import 'package:pixraw/ui/widgets/info_panel.dart';
+import 'package:pixraw/ui/widgets/single_photo_view.dart';
+import 'package:pixraw/ui/widgets/status_bar.dart';
+import 'package:pixraw/ui/widgets/tool_bar.dart';
 import 'package:window_manager/window_manager.dart';
 
-import 'ui/dialog/about_dialog.dart';
-import 'ui/dialog/copy_dialog.dart';
 import 'ui/intents.dart';
 import 'ui/widgets/lazy_thumbnail_card.dart';
 
@@ -27,7 +26,6 @@ class MainWindow extends ConsumerStatefulWidget {
 class _MainWindowState extends ConsumerState<MainWindow> with WindowListener {
   static const appName = 'PixRAW';
 
-  bool gridView = true;
   int _currentCrossAxisCount = 6;
   final ScrollController _gridScrollController = ScrollController();
 
@@ -66,9 +64,7 @@ class _MainWindowState extends ConsumerState<MainWindow> with WindowListener {
 
   void _toggleGridView() {
     if (ref.read(rawPhotosProvider).rawPhotoPaths.isNotEmpty) {
-      setState(() {
-        gridView = !gridView;
-      });
+      ref.read(appConfigProvider.notifier).toggleGridView();
       WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToSelected());
     }
   }
@@ -112,209 +108,46 @@ class _MainWindowState extends ConsumerState<MainWindow> with WindowListener {
   @override
   Widget build(BuildContext context) {
     RawPhotos rawPhotos = ref.watch(rawPhotosProvider);
+    final config = ref.watch(appConfigProvider);
+
     return Scaffold(
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 15),
+        padding: EdgeInsets.symmetric(horizontal: 5),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            //=================================================================================[Toolbar]
-            Row(
+            ToolBar(onSelectFolder: selectFolder, toggleGridView: _toggleGridView,),
+
+            //=================================================================================[Main View]
+            Expanded(child: Row(
               children: [
-                IconButton(
-                  tooltip: 'Open folder',
-                  icon: const Icon(Icons.folder_rounded),
-                  onPressed: selectFolder,
+                Expanded(
+                  child: rawPhotos.directory == null
+                      ? _buildEmptyState() // Shown when app opens
+                      : _buildMainView(),
                 ),
-                SizedBox(
-                  height: 30,
-                  child: VerticalDivider(
-                    color: Colors.grey, // Ensure color is visible
-                    thickness: 1, // Explicitly set thickness
-                    width: 20, // Space allocated for the divider
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 250),
+                  curve: Curves.easeInOut,
+                  width: config.isPanelOpen ? 300 : 0,
+                  //color: Colors.blueGrey[900],
+                  //clipBehavior: Clip.hardEdge,
+                  child: SizedBox(
+                    width: 300,
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      physics: const NeverScrollableScrollPhysics(),
+                      child: InfoPanel(),
+                    ),
                   ),
                 ),
-                IconButton(
-                  icon: gridView
-                      ? const Icon(Icons.grid_view_rounded)
-                      : const Icon(Icons.grid_view),
-                  tooltip: 'Grid View',
-                  iconSize: 15,
-                  color: gridView
-                      ? Theme.of(context).colorScheme.primary
-                      : Theme.of(context).colorScheme.secondary,
-                  onPressed:
-                  rawPhotos.directory == null ||
-                      rawPhotos.rawPhotoPaths.isEmpty
-                      ? null
-                      : _toggleGridView,
-                ),
-                IconButton(
-                  icon: gridView
-                      ? const Icon(Icons.image_outlined)
-                      : const Icon(Icons.image_rounded),
-                  tooltip: 'Single Photo View',
-                  iconSize: 15,
-                  color: gridView
-                      ? Theme.of(context).colorScheme.secondary
-                      : Theme.of(context).colorScheme.primary,
-                  onPressed:
-                  rawPhotos.directory == null ||
-                      rawPhotos.rawPhotoPaths.isEmpty
-                      ? null
-                      : _toggleGridView,
-                ),
-                Expanded(child: Container(),),
-
-                if (rawPhotos.directory != null)
-                  IconButton(
-                    tooltip: 'Copy selected photos',
-                    icon: const Icon(Icons.file_copy_rounded),
-                    onPressed:
-                    rawPhotos.rawPhotoPaths.where((p) => p.selected).isEmpty
-                        ? null
-                        : () {
-                      _showCopyDialog(context);
-                    },
-                  ),
-
-                IconButton(onPressed: (){}, icon: Icon(Icons.info_outline),),
-                IconButton(
-                  icon: const Icon(Icons.settings),
-                  tooltip: 'App Settings',
-                  onPressed: () => _showSettingsDialog(context),
-                ),
-                IconButton(
-                  icon: const Icon(Icons.help),
-                  tooltip: 'About PixRAW',
-                  onPressed: () => _showAboutDialog(context),
-                ),
-
               ],
-            ),
-            Expanded(
-              child: rawPhotos.directory == null
-                  ? _buildEmptyState() // Shown when app opens
-                  : _buildMainView(),
-            ),
+            ),),
 
-            SizedBox(
-              height: 35,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-
-                  Expanded(
-                    child: rawPhotos.rawPhotoPaths.isEmpty ? Container() :
-
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            p.basename(rawPhotos.rawPhotoPaths[rawPhotos.currentPhoto].filePath),
-                            style: TextStyle(fontSize: 12),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          SizedBox(width: 10),
-                          if(!gridView)
-                            Checkbox(
-                              value: rawPhotos.rawPhotoPaths[rawPhotos.currentPhoto].selected,
-                              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                              visualDensity: const VisualDensity(
-                                horizontal: VisualDensity.minimumDensity,
-                                vertical: VisualDensity.minimumDensity,
-                              ),
-                              onChanged: (bool? value){_toggleSelectedPhoto();},
-                            )
-                        ],
-                      )
-
-                  ),
-
-                  rawPhotos.rawPhotoPaths.isEmpty
-                      ? Text('0')
-                      : Text(
-                    '${rawPhotos.currentPhoto + 1} of ${rawPhotos.rawPhotoPaths.length}',
-                  ),
-                  SizedBox(width: 5,),
-                  const Icon(Icons.image_outlined, size: 14,),
-                  SizedBox(width: 15,),
-                  Text(
-                    '${rawPhotos.rawPhotoPaths.where((p) => p.selected).length} selected',
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.library_add_check_rounded),
-                    tooltip: 'Select all photos',
-                    iconSize: 15,
-                    onPressed:
-                        rawPhotos.rawPhotoPaths.isEmpty ||
-                            (rawPhotos.rawPhotoPaths
-                                    .where((p) => p.selected)
-                                    .length ==
-                                rawPhotos.rawPhotoPaths.length)
-                        ? null
-                        : () {
-                            ref
-                                .read(rawPhotosProvider.notifier)
-                                .selectAllPhotos();
-                          },
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.deselect),
-                    tooltip: 'Clear selected photos',
-                    iconSize: 15,
-                    onPressed:
-                        rawPhotos.rawPhotoPaths.where((p) => p.selected).isEmpty
-                        ? null
-                        : () {
-                            ref
-                                .read(rawPhotosProvider.notifier)
-                                .unSelectAllPhotos();
-                          },
-                  ),
-                ],
-              ),
-            ),
+            StatusBar(),
           ],
         ),
       ),
-    );
-  }
-
-  Future<void> _showAboutDialog(BuildContext context) {
-    return showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return PRAboutDialog();
-      },
-    );
-  }
-
-  Future<void> _showSettingsDialog(BuildContext context) {
-    return showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return SettingsDialog();
-      },
-    );
-  }
-
-  Future<void> _showCopyDialog(BuildContext context) {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return CopyDialog(
-          selectedPhotos: ref
-              .read(rawPhotosProvider)
-              .rawPhotoPaths
-              .where((p) => p.selected)
-              .toList(),
-        );
-      },
     );
   }
 
@@ -347,6 +180,7 @@ class _MainWindowState extends ConsumerState<MainWindow> with WindowListener {
   }
 
   Widget _buildMainView() {
+    final config = ref.watch(appConfigProvider);
     return FocusableActionDetector(
       autofocus: true, // Grabs focus initially so arrows work right away
       shortcuts: const <ShortcutActivator, Intent>{
@@ -371,24 +205,8 @@ class _MainWindowState extends ConsumerState<MainWindow> with WindowListener {
         ),
       },
       child: AnimatedSwitcher(
-        duration: const Duration(milliseconds: 200),
-        child: gridView ? _buildPhotoGrid() : _buildSinglePhotoView(),
-      ),
-    );
-  }
-
-  Widget _buildSinglePhotoView() {
-    RawPhotos rawPhotos = ref.read(rawPhotosProvider);
-    return Center(
-      child: PRawImage(
-        index: rawPhotos.currentPhoto,
-        cacheWidth: MediaQuery.of(context).size.width.toInt(),
-        onChanged: (bool? value) {
-          _toggleSelectedPhoto();
-        },
-        onDoubleTap: () {
-          _toggleGridView();
-        },
+        duration: const Duration(milliseconds: 50),
+        child: config.isGridView ? _buildPhotoGrid() : SinglePhotoView(toggleGridView: _toggleGridView,),
       ),
     );
   }
@@ -444,9 +262,10 @@ class _MainWindowState extends ConsumerState<MainWindow> with WindowListener {
   }
 
   void _scrollToSelected() {
+    final config = ref.watch(appConfigProvider);
     RawPhotos rawPhotos = ref.read(rawPhotosProvider);
     // Ensure the grid view is active and the controller is attached
-    if (!_gridScrollController.hasClients || !gridView) return;
+    if (!_gridScrollController.hasClients || !config.isGridView) return;
 
     // 1. Get grid metrics from the controller
     final position = _gridScrollController.position;
