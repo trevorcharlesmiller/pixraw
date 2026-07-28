@@ -11,6 +11,7 @@ import 'package:pixraw/ui/widgets/info_panel.dart';
 import 'package:pixraw/ui/widgets/single_photo_view.dart';
 import 'package:pixraw/ui/widgets/status_bar.dart';
 import 'package:pixraw/ui/widgets/tool_bar.dart';
+import 'package:pixraw/util/rating_color.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'ui/intents.dart';
@@ -188,6 +189,20 @@ class _MainWindowState extends ConsumerState<MainWindow> with WindowListener {
         SingleActivator(LogicalKeyboardKey.arrowRight): MoveRightIntent(),
         SingleActivator(LogicalKeyboardKey.enter): ToggleViewIntent(),
         SingleActivator(LogicalKeyboardKey.space): ToggleSelectedIntent(),
+        SingleActivator(LogicalKeyboardKey.arrowUp): DoNothingIntent2(),
+        SingleActivator(LogicalKeyboardKey.arrowDown): DoNothingIntent2(),
+        SingleActivator(LogicalKeyboardKey.digit0): Rating0Intent(),
+        SingleActivator(LogicalKeyboardKey.digit1): Rating1Intent(),
+        SingleActivator(LogicalKeyboardKey.digit2): Rating2Intent(),
+        SingleActivator(LogicalKeyboardKey.digit3): Rating3Intent(),
+        SingleActivator(LogicalKeyboardKey.digit4): Rating4Intent(),
+        SingleActivator(LogicalKeyboardKey.digit5): Rating5Intent(),
+        SingleActivator(LogicalKeyboardKey.keyR): ColorRedIntent(),
+        SingleActivator(LogicalKeyboardKey.keyG): ColorGreenIntent(),
+        SingleActivator(LogicalKeyboardKey.keyB): ColorBlueIntent(),
+        SingleActivator(LogicalKeyboardKey.keyY): ColorYellowIntent(),
+        SingleActivator(LogicalKeyboardKey.keyP): ColorPurpleIntent(),
+        SingleActivator(LogicalKeyboardKey.keyC): ColorClearIntent(),
       },
       actions: <Type, Action<Intent>>{
         // Define what happens when the intents are triggered
@@ -202,6 +217,44 @@ class _MainWindowState extends ConsumerState<MainWindow> with WindowListener {
         ),
         ToggleSelectedIntent: CallbackAction<ToggleSelectedIntent>(
           onInvoke: (_) => _toggleSelectedPhoto(),
+        ),
+        DoNothingIntent2: CallbackAction<DoNothingIntent2>(onInvoke: (_) {return null;},),
+        Rating0Intent: CallbackAction<Rating0Intent>(
+          onInvoke: (_) => ref.read(rawPhotosProvider.notifier).setRating(0),
+        ),
+        Rating1Intent: CallbackAction<Rating1Intent>(
+          onInvoke: (_) => ref.read(rawPhotosProvider.notifier).setRating(1),
+        ),
+        Rating2Intent: CallbackAction<Rating2Intent>(
+          onInvoke: (_) => ref.read(rawPhotosProvider.notifier).setRating(2),
+        ),
+        Rating3Intent: CallbackAction<Rating3Intent>(
+          onInvoke: (_) => ref.read(rawPhotosProvider.notifier).setRating(3),
+        ),
+        Rating4Intent: CallbackAction<Rating4Intent>(
+          onInvoke: (_) => ref.read(rawPhotosProvider.notifier).setRating(4),
+        ),
+        Rating5Intent: CallbackAction<Rating5Intent>(
+          onInvoke: (_) => ref.read(rawPhotosProvider.notifier).setRating(5),
+        ),
+
+        ColorRedIntent: CallbackAction<ColorRedIntent>(
+          onInvoke: (_) => ref.read(rawPhotosProvider.notifier).setColor(RatingColor.Red),
+        ),
+        ColorGreenIntent: CallbackAction<ColorGreenIntent>(
+          onInvoke: (_) => ref.read(rawPhotosProvider.notifier).setColor(RatingColor.Green),
+        ),
+        ColorBlueIntent: CallbackAction<ColorBlueIntent>(
+          onInvoke: (_) => ref.read(rawPhotosProvider.notifier).setColor(RatingColor.Blue),
+        ),
+        ColorYellowIntent: CallbackAction<ColorYellowIntent>(
+          onInvoke: (_) => ref.read(rawPhotosProvider.notifier).setColor(RatingColor.Yellow),
+        ),
+        ColorPurpleIntent: CallbackAction<ColorPurpleIntent>(
+          onInvoke: (_) => ref.read(rawPhotosProvider.notifier).setColor(RatingColor.Purple),
+        ),
+        ColorClearIntent: CallbackAction<ColorClearIntent>(
+          onInvoke: (_) => ref.read(rawPhotosProvider.notifier).setColor(null),
         ),
       },
       child: AnimatedSwitcher(
@@ -249,6 +302,9 @@ class _MainWindowState extends ConsumerState<MainWindow> with WindowListener {
               },
               onRatingChanged: (int? rating) {
                 ref.read(rawPhotosProvider.notifier).setRating(rating, index: index);
+              },
+              onColorChanged: (RatingColor? color) {
+                ref.read(rawPhotosProvider.notifier).setColor(color, index: index);
               },
               onTap: () {
                 ref.read(rawPhotosProvider.notifier).setSelectedPhoto(index);

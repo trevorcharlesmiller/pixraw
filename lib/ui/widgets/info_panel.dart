@@ -31,7 +31,10 @@ class InfoPanel extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     RawPhotos rawPhotos = ref.watch(rawPhotosProvider);
     if(rawPhotos.rawPhotoPaths.isEmpty) {
-      return Card();
+      return Card(
+        child: Padding(padding: const EdgeInsets.all(15.0),
+        child: SizedBox(width: 262,child: Column(),),),
+      );
     }
     RawPhoto photo = rawPhotos.rawPhotoPaths[rawPhotos.currentPhoto];
     return Card(

@@ -4,6 +4,8 @@ import 'package:pixraw/ui/widgets/raw_image.dart';
 import 'package:pixraw/model/raw_photo.dart';
 import 'package:path/path.dart' as p;
 
+import '../../util/rating_color.dart';
+
 class LazyThumbnailCard extends StatefulWidget {
   final int index;
   final RawPhoto rawPhoto;
@@ -12,6 +14,7 @@ class LazyThumbnailCard extends StatefulWidget {
   final VoidCallback onTap;
   final VoidCallback onDoubleTap;
   final ValueChanged<int>? onRatingChanged;
+  final ValueChanged<RatingColor?>? onColorChanged;
 
   const LazyThumbnailCard({
     super.key,
@@ -22,6 +25,7 @@ class LazyThumbnailCard extends StatefulWidget {
     required this.onTap,
     required this.onDoubleTap,
     required this.onRatingChanged,
+    required this.onColorChanged,
   });
 
   @override
@@ -89,7 +93,11 @@ class _LazyThumbnailCardState extends State<LazyThumbnailCard> {
               Row(
                 spacing: 10,
                 children: [
-                  Rating(onChanged: widget.onRatingChanged, rawPhoto: widget.rawPhoto,),
+                  Rating(
+                    onChanged: widget.onRatingChanged,
+                    onColorChanged: widget.onColorChanged,
+                    rawPhoto: widget.rawPhoto,
+                  ),
                   Expanded(
                     child: Container(),
                   ),
