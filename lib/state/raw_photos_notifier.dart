@@ -3,6 +3,7 @@ import 'package:path/path.dart' as p;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:pixraw/model/raw_photos.dart';
+import 'package:pixraw/util/rating_color.dart';
 
 import '../model/raw_photo.dart';
 import '../model/raw_photo_load_result.dart';
@@ -78,6 +79,20 @@ class RawPhotosNotifier extends Notifier<RawPhotos> {
 
       updatedPaths[i] = current.copyWith(
           rating: rating
+      );
+
+      state = state.copyWith(rawPhotoPaths: updatedPaths);
+    }
+  }
+
+  void setColor(RatingColor? color, {int? index}) {
+    int i = index ?? state.currentPhoto;
+    if(state.rawPhotoPaths.isNotEmpty) {
+      final updatedPaths = List<RawPhoto>.from(state.rawPhotoPaths);
+      final current = updatedPaths[i];
+
+      updatedPaths[i] = current.copyWith(
+          color: color
       );
 
       state = state.copyWith(rawPhotoPaths: updatedPaths);
