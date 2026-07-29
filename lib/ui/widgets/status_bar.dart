@@ -23,6 +23,7 @@ class StatusBar extends ConsumerWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          SizedBox(width: 5,),
           Expanded(
             child: rawPhotos.rawPhotoPaths.isEmpty
                 ? Container()
