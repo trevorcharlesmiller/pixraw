@@ -47,6 +47,7 @@ void main() async {
       await windowManager.maximize();
     }
   });
+  container.read(appConfigProvider.notifier).setFirstRun(true);
   runApp(
       UncontrolledProviderScope(
         container: container,
