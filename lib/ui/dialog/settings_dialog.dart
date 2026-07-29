@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pixraw/ui/widgets/shared/theme_selector.dart';
 
 import '../../state/app_config_notifier.dart';
 
@@ -8,36 +9,28 @@ class SettingsDialog extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final config = ref.watch(appConfigProvider);
-    final notifier = ref.read(appConfigProvider.notifier);
+    final colorScheme = Theme.of(context).colorScheme;
 
     return AlertDialog(
       title: const Text('Settings'),
-      content: SizedBox(
+      content: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: colorScheme.onPrimary,
+            width: 1.0,
+          ),
+          borderRadius: BorderRadius.circular(12.0), // Rounded corners radius
+        ),
         width: 400,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Theme Selector
-            ListTile(
-              title: const Text('Preferred Theme'),
-              trailing: DropdownButton<ThemeMode>(
-                value: config.themeMode,
-                onChanged: (newMode) {
-                  if (newMode != null) notifier.setThemeMode(newMode);
-                },
-                items: ThemeMode.values.map((mode) {
-                  return DropdownMenuItem(
-                    value: mode,
-                    child: Text(mode.name.toUpperCase()),
-                  );
-                }).toList(),
-              ),
-            ),
-
-
-          ],
+        child: Padding(padding: EdgeInsetsGeometry.all(15,),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            spacing: 10,
+            children: [
+              Text('Theme', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+              ThemeSelector()
+            ],
+          ),
         ),
       ),
       actions: <Widget>[
