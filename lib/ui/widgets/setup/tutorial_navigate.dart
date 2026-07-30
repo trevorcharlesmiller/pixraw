@@ -103,7 +103,7 @@ class _TutorialNavigateState extends State<TutorialNavigate> {
                   style: TextStyle(fontSize: 24, color: Colors.blueAccent),
                 ),
                 SizedBox(height: 5),
-                Text('Go ahead and try it out now'),
+                Text('Go ahead and try it out now!'),
               ],
             ),
           ),
