@@ -33,11 +33,6 @@ class LazyThumbnailCard extends StatefulWidget {
 }
 
 class _LazyThumbnailCardState extends State<LazyThumbnailCard> {
-  final paleYellow = Color.from(
-    alpha: 1.0, red: 255, green: 251, blue: 242,
-
-  );
-
   bool highlighted = false;
 
   @override
@@ -55,8 +50,6 @@ class _LazyThumbnailCardState extends State<LazyThumbnailCard> {
         highlighted = widget.highlighted;
       });
     }
-
-
   }
 
   @override
