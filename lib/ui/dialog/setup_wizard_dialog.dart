@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pixraw/ui/widgets/setup/tutorial_navigate.dart';
 
 import '../../state/app_config_notifier.dart';
 import '../widgets/setup/setup_key.dart';
@@ -55,44 +56,13 @@ class _SetupWizardDialogState extends ConsumerState<SetupWizardDialog> {
   }
 
   Widget _buildTutorialPage1(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          flex: 4,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-            )
-        ),
-        SizedBox(width: 55),
-        Expanded(
-          flex: 6,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            spacing: 15,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                spacing: 15,
-                children: [
-                SetupKey(icon: Icon(Icons.arrow_back),),
-                  SetupKey(icon: Icon(Icons.arrow_forward),),
-                ],
-              ),
-              Text('Use the left and right arrow keys\nto navigate between photos', style: TextStyle(fontSize: 24, color: Colors.blueAccent),),
-            ],
-          ),
-        ),
-      ],
-    );
+    return TutorialNavigate();
   }
 
   Widget _buildTutorialPage2(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final TextStyle subStyle = TextStyle(fontSize: 11, color: colorScheme.onSurfaceVariant);
+    Color defaultFontColor = colorScheme.onSurface;
+    final TextStyle subStyle = TextStyle(fontSize: 11, color: colorScheme.secondary);
     return Row(
       children: [
         Expanded(
@@ -112,8 +82,8 @@ class _SetupWizardDialogState extends ConsumerState<SetupWizardDialog> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text('Apply a rating to a photo\nwith keyboard shortcuts', style: TextStyle(fontSize: 24, color: Colors.blueAccent),),
-              SizedBox(height: 10,),
-              Text('stars', style: subStyle,),
+              SizedBox(height: 15,),
+              Text('STARS', style: subStyle,),
               SizedBox(height: 2,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -126,8 +96,8 @@ class _SetupWizardDialogState extends ConsumerState<SetupWizardDialog> {
                   SetupKey(label: '5'),
                 ],
               ),
-              SizedBox(height: 10,),
-              Text('colors', style: subStyle,),
+              SizedBox(height: 15,),
+              Text('COLORS', style: subStyle,),
               SizedBox(height: 2,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -138,6 +108,25 @@ class _SetupWizardDialogState extends ConsumerState<SetupWizardDialog> {
                   SetupKey(label: 'B', color: Colors.blue,),
                   SetupKey(label: 'Y', color: Colors.amber),
                   SetupKey(label: 'P', color: Colors.purple,),
+                ],
+              ),
+              SizedBox(height: 15,),
+              Text('SELECT PHOTO', style: subStyle,),
+              SizedBox(height: 2,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 270,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: defaultFontColor, width: 1.0),
+                      borderRadius: BorderRadius.circular(10.0), // Rounded corners radius
+                    ),
+                    child: Center(
+                      child: Text('SPACE BAR', style: TextStyle(fontSize: 26, color: defaultFontColor)),
+                    ),
+                  )
                 ],
               ),
             ],

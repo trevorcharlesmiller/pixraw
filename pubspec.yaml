@@ -36,6 +36,8 @@ flutter:
     - assets/pixraw-mode.png
     - assets/pixraw-dark.png
     - assets/pixraw-light.png
+    - assets/photo1.jpg
+    - assets/photo2.jpg
   fonts:
     - family: Nunito
       fonts:
