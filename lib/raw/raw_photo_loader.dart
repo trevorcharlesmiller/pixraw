@@ -66,7 +66,7 @@ class RawPhotoLoader {
         rawFile.absolute.path.toNativeUtf8().cast(),
       );
       if (result != 0) {
-        print('Failed to open raw file');
+        return RawPhotoResult(bytes: null, hasError: true, errorMessage: 'Failed to load raw file', info: null);
       }
 
       RawPhotoInfo? info;
@@ -85,9 +85,8 @@ class RawPhotoLoader {
       flutterLibRawBindings.libraw_close(ptr);
 
       return RawPhotoResult(bytes: dartBytes, hasError: false, info: info, quarterTurns: quarterTurns);
-    } catch (err) {
-      print(err);
-      return RawPhotoResult(bytes: null, hasError: true, info: null);
+    } catch (err, trace) {
+      return RawPhotoResult(bytes: null, hasError: true, errorMessage: err.toString(), info: null);
     }
   }
 }

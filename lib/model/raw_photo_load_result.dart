@@ -9,6 +9,7 @@ abstract class RawPhotoResult with _$RawPhotoResult {
   const factory RawPhotoResult({
     @Default(null) Uint8List? bytes,
     @Default(false) bool hasError,
+    @Default(null) String? errorMessage,
 
     @Default(null) RawPhotoInfo? info,
     @Default(0) int quarterTurns,

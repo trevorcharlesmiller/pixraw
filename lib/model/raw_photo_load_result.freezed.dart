@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$RawPhotoResult {
 
- Uint8List? get bytes; bool get hasError; RawPhotoInfo? get info; int get quarterTurns;
+ Uint8List? get bytes; bool get hasError; String? get errorMessage; RawPhotoInfo? get info; int get quarterTurns;
 /// Create a copy of RawPhotoResult
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $RawPhotoResultCopyWith<RawPhotoResult> get copyWith => _$RawPhotoResultCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is RawPhotoResult&&const DeepCollectionEquality().equals(other.bytes, bytes)&&(identical(other.hasError, hasError) || other.hasError == hasError)&&(identical(other.info, info) || other.info == info)&&(identical(other.quarterTurns, quarterTurns) || other.quarterTurns == quarterTurns));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is RawPhotoResult&&const DeepCollectionEquality().equals(other.bytes, bytes)&&(identical(other.hasError, hasError) || other.hasError == hasError)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.info, info) || other.info == info)&&(identical(other.quarterTurns, quarterTurns) || other.quarterTurns == quarterTurns));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(bytes),hasError,info,quarterTurns);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(bytes),hasError,errorMessage,info,quarterTurns);
 
 @override
 String toString() {
-  return 'RawPhotoResult(bytes: $bytes, hasError: $hasError, info: $info, quarterTurns: $quarterTurns)';
+  return 'RawPhotoResult(bytes: $bytes, hasError: $hasError, errorMessage: $errorMessage, info: $info, quarterTurns: $quarterTurns)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $RawPhotoResultCopyWith<$Res>  {
   factory $RawPhotoResultCopyWith(RawPhotoResult value, $Res Function(RawPhotoResult) _then) = _$RawPhotoResultCopyWithImpl;
 @useResult
 $Res call({
- Uint8List? bytes, bool hasError, RawPhotoInfo? info, int quarterTurns
+ Uint8List? bytes, bool hasError, String? errorMessage, RawPhotoInfo? info, int quarterTurns
 });
 
 
@@ -62,11 +62,12 @@ class _$RawPhotoResultCopyWithImpl<$Res>
 
 /// Create a copy of RawPhotoResult
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? bytes = freezed,Object? hasError = null,Object? info = freezed,Object? quarterTurns = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? bytes = freezed,Object? hasError = null,Object? errorMessage = freezed,Object? info = freezed,Object? quarterTurns = null,}) {
   return _then(_self.copyWith(
 bytes: freezed == bytes ? _self.bytes : bytes // ignore: cast_nullable_to_non_nullable
 as Uint8List?,hasError: null == hasError ? _self.hasError : hasError // ignore: cast_nullable_to_non_nullable
-as bool,info: freezed == info ? _self.info : info // ignore: cast_nullable_to_non_nullable
+as bool,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as String?,info: freezed == info ? _self.info : info // ignore: cast_nullable_to_non_nullable
 as RawPhotoInfo?,quarterTurns: null == quarterTurns ? _self.quarterTurns : quarterTurns // ignore: cast_nullable_to_non_nullable
 as int,
   ));
@@ -165,10 +166,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( Uint8List? bytes,  bool hasError,  RawPhotoInfo? info,  int quarterTurns)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( Uint8List? bytes,  bool hasError,  String? errorMessage,  RawPhotoInfo? info,  int quarterTurns)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _RawPhotoResult() when $default != null:
-return $default(_that.bytes,_that.hasError,_that.info,_that.quarterTurns);case _:
+return $default(_that.bytes,_that.hasError,_that.errorMessage,_that.info,_that.quarterTurns);case _:
   return orElse();
 
 }
@@ -186,10 +187,10 @@ return $default(_that.bytes,_that.hasError,_that.info,_that.quarterTurns);case _
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( Uint8List? bytes,  bool hasError,  RawPhotoInfo? info,  int quarterTurns)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( Uint8List? bytes,  bool hasError,  String? errorMessage,  RawPhotoInfo? info,  int quarterTurns)  $default,) {final _that = this;
 switch (_that) {
 case _RawPhotoResult():
-return $default(_that.bytes,_that.hasError,_that.info,_that.quarterTurns);case _:
+return $default(_that.bytes,_that.hasError,_that.errorMessage,_that.info,_that.quarterTurns);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -206,10 +207,10 @@ return $default(_that.bytes,_that.hasError,_that.info,_that.quarterTurns);case _
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( Uint8List? bytes,  bool hasError,  RawPhotoInfo? info,  int quarterTurns)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( Uint8List? bytes,  bool hasError,  String? errorMessage,  RawPhotoInfo? info,  int quarterTurns)?  $default,) {final _that = this;
 switch (_that) {
 case _RawPhotoResult() when $default != null:
-return $default(_that.bytes,_that.hasError,_that.info,_that.quarterTurns);case _:
+return $default(_that.bytes,_that.hasError,_that.errorMessage,_that.info,_that.quarterTurns);case _:
   return null;
 
 }
@@ -221,11 +222,12 @@ return $default(_that.bytes,_that.hasError,_that.info,_that.quarterTurns);case _
 
 
 class _RawPhotoResult implements RawPhotoResult {
-  const _RawPhotoResult({this.bytes = null, this.hasError = false, this.info = null, this.quarterTurns = 0});
+  const _RawPhotoResult({this.bytes = null, this.hasError = false, this.errorMessage = null, this.info = null, this.quarterTurns = 0});
   
 
 @override@JsonKey() final  Uint8List? bytes;
 @override@JsonKey() final  bool hasError;
+@override@JsonKey() final  String? errorMessage;
 @override@JsonKey() final  RawPhotoInfo? info;
 @override@JsonKey() final  int quarterTurns;
 
@@ -239,16 +241,16 @@ _$RawPhotoResultCopyWith<_RawPhotoResult> get copyWith => __$RawPhotoResultCopyW
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RawPhotoResult&&const DeepCollectionEquality().equals(other.bytes, bytes)&&(identical(other.hasError, hasError) || other.hasError == hasError)&&(identical(other.info, info) || other.info == info)&&(identical(other.quarterTurns, quarterTurns) || other.quarterTurns == quarterTurns));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RawPhotoResult&&const DeepCollectionEquality().equals(other.bytes, bytes)&&(identical(other.hasError, hasError) || other.hasError == hasError)&&(identical(other.errorMessage, errorMessage) || other.errorMessage == errorMessage)&&(identical(other.info, info) || other.info == info)&&(identical(other.quarterTurns, quarterTurns) || other.quarterTurns == quarterTurns));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(bytes),hasError,info,quarterTurns);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(bytes),hasError,errorMessage,info,quarterTurns);
 
 @override
 String toString() {
-  return 'RawPhotoResult(bytes: $bytes, hasError: $hasError, info: $info, quarterTurns: $quarterTurns)';
+  return 'RawPhotoResult(bytes: $bytes, hasError: $hasError, errorMessage: $errorMessage, info: $info, quarterTurns: $quarterTurns)';
 }
 
 
@@ -259,7 +261,7 @@ abstract mixin class _$RawPhotoResultCopyWith<$Res> implements $RawPhotoResultCo
   factory _$RawPhotoResultCopyWith(_RawPhotoResult value, $Res Function(_RawPhotoResult) _then) = __$RawPhotoResultCopyWithImpl;
 @override @useResult
 $Res call({
- Uint8List? bytes, bool hasError, RawPhotoInfo? info, int quarterTurns
+ Uint8List? bytes, bool hasError, String? errorMessage, RawPhotoInfo? info, int quarterTurns
 });
 
 
@@ -276,11 +278,12 @@ class __$RawPhotoResultCopyWithImpl<$Res>
 
 /// Create a copy of RawPhotoResult
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? bytes = freezed,Object? hasError = null,Object? info = freezed,Object? quarterTurns = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? bytes = freezed,Object? hasError = null,Object? errorMessage = freezed,Object? info = freezed,Object? quarterTurns = null,}) {
   return _then(_RawPhotoResult(
 bytes: freezed == bytes ? _self.bytes : bytes // ignore: cast_nullable_to_non_nullable
 as Uint8List?,hasError: null == hasError ? _self.hasError : hasError // ignore: cast_nullable_to_non_nullable
-as bool,info: freezed == info ? _self.info : info // ignore: cast_nullable_to_non_nullable
+as bool,errorMessage: freezed == errorMessage ? _self.errorMessage : errorMessage // ignore: cast_nullable_to_non_nullable
+as String?,info: freezed == info ? _self.info : info // ignore: cast_nullable_to_non_nullable
 as RawPhotoInfo?,quarterTurns: null == quarterTurns ? _self.quarterTurns : quarterTurns // ignore: cast_nullable_to_non_nullable
 as int,
   ));
