@@ -118,6 +118,9 @@ class RawPhotosNotifier extends Notifier<RawPhotos> {
 
   Future<RawPhotoResult> loadThumbnail(int index) async {
     RawPhotoResult result = await RawPhotoLoader().loadRawPhotoThumbnail(state.rawPhotoPaths[index]);
+    if(result.hasError) {
+      throw Exception('Failed to read raw file');
+    }
     if (result.info != null && state.rawPhotoPaths.isNotEmpty) {
       final updatedPaths = List<RawPhoto>.from(state.rawPhotoPaths);
       final current = updatedPaths[index];
