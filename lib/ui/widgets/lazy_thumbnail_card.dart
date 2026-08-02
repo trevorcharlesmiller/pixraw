@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:pixraw/ui/widgets/rating.dart';
+import 'package:pixraw/ui/widgets/rating/rating.dart';
 import 'package:pixraw/ui/widgets/raw_image.dart';
 import 'package:pixraw/model/raw_photo.dart';
 import 'package:path/path.dart' as p;
-import 'package:pixraw/ui/widgets/select_reject.dart';
+import 'package:pixraw/ui/widgets/rating/select_reject.dart';
 
 import '../../util/rating_color.dart';
 

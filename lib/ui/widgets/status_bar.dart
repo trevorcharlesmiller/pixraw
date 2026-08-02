@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart' as p;
-import 'package:pixraw/ui/widgets/rating.dart';
-import 'package:pixraw/ui/widgets/select_reject.dart';
+import 'package:pixraw/ui/widgets/rating/rating.dart';
+import 'package:pixraw/ui/widgets/rating/select_reject.dart';
 
 import '../../model/raw_photos.dart';
 import '../../state/app_config_notifier.dart';

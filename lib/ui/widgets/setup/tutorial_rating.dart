@@ -5,7 +5,7 @@ import 'package:pixraw/util/rating_color.dart';
 
 import '../../../model/raw_photo.dart';
 import '../../intents.dart';
-import '../rating.dart';
+import '../rating/rating.dart';
 
 class TutorialRating extends StatefulWidget {
   const TutorialRating({super.key});

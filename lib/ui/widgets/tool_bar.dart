@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:pixraw/ui/widgets/rating/rating_filter_button.dart';
 
 import '../../model/raw_photo.dart';
 import '../../model/raw_photos.dart';
@@ -99,6 +101,61 @@ class ToolBar extends ConsumerWidget {
                   ? null
                   : toggleGridView,
             ),
+
+            //======================================================[ RATINGS ]
+            SizedBox(
+              height: 30,
+              child: VerticalDivider(
+                color: Colors.grey, // Ensure color is visible
+                thickness: 1, // Explicitly set thickness
+                width: 20, // Space allocated for the divider
+              ),
+            ),
+            Text('Filters:', style: TextStyle(fontSize: 11),),
+            RatingFilterButton(
+              icon: FaIcon(FontAwesomeIcons.star,),
+              label: '0',
+              onTap: (){},
+            ),
+            RatingFilterButton(
+              icon: FaIcon(FontAwesomeIcons.star,),
+              label: '1',
+              onTap: (){},
+            ),
+            RatingFilterButton(
+              icon: FaIcon(FontAwesomeIcons.star,),
+              label: '2',
+              onTap: (){},
+            ),
+            RatingFilterButton(
+              icon: FaIcon(FontAwesomeIcons.star,),
+              label: '3',
+              onTap: (){},
+            ),
+            RatingFilterButton(
+              icon: FaIcon(FontAwesomeIcons.star,),
+              label: '4',
+              onTap: (){},
+            ),
+            RatingFilterButton(
+              icon: FaIcon(FontAwesomeIcons.star,),
+              label: '5',
+              onTap: (){},
+            ),
+            IconButton(onPressed: (){}, icon: FaIcon(FontAwesomeIcons.circle, ),),
+            IconButton(onPressed: (){}, icon: FaIcon(FontAwesomeIcons.circle, color: Colors.red,),),
+            IconButton(onPressed: (){}, icon: FaIcon(FontAwesomeIcons.circle, color: Colors.yellow,),),
+            IconButton(onPressed: (){}, icon: FaIcon(FontAwesomeIcons.circle, color: Colors.green,),),
+            IconButton(onPressed: (){}, icon: FaIcon(FontAwesomeIcons.circle, color: Colors.blue,),),
+            IconButton(onPressed: (){}, icon: FaIcon(FontAwesomeIcons.circle, color: Colors.purple,),),
+            IconButton(onPressed: (){}, icon: FaIcon(FontAwesomeIcons.squareXmark,),),
+            IconButton(onPressed: (){}, icon: FaIcon(FontAwesomeIcons.squareCheck,),),
+            OutlinedButton(onPressed: (){}, child: Text('Clear Filters'),),
+
+
+
+
+
             Expanded(child: Container(),),
 
             if (rawPhotos.directory != null)
