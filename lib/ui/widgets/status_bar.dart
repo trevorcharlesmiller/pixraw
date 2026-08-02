@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart' as p;
 import 'package:pixraw/ui/widgets/rating.dart';
+import 'package:pixraw/ui/widgets/select_reject.dart';
 
 import '../../model/raw_photos.dart';
 import '../../state/app_config_notifier.dart';
 import '../../state/raw_photos_notifier.dart';
 import '../../util/rating_color.dart';
-import 'color_select.dart';
 
 class StatusBar extends ConsumerWidget {
   const StatusBar({super.key});
@@ -48,22 +48,7 @@ class StatusBar extends ConsumerWidget {
                         ),
 
                       if (!config.isGridView)
-                        Checkbox(
-                          value: rawPhotos
-                              .rawPhotoPaths[rawPhotos.currentPhoto]
-                              .selected,
-                          materialTapTargetSize:
-                              MaterialTapTargetSize.shrinkWrap,
-                          visualDensity: const VisualDensity(
-                            horizontal: VisualDensity.minimumDensity,
-                            vertical: VisualDensity.minimumDensity,
-                          ),
-                          onChanged: (bool? value) {
-                            ref
-                                .read(rawPhotosProvider.notifier)
-                                .toggleCurrentPhotoSelected();
-                          },
-                        ),
+                        SelectReject(),
 
                       Text(
                         p.basename(
@@ -88,7 +73,7 @@ class StatusBar extends ConsumerWidget {
           const Icon(Icons.image_outlined, size: 14),
           SizedBox(width: 15),
           Text(
-            '${rawPhotos.rawPhotoPaths.where((p) => p.selected).length} selected',
+            '${rawPhotos.rawPhotoPaths.where((p) => p.selected??false).length} selected',
           ),
           IconButton(
             icon: const Icon(Icons.library_add_check_rounded),
@@ -96,7 +81,7 @@ class StatusBar extends ConsumerWidget {
             iconSize: 15,
             onPressed:
                 rawPhotos.rawPhotoPaths.isEmpty ||
-                    (rawPhotos.rawPhotoPaths.where((p) => p.selected).length ==
+                    (rawPhotos.rawPhotoPaths.where((p) => p.selected??false).length ==
                         rawPhotos.rawPhotoPaths.length)
                 ? null
                 : () {
@@ -107,7 +92,7 @@ class StatusBar extends ConsumerWidget {
             icon: const Icon(Icons.deselect),
             tooltip: 'Clear selected photos',
             iconSize: 15,
-            onPressed: rawPhotos.rawPhotoPaths.where((p) => p.selected).isEmpty
+            onPressed: rawPhotos.rawPhotoPaths.where((p) => p.selected??false).isEmpty
                 ? null
                 : () {
                     ref.read(rawPhotosProvider.notifier).unSelectAllPhotos();

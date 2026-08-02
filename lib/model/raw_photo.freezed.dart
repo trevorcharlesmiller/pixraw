@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$RawPhoto {
 
- String get filePath; bool get selected; bool get loaded; int? get rating; RatingColor? get color; RawPhotoInfo get info;
+ String get filePath; bool? get selected; bool get loaded; int? get rating; RatingColor? get color; RawPhotoInfo get info;
 /// Create a copy of RawPhoto
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -45,7 +45,7 @@ abstract mixin class $RawPhotoCopyWith<$Res>  {
   factory $RawPhotoCopyWith(RawPhoto value, $Res Function(RawPhoto) _then) = _$RawPhotoCopyWithImpl;
 @useResult
 $Res call({
- String filePath, bool selected, bool loaded, int? rating, RatingColor? color, RawPhotoInfo info
+ String filePath, bool? selected, bool loaded, int? rating, RatingColor? color, RawPhotoInfo info
 });
 
 
@@ -62,11 +62,11 @@ class _$RawPhotoCopyWithImpl<$Res>
 
 /// Create a copy of RawPhoto
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? filePath = null,Object? selected = null,Object? loaded = null,Object? rating = freezed,Object? color = freezed,Object? info = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? filePath = null,Object? selected = freezed,Object? loaded = null,Object? rating = freezed,Object? color = freezed,Object? info = null,}) {
   return _then(_self.copyWith(
 filePath: null == filePath ? _self.filePath : filePath // ignore: cast_nullable_to_non_nullable
-as String,selected: null == selected ? _self.selected : selected // ignore: cast_nullable_to_non_nullable
-as bool,loaded: null == loaded ? _self.loaded : loaded // ignore: cast_nullable_to_non_nullable
+as String,selected: freezed == selected ? _self.selected : selected // ignore: cast_nullable_to_non_nullable
+as bool?,loaded: null == loaded ? _self.loaded : loaded // ignore: cast_nullable_to_non_nullable
 as bool,rating: freezed == rating ? _self.rating : rating // ignore: cast_nullable_to_non_nullable
 as int?,color: freezed == color ? _self.color : color // ignore: cast_nullable_to_non_nullable
 as RatingColor?,info: null == info ? _self.info : info // ignore: cast_nullable_to_non_nullable
@@ -164,7 +164,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String filePath,  bool selected,  bool loaded,  int? rating,  RatingColor? color,  RawPhotoInfo info)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String filePath,  bool? selected,  bool loaded,  int? rating,  RatingColor? color,  RawPhotoInfo info)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _RawPhoto() when $default != null:
 return $default(_that.filePath,_that.selected,_that.loaded,_that.rating,_that.color,_that.info);case _:
@@ -185,7 +185,7 @@ return $default(_that.filePath,_that.selected,_that.loaded,_that.rating,_that.co
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String filePath,  bool selected,  bool loaded,  int? rating,  RatingColor? color,  RawPhotoInfo info)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String filePath,  bool? selected,  bool loaded,  int? rating,  RatingColor? color,  RawPhotoInfo info)  $default,) {final _that = this;
 switch (_that) {
 case _RawPhoto():
 return $default(_that.filePath,_that.selected,_that.loaded,_that.rating,_that.color,_that.info);case _:
@@ -205,7 +205,7 @@ return $default(_that.filePath,_that.selected,_that.loaded,_that.rating,_that.co
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String filePath,  bool selected,  bool loaded,  int? rating,  RatingColor? color,  RawPhotoInfo info)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String filePath,  bool? selected,  bool loaded,  int? rating,  RatingColor? color,  RawPhotoInfo info)?  $default,) {final _that = this;
 switch (_that) {
 case _RawPhoto() when $default != null:
 return $default(_that.filePath,_that.selected,_that.loaded,_that.rating,_that.color,_that.info);case _:
@@ -220,11 +220,11 @@ return $default(_that.filePath,_that.selected,_that.loaded,_that.rating,_that.co
 
 
 class _RawPhoto extends RawPhoto {
-  const _RawPhoto({required this.filePath, this.selected = false, this.loaded = false, this.rating = null, this.color = null, this.info = const RawPhotoInfo()}): super._();
+  const _RawPhoto({required this.filePath, this.selected = null, this.loaded = false, this.rating = null, this.color = null, this.info = const RawPhotoInfo()}): super._();
   
 
 @override final  String filePath;
-@override@JsonKey() final  bool selected;
+@override@JsonKey() final  bool? selected;
 @override@JsonKey() final  bool loaded;
 @override@JsonKey() final  int? rating;
 @override@JsonKey() final  RatingColor? color;
@@ -260,7 +260,7 @@ abstract mixin class _$RawPhotoCopyWith<$Res> implements $RawPhotoCopyWith<$Res>
   factory _$RawPhotoCopyWith(_RawPhoto value, $Res Function(_RawPhoto) _then) = __$RawPhotoCopyWithImpl;
 @override @useResult
 $Res call({
- String filePath, bool selected, bool loaded, int? rating, RatingColor? color, RawPhotoInfo info
+ String filePath, bool? selected, bool loaded, int? rating, RatingColor? color, RawPhotoInfo info
 });
 
 
@@ -277,11 +277,11 @@ class __$RawPhotoCopyWithImpl<$Res>
 
 /// Create a copy of RawPhoto
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? filePath = null,Object? selected = null,Object? loaded = null,Object? rating = freezed,Object? color = freezed,Object? info = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? filePath = null,Object? selected = freezed,Object? loaded = null,Object? rating = freezed,Object? color = freezed,Object? info = null,}) {
   return _then(_RawPhoto(
 filePath: null == filePath ? _self.filePath : filePath // ignore: cast_nullable_to_non_nullable
-as String,selected: null == selected ? _self.selected : selected // ignore: cast_nullable_to_non_nullable
-as bool,loaded: null == loaded ? _self.loaded : loaded // ignore: cast_nullable_to_non_nullable
+as String,selected: freezed == selected ? _self.selected : selected // ignore: cast_nullable_to_non_nullable
+as bool?,loaded: null == loaded ? _self.loaded : loaded // ignore: cast_nullable_to_non_nullable
 as bool,rating: freezed == rating ? _self.rating : rating // ignore: cast_nullable_to_non_nullable
 as int?,color: freezed == color ? _self.color : color // ignore: cast_nullable_to_non_nullable
 as RatingColor?,info: null == info ? _self.info : info // ignore: cast_nullable_to_non_nullable

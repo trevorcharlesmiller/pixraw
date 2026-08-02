@@ -227,7 +227,7 @@ class _TutorialRatingState extends State<TutorialRating> {
 
   void _toggleSelectedPhoto() {
     setState(() {
-      rawPhoto = rawPhoto.copyWith(selected: !rawPhoto.selected);
+      rawPhoto = rawPhoto.copyWith(selected: rawPhoto.selected);
     });
   }
 }

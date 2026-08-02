@@ -46,7 +46,20 @@ class RawPhotosNotifier extends Notifier<RawPhotos> {
       final current = updatedPaths[state.currentPhoto];
 
       updatedPaths[state.currentPhoto] = current.copyWith(
-          selected: !current.selected
+          selected: (current.selected==null || current.selected==false) ? true : null
+      );
+
+      state = state.copyWith(rawPhotoPaths: updatedPaths);
+    }
+  }
+
+  void toggleCurrentPhotoRejected() {
+    if (state.rawPhotoPaths.isNotEmpty) {
+      final updatedPaths = List<RawPhoto>.from(state.rawPhotoPaths);
+      final current = updatedPaths[state.currentPhoto];
+
+      updatedPaths[state.currentPhoto] = current.copyWith(
+          selected: (current.selected==null || current.selected==true) ? false : null
       );
 
       state = state.copyWith(rawPhotoPaths: updatedPaths);
@@ -65,7 +78,7 @@ class RawPhotosNotifier extends Notifier<RawPhotos> {
   void unSelectAllPhotos() {
     // Map to a brand new list with updated values
     final updatedPaths = state.rawPhotoPaths.map((photo) {
-      return photo.copyWith(selected: false);
+      return photo.copyWith(selected: null);
     }).toList();
 
     state = state.copyWith(rawPhotoPaths: updatedPaths);

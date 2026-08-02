@@ -73,6 +73,9 @@ class _MainWindowState extends ConsumerState<MainWindow> with WindowListener {
   void _toggleSelectedPhoto() {
     ref.read(rawPhotosProvider.notifier).toggleCurrentPhotoSelected();
   }
+  void _toggleRejectedPhoto() {
+    ref.read(rawPhotosProvider.notifier).toggleCurrentPhotoRejected();
+  }
 
   Future<String?> getInitialDir() async {
     final config = ref.watch(appConfigProvider);
@@ -203,6 +206,7 @@ class _MainWindowState extends ConsumerState<MainWindow> with WindowListener {
         SingleActivator(LogicalKeyboardKey.keyY): ColorYellowIntent(),
         SingleActivator(LogicalKeyboardKey.keyP): ColorPurpleIntent(),
         SingleActivator(LogicalKeyboardKey.keyC): ColorClearIntent(),
+        SingleActivator(LogicalKeyboardKey.keyX): ToggleRejectedIntent(),
       },
       actions: <Type, Action<Intent>>{
         // Define what happens when the intents are triggered
@@ -217,6 +221,9 @@ class _MainWindowState extends ConsumerState<MainWindow> with WindowListener {
         ),
         ToggleSelectedIntent: CallbackAction<ToggleSelectedIntent>(
           onInvoke: (_) => _toggleSelectedPhoto(),
+        ),
+        ToggleRejectedIntent: CallbackAction<ToggleRejectedIntent>(
+          onInvoke: (_) => _toggleRejectedPhoto(),
         ),
         DoNothingIntent2: CallbackAction<DoNothingIntent2>(onInvoke: (_) {return null;},),
         Rating0Intent: CallbackAction<Rating0Intent>(
@@ -294,12 +301,6 @@ class _MainWindowState extends ConsumerState<MainWindow> with WindowListener {
               index: index,
               rawPhoto: rawPhotos.rawPhotoPaths[index],
               highlighted: index == rawPhotos.currentPhoto,
-              onChanged: (bool? value) {
-                if (rawPhotos.currentPhoto != index) {
-                  ref.read(rawPhotosProvider.notifier).setSelectedPhoto(index);
-                }
-                _toggleSelectedPhoto();
-              },
               onRatingChanged: (int? rating) {
                 ref.read(rawPhotosProvider.notifier).setRating(rating, index: index);
               },
