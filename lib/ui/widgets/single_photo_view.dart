@@ -16,9 +16,6 @@ class SinglePhotoView extends ConsumerWidget {
       child: PRawImage(
         index: rawPhotos.currentPhoto,
         cacheWidth: MediaQuery.of(context).size.width.toInt(),
-        onChanged: (bool? value) {
-          ref.read(rawPhotosProvider.notifier).toggleCurrentPhotoSelected();
-        },
         onDoubleTap: toggleGridView,
       ),
     );

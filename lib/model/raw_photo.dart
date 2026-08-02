@@ -11,7 +11,7 @@ abstract class RawPhoto with _$RawPhoto {
 
   const factory RawPhoto({
     required String filePath,
-    @Default(false) bool selected,
+    @Default(null) bool? selected,
     @Default(false) bool loaded,
 
     @Default(null) int? rating,

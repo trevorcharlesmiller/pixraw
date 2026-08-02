@@ -8,14 +8,12 @@ import '../../state/raw_photos_notifier.dart';
 class PRawImage extends ConsumerStatefulWidget {
   final int index;
   final int? cacheWidth;
-  final ValueChanged<bool?>? onChanged;
   final VoidCallback onDoubleTap;
 
   const PRawImage({
     super.key,
     required this.index,
     this.cacheWidth,
-    required this.onChanged,
     required this.onDoubleTap
   });
 
@@ -55,11 +53,6 @@ class _PRawImageState extends ConsumerState<PRawImage> {
         future: thumbnail,
         builder: (BuildContext context, AsyncSnapshot<RawPhotoResult> snapshot) {
           if (snapshot.hasData) {
-            // final renderStopwatch = Stopwatch()..start();
-            // WidgetsBinding.instance.addPostFrameCallback((_) {
-            //   renderStopwatch.stop();
-            //   print('🖼️ Flutter render completed in ${renderStopwatch.elapsedMilliseconds}ms');
-            // });
             return GestureDetector(
               onDoubleTap: widget.onDoubleTap,
               child: RotatedBox(

@@ -15,6 +15,9 @@ class ToggleViewIntent extends Intent {
 class ToggleSelectedIntent extends Intent {
   const ToggleSelectedIntent();
 }
+class ToggleRejectedIntent extends Intent {
+  const ToggleRejectedIntent();
+}
 
 class DoNothingIntent2 extends Intent {
   const DoNothingIntent2();

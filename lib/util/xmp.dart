@@ -3,7 +3,9 @@ import '../model/raw_photo.dart';
 String getXMPForRawFile(RawPhoto rawPhoto) {
   String rating = rawPhoto.rating==null ? '' : '<xmp:Rating>${rawPhoto.rating}</xmp:Rating>';
   String color = rawPhoto.color==null ? '' : '<xmp:Label>${rawPhoto.color!.name}</xmp:Label>';
-  String selected = rawPhoto.selected ? '<xmpDM:good>True</xmpDM:good>' : '';
+  String selected = rawPhoto.selected==null ?  '' :
+    (rawPhoto.selected==true ? '<xmpDM:good>True</xmpDM:good>' :
+      '<xmpDM:good>False</xmpDM:good>' );
 
   String xml = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\n'
       '<x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="XMP Core 6.0.0">\n'

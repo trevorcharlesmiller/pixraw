@@ -106,12 +106,12 @@ class ToolBar extends ConsumerWidget {
                 tooltip: 'Copy selected photos',
                 icon: const Icon(Icons.file_copy_rounded),
                 onPressed:
-                rawPhotos.rawPhotoPaths.where((p) => p.selected).isEmpty
+                rawPhotos.rawPhotoPaths.where((p) => p.selected ?? false).isEmpty
                     ? null
                     : () {
                   _showCopyDialog(context,
                       rawPhotos.rawPhotoPaths
-                      .where((p) => p.selected)
+                          .where((p) => p.selected ?? false)
                       .toList());
                 },
               ),

@@ -3,6 +3,7 @@ import 'package:pixraw/ui/widgets/rating.dart';
 import 'package:pixraw/ui/widgets/raw_image.dart';
 import 'package:pixraw/model/raw_photo.dart';
 import 'package:path/path.dart' as p;
+import 'package:pixraw/ui/widgets/select_reject.dart';
 
 import '../../util/rating_color.dart';
 
@@ -10,7 +11,6 @@ class LazyThumbnailCard extends StatefulWidget {
   final int index;
   final RawPhoto rawPhoto;
   final bool highlighted;
-  final ValueChanged<bool?>? onChanged;
   final VoidCallback onTap;
   final VoidCallback onDoubleTap;
   final ValueChanged<int>? onRatingChanged;
@@ -21,7 +21,6 @@ class LazyThumbnailCard extends StatefulWidget {
     required this.index,
     required this.rawPhoto,
     required this.highlighted,
-    required this.onChanged,
     required this.onTap,
     required this.onDoubleTap,
     required this.onRatingChanged,
@@ -52,12 +51,24 @@ class _LazyThumbnailCardState extends State<LazyThumbnailCard> {
     }
   }
 
+  Color? cardColor(ColorScheme colorScheme) {
+    if(highlighted) {
+      return Colors.blueAccent;
+    }
+    if(widget.rawPhoto.selected != null) {
+      if(widget.rawPhoto.selected!) {
+        return colorScheme.primaryContainer;
+      }
+    }
+    return null;
+  }
+
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     return Card(
       clipBehavior: Clip.antiAlias,
-      color: highlighted ? Colors.blueAccent : (widget.rawPhoto.selected ? colorScheme.primaryContainer : null),
+      color: cardColor(colorScheme),
       child: InkWell(
         onTap: widget.onTap,
         onDoubleTap: widget.onDoubleTap,
@@ -78,7 +89,6 @@ class _LazyThumbnailCardState extends State<LazyThumbnailCard> {
                   child: PRawImage(
                     index: widget.index,
                     cacheWidth: 280,
-                    onChanged: widget.onChanged,
                     onDoubleTap: widget.onDoubleTap,
                   ),
                 ),
@@ -94,15 +104,7 @@ class _LazyThumbnailCardState extends State<LazyThumbnailCard> {
                   Expanded(
                     child: Container(),
                   ),
-                  Checkbox(
-                    value: widget.rawPhoto.selected,
-                    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    visualDensity: const VisualDensity(
-                      horizontal: VisualDensity.minimumDensity,
-                      vertical: VisualDensity.minimumDensity,
-                    ),
-                    onChanged: widget.onChanged,
-                  ),
+                  SelectReject(index: widget.index,),
                 ],
               ),
             ],
