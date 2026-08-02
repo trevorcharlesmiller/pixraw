@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-import '../../model/raw_photo.dart';
-import '../../model/raw_photos.dart';
-import '../../state/raw_photos_notifier.dart' show rawPhotosProvider;
+import '../../../model/raw_photo.dart';
+import '../../../model/raw_photos.dart';
+import '../../../state/raw_photos_notifier.dart' show rawPhotosProvider;
 
 class SelectReject extends ConsumerWidget {
   final int? index;

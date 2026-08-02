@@ -4,8 +4,8 @@ import 'package:pixraw/model/raw_photo.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as p;
 
-import '../../model/raw_photos.dart';
-import '../../state/raw_photos_notifier.dart';
+import '../../../model/raw_photos.dart';
+import '../../../state/raw_photos_notifier.dart';
 import 'info_row.dart';
 
 const TextStyle labelStyle = TextStyle(

@@ -7,7 +7,7 @@ import 'package:pixraw/model/raw_photos.dart';
 import 'package:pixraw/state/app_config_notifier.dart';
 import 'package:pixraw/state/raw_photos_notifier.dart';
 import 'package:pixraw/ui/dialog/setup_wizard_dialog.dart';
-import 'package:pixraw/ui/widgets/info_panel.dart';
+import 'package:pixraw/ui/widgets/info/info_panel.dart';
 import 'package:pixraw/ui/widgets/single_photo_view.dart';
 import 'package:pixraw/ui/widgets/status_bar.dart';
 import 'package:pixraw/ui/widgets/tool_bar.dart';
