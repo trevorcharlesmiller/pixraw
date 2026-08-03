@@ -8,6 +8,7 @@ import 'package:pixraw/state/app_config_notifier.dart';
 import 'package:pixraw/state/raw_photos_notifier.dart';
 import 'package:pixraw/ui/dialog/setup_wizard_dialog.dart';
 import 'package:pixraw/ui/widgets/info/info_panel.dart';
+import 'package:pixraw/ui/widgets/no_photos.dart';
 import 'package:pixraw/ui/widgets/single_photo_view.dart';
 import 'package:pixraw/ui/widgets/status_bar.dart';
 import 'package:pixraw/ui/widgets/tool_bar.dart';
@@ -127,7 +128,7 @@ class _MainWindowState extends ConsumerState<MainWindow> with WindowListener {
               children: [
                 Expanded(
                   child: (rawPhotos.directory == null || rawPhotos.rawPhotoPaths.isEmpty)
-                      ? _buildEmptyState() // Shown when app opens
+                      ? NoPhotos(selectFolder: selectFolder,) // Shown when app opens
                       : _buildMainView(),
                 ),
                 AnimatedContainer(
@@ -162,24 +163,6 @@ class _MainWindowState extends ConsumerState<MainWindow> with WindowListener {
       builder: (BuildContext context) {
         return SetupWizardDialog();
       },
-    );
-  }
-
-  Widget _buildEmptyState() {
-    return Center(
-      child: ElevatedButton.icon(
-        onPressed: selectFolder,
-        icon: const Icon(Icons.folder_open, size: 24),
-        label: const Text(
-          'Open Folder',
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-        ),
-        style: ElevatedButton.styleFrom(
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
-          backgroundColor: Theme.of(context).colorScheme.primary,
-          foregroundColor: Theme.of(context).colorScheme.onPrimary,
-        ),
-      ),
     );
   }
 
