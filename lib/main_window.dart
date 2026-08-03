@@ -126,7 +126,7 @@ class _MainWindowState extends ConsumerState<MainWindow> with WindowListener {
             Expanded(child: Row(
               children: [
                 Expanded(
-                  child: rawPhotos.directory == null
+                  child: (rawPhotos.directory == null || rawPhotos.rawPhotoPaths.isEmpty)
                       ? _buildEmptyState() // Shown when app opens
                       : _buildMainView(),
                 ),
