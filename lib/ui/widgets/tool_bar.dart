@@ -102,16 +102,12 @@ class ToolBar extends ConsumerWidget {
             ),
 
             //======================================================[ RATINGS ]
-            if (rawPhotos.directory != null)
+            if (rawPhotos.directory != null && rawPhotos.rawPhotoPaths.isNotEmpty)
               RatingToolbar(),
-
-
-
-
 
             Expanded(child: Container(),),
 
-            if (rawPhotos.directory != null)
+            if (rawPhotos.directory != null && rawPhotos.rawPhotoPaths.isNotEmpty)
               IconButton(
                 tooltip: 'Copy selected photos',
                 icon: const Icon(Icons.file_copy_rounded),

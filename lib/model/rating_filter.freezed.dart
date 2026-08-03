@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$RatingFilter {
 
- Set<int> get ratings; Set<RatingColor> get colors;
+ Set<int> get ratings; Set<RatingColor> get colors; bool? get selected; bool? get rejected;
 /// Create a copy of RatingFilter
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $RatingFilterCopyWith<RatingFilter> get copyWith => _$RatingFilterCopyWithImpl<R
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is RatingFilter&&const DeepCollectionEquality().equals(other.ratings, ratings)&&const DeepCollectionEquality().equals(other.colors, colors));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is RatingFilter&&const DeepCollectionEquality().equals(other.ratings, ratings)&&const DeepCollectionEquality().equals(other.colors, colors)&&(identical(other.selected, selected) || other.selected == selected)&&(identical(other.rejected, rejected) || other.rejected == rejected));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(ratings),const DeepCollectionEquality().hash(colors));
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(ratings),const DeepCollectionEquality().hash(colors),selected,rejected);
 
 @override
 String toString() {
-  return 'RatingFilter(ratings: $ratings, colors: $colors)';
+  return 'RatingFilter(ratings: $ratings, colors: $colors, selected: $selected, rejected: $rejected)';
 }
 
 
@@ -45,7 +45,7 @@ abstract mixin class $RatingFilterCopyWith<$Res>  {
   factory $RatingFilterCopyWith(RatingFilter value, $Res Function(RatingFilter) _then) = _$RatingFilterCopyWithImpl;
 @useResult
 $Res call({
- Set<int> ratings, Set<RatingColor> colors
+ Set<int> ratings, Set<RatingColor> colors, bool? selected, bool? rejected
 });
 
 
@@ -62,11 +62,13 @@ class _$RatingFilterCopyWithImpl<$Res>
 
 /// Create a copy of RatingFilter
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? ratings = null,Object? colors = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? ratings = null,Object? colors = null,Object? selected = freezed,Object? rejected = freezed,}) {
   return _then(_self.copyWith(
 ratings: null == ratings ? _self.ratings : ratings // ignore: cast_nullable_to_non_nullable
 as Set<int>,colors: null == colors ? _self.colors : colors // ignore: cast_nullable_to_non_nullable
-as Set<RatingColor>,
+as Set<RatingColor>,selected: freezed == selected ? _self.selected : selected // ignore: cast_nullable_to_non_nullable
+as bool?,rejected: freezed == rejected ? _self.rejected : rejected // ignore: cast_nullable_to_non_nullable
+as bool?,
   ));
 }
 
@@ -151,10 +153,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( Set<int> ratings,  Set<RatingColor> colors)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( Set<int> ratings,  Set<RatingColor> colors,  bool? selected,  bool? rejected)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _RatingFilter() when $default != null:
-return $default(_that.ratings,_that.colors);case _:
+return $default(_that.ratings,_that.colors,_that.selected,_that.rejected);case _:
   return orElse();
 
 }
@@ -172,10 +174,10 @@ return $default(_that.ratings,_that.colors);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( Set<int> ratings,  Set<RatingColor> colors)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( Set<int> ratings,  Set<RatingColor> colors,  bool? selected,  bool? rejected)  $default,) {final _that = this;
 switch (_that) {
 case _RatingFilter():
-return $default(_that.ratings,_that.colors);case _:
+return $default(_that.ratings,_that.colors,_that.selected,_that.rejected);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -192,10 +194,10 @@ return $default(_that.ratings,_that.colors);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( Set<int> ratings,  Set<RatingColor> colors)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( Set<int> ratings,  Set<RatingColor> colors,  bool? selected,  bool? rejected)?  $default,) {final _that = this;
 switch (_that) {
 case _RatingFilter() when $default != null:
-return $default(_that.ratings,_that.colors);case _:
+return $default(_that.ratings,_that.colors,_that.selected,_that.rejected);case _:
   return null;
 
 }
@@ -207,7 +209,7 @@ return $default(_that.ratings,_that.colors);case _:
 
 
 class _RatingFilter extends RatingFilter {
-  const _RatingFilter({final  Set<int> ratings = const {}, final  Set<RatingColor> colors = const {}}): _ratings = ratings,_colors = colors,super._();
+  const _RatingFilter({final  Set<int> ratings = const {}, final  Set<RatingColor> colors = const {}, this.selected = null, this.rejected = null}): _ratings = ratings,_colors = colors,super._();
   
 
  final  Set<int> _ratings;
@@ -224,6 +226,8 @@ class _RatingFilter extends RatingFilter {
   return EqualUnmodifiableSetView(_colors);
 }
 
+@override@JsonKey() final  bool? selected;
+@override@JsonKey() final  bool? rejected;
 
 /// Create a copy of RatingFilter
 /// with the given fields replaced by the non-null parameter values.
@@ -235,16 +239,16 @@ _$RatingFilterCopyWith<_RatingFilter> get copyWith => __$RatingFilterCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RatingFilter&&const DeepCollectionEquality().equals(other._ratings, _ratings)&&const DeepCollectionEquality().equals(other._colors, _colors));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RatingFilter&&const DeepCollectionEquality().equals(other._ratings, _ratings)&&const DeepCollectionEquality().equals(other._colors, _colors)&&(identical(other.selected, selected) || other.selected == selected)&&(identical(other.rejected, rejected) || other.rejected == rejected));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_ratings),const DeepCollectionEquality().hash(_colors));
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_ratings),const DeepCollectionEquality().hash(_colors),selected,rejected);
 
 @override
 String toString() {
-  return 'RatingFilter(ratings: $ratings, colors: $colors)';
+  return 'RatingFilter(ratings: $ratings, colors: $colors, selected: $selected, rejected: $rejected)';
 }
 
 
@@ -255,7 +259,7 @@ abstract mixin class _$RatingFilterCopyWith<$Res> implements $RatingFilterCopyWi
   factory _$RatingFilterCopyWith(_RatingFilter value, $Res Function(_RatingFilter) _then) = __$RatingFilterCopyWithImpl;
 @override @useResult
 $Res call({
- Set<int> ratings, Set<RatingColor> colors
+ Set<int> ratings, Set<RatingColor> colors, bool? selected, bool? rejected
 });
 
 
@@ -272,11 +276,13 @@ class __$RatingFilterCopyWithImpl<$Res>
 
 /// Create a copy of RatingFilter
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? ratings = null,Object? colors = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? ratings = null,Object? colors = null,Object? selected = freezed,Object? rejected = freezed,}) {
   return _then(_RatingFilter(
 ratings: null == ratings ? _self._ratings : ratings // ignore: cast_nullable_to_non_nullable
 as Set<int>,colors: null == colors ? _self._colors : colors // ignore: cast_nullable_to_non_nullable
-as Set<RatingColor>,
+as Set<RatingColor>,selected: freezed == selected ? _self.selected : selected // ignore: cast_nullable_to_non_nullable
+as bool?,rejected: freezed == rejected ? _self.rejected : rejected // ignore: cast_nullable_to_non_nullable
+as bool?,
   ));
 }
 
