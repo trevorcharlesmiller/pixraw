@@ -22,13 +22,13 @@ class RatingToolbar extends ConsumerWidget {
             width: 20, // Space allocated for the divider
           ),
         ),
-        SizedBox(width: 4,),
-        Text('Filters:', style: TextStyle(fontSize: 12),),
+        // SizedBox(width: 4,),
+        // Text('Filters:', style: TextStyle(fontSize: 12),),
         RatingFilterButton(
           icon: FaIcon(FontAwesomeIcons.star,),
           label: '0',
           onTap: (){},
-          tooltip: 'Filter for unrated photos',
+          tooltip: 'Show all unrated photos.',
           color: (rawPhotos.ratingFilter != null && rawPhotos.ratingFilter!.ratings.contains(0))
               ? Theme.of(context).colorScheme.primary
               : Theme.of(context).colorScheme.secondary,
@@ -37,7 +37,7 @@ class RatingToolbar extends ConsumerWidget {
           icon: FaIcon(FontAwesomeIcons.star,),
           label: '1',
           onTap: (){},
-          tooltip: 'Filter photos rated with 1 star',
+          tooltip: 'Show photos rated with 1 star.',
           color: (rawPhotos.ratingFilter != null && rawPhotos.ratingFilter!.ratings.contains(1))
               ? Theme.of(context).colorScheme.primary
               : Theme.of(context).colorScheme.secondary,
@@ -46,7 +46,7 @@ class RatingToolbar extends ConsumerWidget {
           icon: FaIcon(FontAwesomeIcons.star,),
           label: '2',
           onTap: (){},
-          tooltip: 'Filter photos rated with 2 stars',
+          tooltip: 'Show photos rated with 2 stars.',
           color: (rawPhotos.ratingFilter != null && rawPhotos.ratingFilter!.ratings.contains(2))
               ? Theme.of(context).colorScheme.primary
               : Theme.of(context).colorScheme.secondary,
@@ -55,7 +55,7 @@ class RatingToolbar extends ConsumerWidget {
           icon: FaIcon(FontAwesomeIcons.star,),
           label: '3',
           onTap: (){},
-          tooltip: 'Filter photos rated with 3 star2',
+          tooltip: 'Show photos rated with 3 stars.',
           color: (rawPhotos.ratingFilter != null && rawPhotos.ratingFilter!.ratings.contains(3))
               ? Theme.of(context).colorScheme.primary
               : Theme.of(context).colorScheme.secondary,
@@ -64,7 +64,7 @@ class RatingToolbar extends ConsumerWidget {
           icon: FaIcon(FontAwesomeIcons.star,),
           label: '4',
           onTap: (){},
-          tooltip: 'Filter photos rated with 4 star2',
+          tooltip: 'Show photos rated with 4 stars.',
           color: (rawPhotos.ratingFilter != null && rawPhotos.ratingFilter!.ratings.contains(4))
               ? Theme.of(context).colorScheme.primary
               : Theme.of(context).colorScheme.secondary,
@@ -73,39 +73,52 @@ class RatingToolbar extends ConsumerWidget {
           icon: FaIcon(FontAwesomeIcons.star,),
           label: '5',
           onTap: (){},
-          tooltip: 'Filter photos rated with 5 star2',
+          tooltip: 'Show photos rated with 5 stars.',
           color: (rawPhotos.ratingFilter != null && rawPhotos.ratingFilter!.ratings.contains(5))
               ? Theme.of(context).colorScheme.primary
               : Theme.of(context).colorScheme.secondary,
         ),
         IconButton(
+          tooltip: 'Show photos with no color rating.',
           onPressed: (){},
           icon: FaIcon(FontAwesomeIcons.circle, ),
         ),
         IconButton(
+          tooltip: 'Show photos with Red rating.',
           onPressed: (){},
           icon: FaIcon(FontAwesomeIcons.circle, color: Colors.red,),
         ),
         IconButton(
+          tooltip: 'Show photos with Yellow rating.',
           onPressed: (){},
           icon: FaIcon(FontAwesomeIcons.circle, color: Colors.yellow,),
         ),
         IconButton(
+          tooltip: 'Show photos with Green rating.',
           onPressed: (){},
           icon: FaIcon(FontAwesomeIcons.circle, color: Colors.green,),),
         IconButton(
+          tooltip: 'Show photos with Blue rating.',
           onPressed: (){},
           icon: FaIcon(FontAwesomeIcons.circle, color: Colors.blue,),
         ),
         IconButton(
+          tooltip: 'Show photos with Purple rating.',
           onPressed: (){},
           icon: FaIcon(FontAwesomeIcons.circle, color: Colors.purple,),
         ),
         IconButton(
+          tooltip: 'Show photos neither selected nor rejected.',
+          onPressed: (){},
+          icon: FaIcon(FontAwesomeIcons.square,),
+        ),
+        IconButton(
+          tooltip: 'Show photos that have been rejected.',
           onPressed: (){},
           icon: FaIcon(FontAwesomeIcons.squareXmark,),
         ),
         IconButton(
+          tooltip: 'Show photos that have been selected.',
           onPressed: (){},
           icon: FaIcon(FontAwesomeIcons.squareCheck,),
         ),
@@ -113,7 +126,7 @@ class RatingToolbar extends ConsumerWidget {
         OutlinedButton(
           onPressed: (rawPhotos.ratingFilter == null || rawPhotos.ratingFilter!.isEmpty) ? null :
               (){},
-          child: Text('Clear Filters'),
+          child: Text('Clear'),
         ),
       ]
     );

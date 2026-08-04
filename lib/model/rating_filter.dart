@@ -9,10 +9,11 @@ abstract class RatingFilter with _$RatingFilter {
   const RatingFilter._(); // Required for adding custom getters/methods
 
   const factory RatingFilter({
-    @Default({}) Set<int> ratings,
-    @Default({}) Set<RatingColor> colors,
+    @Default({}) Set<int?> ratings,
+    @Default({}) Set<RatingColor?> colors,
     @Default(null) bool? selected,
     @Default(null) bool? rejected,
+    @Default(null) bool? notSelectedOrRejected,
   }) = _RatingFilter;
 
   /// Returns true if and only if both sets are empty.
