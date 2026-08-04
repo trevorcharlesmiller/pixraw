@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:path/path.dart' as p;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pixraw/model/rating_filter.dart';
 
 import 'package:pixraw/model/raw_photos.dart';
 import 'package:pixraw/util/rating_color.dart';
@@ -9,7 +10,6 @@ import '../model/raw_photo.dart';
 import '../model/raw_photo_load_result.dart';
 import '../raw/raw_photo_loader.dart';
 import '../util/raw_utils.dart';
-import 'app_config_notifier.dart';
 
 class RawPhotosNotifier extends Notifier<RawPhotos> {
 
@@ -42,73 +42,73 @@ class RawPhotosNotifier extends Notifier<RawPhotos> {
 
   void toggleCurrentPhotoSelected() {
     if (state.rawPhotoPaths.isNotEmpty) {
-      final updatedPaths = List<RawPhoto>.from(state.rawPhotoPaths);
+      final updatedPaths = List<RawPhoto>.from(state.rawPhotos);
       final current = updatedPaths[state.currentPhoto];
 
       updatedPaths[state.currentPhoto] = current.copyWith(
           selected: (current.selected==null || current.selected==false) ? true : null
       );
 
-      state = state.copyWith(rawPhotoPaths: updatedPaths);
+      state = state.copyWith(rawPhotos: updatedPaths);
     }
   }
 
   void toggleCurrentPhotoRejected() {
     if (state.rawPhotoPaths.isNotEmpty) {
-      final updatedPaths = List<RawPhoto>.from(state.rawPhotoPaths);
+      final updatedPaths = List<RawPhoto>.from(state.rawPhotos);
       final current = updatedPaths[state.currentPhoto];
 
       updatedPaths[state.currentPhoto] = current.copyWith(
           selected: (current.selected==null || current.selected==true) ? false : null
       );
 
-      state = state.copyWith(rawPhotoPaths: updatedPaths);
+      state = state.copyWith(rawPhotos: updatedPaths);
     }
   }
 
   void selectAllPhotos() {
     // Map to a brand new list with updated values
-    final updatedPaths = state.rawPhotoPaths.map((photo) {
+    final updatedPaths = state.rawPhotos.map((photo) {
       return photo.copyWith(selected: true);
     }).toList();
 
-    state = state.copyWith(rawPhotoPaths: updatedPaths);
+    state = state.copyWith(rawPhotos: updatedPaths);
   }
 
   void unSelectAllPhotos() {
     // Map to a brand new list with updated values
-    final updatedPaths = state.rawPhotoPaths.map((photo) {
+    final updatedPaths = state.rawPhotos.map((photo) {
       return photo.copyWith(selected: null);
     }).toList();
 
-    state = state.copyWith(rawPhotoPaths: updatedPaths);
+    state = state.copyWith(rawPhotos: updatedPaths);
   }
 
   void setRating(int? rating, {int? index}) {
     int i = index ?? state.currentPhoto;
     if(state.rawPhotoPaths.isNotEmpty) {
-      final updatedPaths = List<RawPhoto>.from(state.rawPhotoPaths);
+      final updatedPaths = List<RawPhoto>.from(state.rawPhotos);
       final current = updatedPaths[i];
 
       updatedPaths[i] = current.copyWith(
           rating: rating
       );
 
-      state = state.copyWith(rawPhotoPaths: updatedPaths);
+      state = state.copyWith(rawPhotos: updatedPaths);
     }
   }
 
   void setColor(RatingColor? color, {int? index}) {
     int i = index ?? state.currentPhoto;
     if(state.rawPhotoPaths.isNotEmpty) {
-      final updatedPaths = List<RawPhoto>.from(state.rawPhotoPaths);
+      final updatedPaths = List<RawPhoto>.from(state.rawPhotos);
       final current = updatedPaths[i];
 
       updatedPaths[i] = current.copyWith(
           color: color
       );
 
-      state = state.copyWith(rawPhotoPaths: updatedPaths);
+      state = state.copyWith(rawPhotos: updatedPaths);
     }
   }
 
@@ -125,17 +125,17 @@ class RawPhotosNotifier extends Notifier<RawPhotos> {
     state = state.copyWith(
       currentPhoto: 0,
       directory: selectedDir,
-      rawPhotoPaths: paths
+      rawPhotos: paths
     );
   }
 
   Future<RawPhotoResult> loadThumbnail(int index) async {
-    RawPhotoResult result = await RawPhotoLoader().loadRawPhotoThumbnail(state.rawPhotoPaths[index]);
+    RawPhotoResult result = await RawPhotoLoader().loadRawPhotoThumbnail(state.rawPhotos[index]);
     if(result.hasError) {
       throw Exception('Failed to read raw file');
     }
     if (result.info != null && state.rawPhotoPaths.isNotEmpty) {
-      final updatedPaths = List<RawPhoto>.from(state.rawPhotoPaths);
+      final updatedPaths = List<RawPhoto>.from(state.rawPhotos);
       final current = updatedPaths[index];
 
       updatedPaths[index] = current.copyWith(
@@ -143,10 +143,39 @@ class RawPhotosNotifier extends Notifier<RawPhotos> {
           loaded: true
       );
 
-      state = state.copyWith(rawPhotoPaths: updatedPaths);
+      state = state.copyWith(rawPhotos: updatedPaths);
     }
     return result;
   }
+
+  void toggleColorRatingFilter(RatingColor? color) {
+    if(!state.ratingFilter.colors.contains(color)) {
+      final colors = Set<RatingColor?>.from(state.ratingFilter.colors);
+      colors.add(color);
+      RatingFilter filter = state.ratingFilter.copyWith(colors: colors);
+      state = state.copyWith(ratingFilter: filter);
+    } else {
+      final colors = Set<RatingColor?>.from(state.ratingFilter.colors);
+      colors.remove(color);
+      RatingFilter filter = state.ratingFilter.copyWith(colors: colors);
+      state = state.copyWith(ratingFilter: filter);
+    }
+  }
+
+  void toggleRatingFilter(int? rating) {
+    if(!state.ratingFilter.ratings.contains(rating)) {
+      final ratings = Set<int?>.from(state.ratingFilter.ratings);
+      ratings.add(rating);
+      RatingFilter filter = state.ratingFilter.copyWith(ratings: ratings);
+      state = state.copyWith(ratingFilter: filter);
+    } else {
+      final ratings = Set<int?>.from(state.ratingFilter.ratings);
+      ratings.remove(rating);
+      RatingFilter filter = state.ratingFilter.copyWith(ratings: ratings);
+      state = state.copyWith(ratingFilter: filter);
+    }
+  }
+
 }
 
 final rawPhotosProvider = NotifierProvider<RawPhotosNotifier, RawPhotos>(RawPhotosNotifier.new);

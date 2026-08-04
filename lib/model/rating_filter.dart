@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:pixraw/model/raw_photo.dart';
 
 import '../util/rating_color.dart';
 
@@ -18,8 +19,25 @@ abstract class RatingFilter with _$RatingFilter {
 
   /// Returns true if and only if both sets are empty.
   bool get isEmpty =>
-      (ratings.isEmpty && colors.isEmpty && selected==null && rejected==null);
+      (ratings.isEmpty && colors.isEmpty && selected==null && rejected==null && notSelectedOrRejected==null);
 
   /// Returns true if at least one set contains items.
   bool get isNotEmpty => !isEmpty;
+
+  bool isMatch(RawPhoto rawPhoto) {
+    if(isEmpty) {
+      return true;
+    }
+    if(
+      ratings.contains(rawPhoto.rating) 
+      || colors.contains(rawPhoto.color)
+      || (notSelectedOrRejected != null && notSelectedOrRejected==true && rawPhoto.selected==null)
+      || (selected != null && selected==true && rawPhoto.selected==true)
+      || (rejected != null && rejected==true && rawPhoto.selected==false)
+    ) {
+      return true;
+    }
+
+    return false;
+  }
 }

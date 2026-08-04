@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:pixraw/ui/widgets/rating/rating_filter_button.dart';
+import 'package:pixraw/util/rating_color.dart';
 
 import '../../../model/raw_photos.dart';
 import '../../../state/raw_photos_notifier.dart';
@@ -17,17 +18,18 @@ class RatingToolbar extends ConsumerWidget {
         SizedBox(
           height: 30,
           child: VerticalDivider(
-            color: Colors.grey, // Ensure color is visible
-            thickness: 1, // Explicitly set thickness
-            width: 20, // Space allocated for the divider
+            color: Colors.grey,
+            thickness: 1, 
+            width: 20,
           ),
         ),
-        // SizedBox(width: 4,),
-        // Text('Filters:', style: TextStyle(fontSize: 12),),
+
         RatingFilterButton(
           icon: FaIcon(FontAwesomeIcons.star,),
           label: '0',
-          onTap: (){},
+          onTap: (){
+            ref.read(rawPhotosProvider.notifier).toggleRatingFilter(null);
+          },
           tooltip: 'Show all unrated photos.',
           color: (rawPhotos.ratingFilter != null && rawPhotos.ratingFilter!.ratings.contains(0))
               ? Theme.of(context).colorScheme.primary
@@ -36,7 +38,9 @@ class RatingToolbar extends ConsumerWidget {
         RatingFilterButton(
           icon: FaIcon(FontAwesomeIcons.star,),
           label: '1',
-          onTap: (){},
+          onTap: (){
+            ref.read(rawPhotosProvider.notifier).toggleRatingFilter(1);
+          },
           tooltip: 'Show photos rated with 1 star.',
           color: (rawPhotos.ratingFilter != null && rawPhotos.ratingFilter!.ratings.contains(1))
               ? Theme.of(context).colorScheme.primary
@@ -45,7 +49,9 @@ class RatingToolbar extends ConsumerWidget {
         RatingFilterButton(
           icon: FaIcon(FontAwesomeIcons.star,),
           label: '2',
-          onTap: (){},
+          onTap: (){
+            ref.read(rawPhotosProvider.notifier).toggleRatingFilter(2);
+          },
           tooltip: 'Show photos rated with 2 stars.',
           color: (rawPhotos.ratingFilter != null && rawPhotos.ratingFilter!.ratings.contains(2))
               ? Theme.of(context).colorScheme.primary
@@ -54,7 +60,9 @@ class RatingToolbar extends ConsumerWidget {
         RatingFilterButton(
           icon: FaIcon(FontAwesomeIcons.star,),
           label: '3',
-          onTap: (){},
+          onTap: (){
+            ref.read(rawPhotosProvider.notifier).toggleRatingFilter(3);
+          },
           tooltip: 'Show photos rated with 3 stars.',
           color: (rawPhotos.ratingFilter != null && rawPhotos.ratingFilter!.ratings.contains(3))
               ? Theme.of(context).colorScheme.primary
@@ -63,7 +71,9 @@ class RatingToolbar extends ConsumerWidget {
         RatingFilterButton(
           icon: FaIcon(FontAwesomeIcons.star,),
           label: '4',
-          onTap: (){},
+          onTap: (){
+            ref.read(rawPhotosProvider.notifier).toggleRatingFilter(4);
+          },
           tooltip: 'Show photos rated with 4 stars.',
           color: (rawPhotos.ratingFilter != null && rawPhotos.ratingFilter!.ratings.contains(4))
               ? Theme.of(context).colorScheme.primary
@@ -72,7 +82,9 @@ class RatingToolbar extends ConsumerWidget {
         RatingFilterButton(
           icon: FaIcon(FontAwesomeIcons.star,),
           label: '5',
-          onTap: (){},
+          onTap: (){
+            ref.read(rawPhotosProvider.notifier).toggleRatingFilter(5);
+          },
           tooltip: 'Show photos rated with 5 stars.',
           color: (rawPhotos.ratingFilter != null && rawPhotos.ratingFilter!.ratings.contains(5))
               ? Theme.of(context).colorScheme.primary
@@ -80,32 +92,54 @@ class RatingToolbar extends ConsumerWidget {
         ),
         IconButton(
           tooltip: 'Show photos with no color rating.',
-          onPressed: (){},
-          icon: FaIcon(FontAwesomeIcons.circle, ),
+          onPressed: (){
+            ref.read(rawPhotosProvider.notifier).toggleColorRatingFilter(null);
+          },
+          icon: FaIcon(rawPhotos.ratingFilter.colors.contains(null) ? FontAwesomeIcons.solidCircle : FontAwesomeIcons.circle, ),
         ),
         IconButton(
           tooltip: 'Show photos with Red rating.',
-          onPressed: (){},
-          icon: FaIcon(FontAwesomeIcons.circle, color: Colors.red,),
+          onPressed: (){
+            ref.read(rawPhotosProvider.notifier).toggleColorRatingFilter(RatingColor.Red);
+          },
+          icon: FaIcon(
+            rawPhotos.ratingFilter.colors.contains(RatingColor.Red) ? FontAwesomeIcons.solidCircle : FontAwesomeIcons.circle, 
+            color: Colors.red,),
         ),
         IconButton(
           tooltip: 'Show photos with Yellow rating.',
-          onPressed: (){},
-          icon: FaIcon(FontAwesomeIcons.circle, color: Colors.yellow,),
+          onPressed: (){
+            ref.read(rawPhotosProvider.notifier).toggleColorRatingFilter(RatingColor.Yellow);
+          },
+          icon: FaIcon(
+            rawPhotos.ratingFilter.colors.contains(RatingColor.Yellow) ? FontAwesomeIcons.solidCircle : FontAwesomeIcons.circle, 
+            color: Colors.yellow,),
         ),
         IconButton(
           tooltip: 'Show photos with Green rating.',
-          onPressed: (){},
-          icon: FaIcon(FontAwesomeIcons.circle, color: Colors.green,),),
+          onPressed: (){
+            ref.read(rawPhotosProvider.notifier).toggleColorRatingFilter(RatingColor.Green);
+          },
+          icon: FaIcon(
+            rawPhotos.ratingFilter.colors.contains(RatingColor.Green) ? FontAwesomeIcons.solidCircle : FontAwesomeIcons.circle, 
+            color: Colors.green,),),
         IconButton(
           tooltip: 'Show photos with Blue rating.',
-          onPressed: (){},
-          icon: FaIcon(FontAwesomeIcons.circle, color: Colors.blue,),
+          onPressed: (){
+            ref.read(rawPhotosProvider.notifier).toggleColorRatingFilter(RatingColor.Blue);
+          },
+          icon: FaIcon(
+            rawPhotos.ratingFilter.colors.contains(RatingColor.Blue) ? FontAwesomeIcons.solidCircle : FontAwesomeIcons.circle, 
+            color: Colors.blue,),
         ),
         IconButton(
           tooltip: 'Show photos with Purple rating.',
-          onPressed: (){},
-          icon: FaIcon(FontAwesomeIcons.circle, color: Colors.purple,),
+          onPressed: (){
+            ref.read(rawPhotosProvider.notifier).toggleColorRatingFilter(RatingColor.Purple);
+          },
+          icon: FaIcon(
+            rawPhotos.ratingFilter.colors.contains(RatingColor.Purple) ? FontAwesomeIcons.solidCircle : FontAwesomeIcons.circle, 
+            color: Colors.purple,),
         ),
         IconButton(
           tooltip: 'Show photos neither selected nor rejected.',

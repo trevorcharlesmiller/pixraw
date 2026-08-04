@@ -8,10 +8,18 @@ part 'raw_photos.freezed.dart';
 
 @freezed
 abstract class RawPhotos with _$RawPhotos {
+  const RawPhotos._();
+
   const factory RawPhotos({
     @Default(null) Directory? directory,
-    @Default([]) List<RawPhoto> rawPhotoPaths,
+    @Default([]) List<RawPhoto> rawPhotos,
     @Default(0) int currentPhoto,
-    @Default(null) RatingFilter? ratingFilter,
+    @Default(RatingFilter()) RatingFilter ratingFilter,
   }) = _RawPhotos;
+
+  List<RawPhoto> get rawPhotoPaths {
+    return rawPhotos.where((photo) {
+      return ratingFilter.isMatch(photo); 
+    }).toList();
+  }
 }
