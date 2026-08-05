@@ -25,19 +25,31 @@ abstract class RatingFilter with _$RatingFilter {
   bool get isNotEmpty => !isEmpty;
 
   bool isMatch(RawPhoto rawPhoto) {
-    if(isEmpty) {
-      return true;
-    }
-    if(
-      (ratings.isNotEmpty && ratings.contains(rawPhoto.rating))
-      || (colors.isNotEmpty && colors.contains(rawPhoto.color))
-      || (notSelectedOrRejected != null && notSelectedOrRejected==true && rawPhoto.selected==null)
-      || (selected != null && selected==true && rawPhoto.selected==true)
-      || (rejected != null && rejected==true && rawPhoto.selected==false)
-    ) {
+    if (isEmpty) {
       return true;
     }
 
-    return false;
+    // 1. Ratings Check (OR within ratings, if any are selected)
+    // If the ratings set is not empty, the photo's rating must be in the set.
+    // If it is empty, this condition is skipped (passes).
+    final bool matchesRatings = ratings.isEmpty || ratings.contains(rawPhoto.rating);
+
+    // 2. Colors Check (OR within colors, if any are selected)
+    final bool matchesColors = colors.isEmpty || colors.contains(rawPhoto.color);
+
+    // 3. Selection / Rejection / Not Selected-or-Rejected Checks
+    // For each boolean flag, if it is explicitly set to true, the photo must match it.
+    // If the flag is null, we ignore it.
+    final bool matchesSelected = selected == null || (selected! && rawPhoto.selected == true);
+    final bool matchesRejected = rejected == null || (rejected! && rawPhoto.selected == false);
+    final bool matchesNotSelectedOrRejected = notSelectedOrRejected == null || 
+        (notSelectedOrRejected! && rawPhoto.selected == null);
+
+    // Combine all active categories with an AND operation.
+    return matchesRatings && 
+           matchesColors && 
+           matchesSelected && 
+           matchesRejected && 
+           matchesNotSelectedOrRejected;
   }
 }
