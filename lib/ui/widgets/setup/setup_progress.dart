@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-const totalPages = 3;
+const totalPages = 4;
 
 class Pill extends StatelessWidget {
   final Color color;
@@ -34,7 +34,7 @@ class SetupProgress extends StatelessWidget {
     List<Widget> children = [];
 
     for(int i = 0; i <= currentPage; i++) {
-      children.add(Pill(color: colorScheme.primary,));
+      children.add(Pill(color: Colors.blueAccent,));
     }
     for(int i = currentPage+1; i < totalPages; i++) {
       children.add(Pill(color: colorScheme.secondary,));
