@@ -35,6 +35,7 @@ class _TutorialNavigateState extends State<TutorialNavigate> {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return FocusableActionDetector(
       autofocus: true, // Grabs focus initially so arrows work right away
       shortcuts: const <ShortcutActivator, Intent>{
@@ -100,7 +101,7 @@ class _TutorialNavigateState extends State<TutorialNavigate> {
                 ),
                 Text(
                   'Use the left and right arrow keys to navigate between photos',
-                  style: TextStyle(fontSize: 24, color: Colors.blueAccent),
+                  style: TextStyle(fontSize: 24, color: colorScheme.secondary),
                 ),
                 SizedBox(height: 5),
                 Text('Go ahead and try it out now!'),

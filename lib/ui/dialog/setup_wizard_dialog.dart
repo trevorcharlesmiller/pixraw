@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:pixraw/ui/widgets/setup/setup_progress.dart';
 import 'package:pixraw/ui/widgets/setup/tutorial_navigate.dart';
+import 'package:pixraw/ui/widgets/setup/tutorial_selection.dart';
 
 import '../../state/app_config_notifier.dart';
 import '../widgets/setup/theme_selection.dart';
@@ -38,7 +39,7 @@ class _SetupWizardDialogState extends ConsumerState<SetupWizardDialog> {
       actions: <Widget>[
         OutlinedButton(
           onPressed: () {
-            if(currentPage<2) {
+            if(currentPage<3) {
               setState(() {
                 currentPage = currentPage+1;
               });
@@ -47,7 +48,7 @@ class _SetupWizardDialogState extends ConsumerState<SetupWizardDialog> {
               if (mounted) Navigator.of(context).pop();
             }
           },
-          child: Text(currentPage<2 ? 'Next' : 'Done'),
+          child: Text(currentPage<3 ? 'Next' : 'Done'),
         ),
       ],
     );
@@ -58,6 +59,8 @@ class _SetupWizardDialogState extends ConsumerState<SetupWizardDialog> {
       return TutorialNavigate();
     } else if(currentPage==1) {
       return TutorialRating();
+    } else if(currentPage==2) {
+      return TutorialSelection();
     }
     return ThemeSelection();
   }

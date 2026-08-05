@@ -8,75 +8,39 @@ import '../../../model/raw_photo.dart';
 import '../../intents.dart';
 import '../rating/rating.dart';
 
-class TutorialRating extends StatefulWidget {
-  const TutorialRating({super.key});
+class TutorialSelection extends StatefulWidget {
+  const TutorialSelection({super.key});
 
   @override
-  State<TutorialRating> createState() => _TutorialRatingState();
+  State<TutorialSelection> createState() => _TutorialSelectionState();
 }
 
-class _TutorialRatingState extends State<TutorialRating> {
+class _TutorialSelectionState extends State<TutorialSelection> {
   RawPhoto rawPhoto = RawPhoto(filePath: '');
 
   @override
   Widget build(BuildContext context) {
+    bool rejected = (rawPhoto.selected != null && rawPhoto.selected == false);
+    bool selected = (rawPhoto.selected != null && rawPhoto.selected == true);
     final colorScheme = Theme.of(context).colorScheme;
+    Color defaultFontColor = colorScheme.onSurface;
     final TextStyle subStyle = TextStyle(
       fontSize: 11,
       color: colorScheme.secondary,
     );
+
     return FocusableActionDetector(
       autofocus: true,
       shortcuts: const <ShortcutActivator, Intent>{
-        SingleActivator(LogicalKeyboardKey.digit0): Rating0Intent(),
-        SingleActivator(LogicalKeyboardKey.digit1): Rating1Intent(),
-        SingleActivator(LogicalKeyboardKey.digit2): Rating2Intent(),
-        SingleActivator(LogicalKeyboardKey.digit3): Rating3Intent(),
-        SingleActivator(LogicalKeyboardKey.digit4): Rating4Intent(),
-        SingleActivator(LogicalKeyboardKey.digit5): Rating5Intent(),
-        SingleActivator(LogicalKeyboardKey.keyR): ColorRedIntent(),
-        SingleActivator(LogicalKeyboardKey.keyG): ColorGreenIntent(),
-        SingleActivator(LogicalKeyboardKey.keyB): ColorBlueIntent(),
-        SingleActivator(LogicalKeyboardKey.keyY): ColorYellowIntent(),
-        SingleActivator(LogicalKeyboardKey.keyP): ColorPurpleIntent(),
-        SingleActivator(LogicalKeyboardKey.keyC): ColorClearIntent(),
+        SingleActivator(LogicalKeyboardKey.space): ToggleSelectedIntent(),
+        SingleActivator(LogicalKeyboardKey.keyX): ToggleRejectedIntent(),
       },
       actions: <Type, Action<Intent>>{
-        Rating0Intent: CallbackAction<Rating0Intent>(
-          onInvoke: (_) => _setRating(0),
+        ToggleSelectedIntent: CallbackAction<ToggleSelectedIntent>(
+          onInvoke: (_) => _toggleSelectedPhoto(),
         ),
-        Rating1Intent: CallbackAction<Rating1Intent>(
-          onInvoke: (_) => _setRating(1),
-        ),
-        Rating2Intent: CallbackAction<Rating2Intent>(
-          onInvoke: (_) => _setRating(2),
-        ),
-        Rating3Intent: CallbackAction<Rating3Intent>(
-          onInvoke: (_) => _setRating(3),
-        ),
-        Rating4Intent: CallbackAction<Rating4Intent>(
-          onInvoke: (_) => _setRating(4),
-        ),
-        Rating5Intent: CallbackAction<Rating5Intent>(
-          onInvoke: (_) => _setRating(5),
-        ),
-        ColorRedIntent: CallbackAction<ColorRedIntent>(
-          onInvoke: (_) => _setRatingColor(RatingColor.Red),
-        ),
-        ColorGreenIntent: CallbackAction<ColorGreenIntent>(
-          onInvoke: (_) => _setRatingColor(RatingColor.Green),
-        ),
-        ColorBlueIntent: CallbackAction<ColorBlueIntent>(
-          onInvoke: (_) => _setRatingColor(RatingColor.Blue),
-        ),
-        ColorYellowIntent: CallbackAction<ColorYellowIntent>(
-          onInvoke: (_) => _setRatingColor(RatingColor.Yellow),
-        ),
-        ColorPurpleIntent: CallbackAction<ColorPurpleIntent>(
-          onInvoke: (_) => _setRatingColor(RatingColor.Purple),
-        ),
-        ColorClearIntent: CallbackAction<ColorClearIntent>(
-          onInvoke: (_) => _setRatingColor(null),
+        ToggleRejectedIntent: CallbackAction<ToggleRejectedIntent>(
+          onInvoke: (_) => _toggleRejectedPhoto(),
         ),
       },
       child: Row(
@@ -113,10 +77,8 @@ class _TutorialRatingState extends State<TutorialRating> {
                             children: [
                               Rating(
                                 onChanged: (int? rating) {
-                                  _setRating(rating);
                                 },
                                 onColorChanged: (RatingColor? color) {
-                                  _setRatingColor(color);
                                 },
                                 rawPhoto: rawPhoto,
                               ),
@@ -133,6 +95,7 @@ class _TutorialRatingState extends State<TutorialRating> {
                                 icon: FaIcon(
                                   FontAwesomeIcons.squareXmark,
                                   size: 16,
+                                  color: rejected ? Colors.red : null,
                                 ),
                               ),
                               IconButton(
@@ -143,7 +106,13 @@ class _TutorialRatingState extends State<TutorialRating> {
                                       MaterialTapTargetSize.shrinkWrap,
                                 ),
                                 onPressed: () {},
-                                icon: FaIcon(FontAwesomeIcons.square, size: 16),
+                                icon: selected
+                                    ? FaIcon(
+                                        FontAwesomeIcons.squareCheck,
+                                        size: 16,
+                                        color: Colors.green,
+                                      )
+                                    : FaIcon(FontAwesomeIcons.square, size: 16),
                               ),
                             ],
                           ),
@@ -155,7 +124,7 @@ class _TutorialRatingState extends State<TutorialRating> {
               ),
             ),
           ),
-          Expanded(
+Expanded(
             flex: 5,
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -163,51 +132,51 @@ class _TutorialRatingState extends State<TutorialRating> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
-                  'Apply a rating to a photo\nwith keyboard shortcuts',
+                  'Select or reject photos\nwith keyboard shortcuts',
                   style: TextStyle(fontSize: 24, color: colorScheme.secondary),
                 ),
                 SizedBox(height: 15),
-                Text('STARS', style: subStyle),
+                
+                Text('SELECT PHOTO', style: subStyle),
                 SizedBox(height: 2),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  spacing: 5,
                   children: [
-                    SetupKey(label: '1'),
-                    SetupKey(label: '2'),
-                    SetupKey(label: '3'),
-                    SetupKey(label: '4'),
-                    SetupKey(label: '5'),
+                    Container(
+                      width: 270,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: defaultFontColor, width: 1.0),
+                        borderRadius: BorderRadius.circular(
+                          10.0,
+                        ), // Rounded corners radius
+                      ),
+                      child: Center(
+                        child: Text(
+                          'SPACE BAR',
+                          style: TextStyle(
+                            fontSize: 26,
+                            color: defaultFontColor,
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
-                SizedBox(height: 15),
-                Text('COLORS', style: subStyle),
-                SizedBox(height: 2),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  spacing: 5,
-                  children: [
-                    SetupKey(label: 'R', color: Colors.red),
-                    SetupKey(label: 'G', color: Colors.green),
-                    SetupKey(label: 'B', color: Colors.blue),
-                    SetupKey(label: 'Y', color: Colors.amber),
-                    SetupKey(label: 'P', color: Colors.purple),
-                  ],
-                ),
-                SizedBox(height: 15),
-                Text('CLEAR RATING AND COLOR', style: subStyle),
-                SizedBox(height: 2),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  spacing: 5,
-                  children: [
-                   SetupKey(label: '0'),
-                   SetupKey(label: 'C'),
 
+                SizedBox(height: 15),
+                Text('REJECT PHOTO', style: subStyle),
+                SizedBox(height: 2),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  spacing: 5,
+                  children: [
+                    SetupKey(label: 'X',),
                   ],
                 ),
+                
                 SizedBox(height: 20),
-                Text('Try it out!'),
+                Text('Toggle the space bar and \'x\' key.'),
               ],
             ),
           ),
@@ -216,16 +185,16 @@ class _TutorialRatingState extends State<TutorialRating> {
     );
   }
 
-  void _setRating(int? rating) {
+  void _toggleSelectedPhoto() {
+    bool? selected = (rawPhoto.selected==null || !rawPhoto.selected!) ? true : null;
     setState(() {
-      rawPhoto = rawPhoto.copyWith(rating: rating);
+      rawPhoto = rawPhoto.copyWith(selected: selected);
     });
   }
-
-  void _setRatingColor(RatingColor? color) {
+  void _toggleRejectedPhoto() {
+    bool? rejected = (rawPhoto.selected!=null && rawPhoto.selected==false) ? null : false;
     setState(() {
-      rawPhoto = rawPhoto.copyWith(color: color);
+      rawPhoto = rawPhoto.copyWith(selected: rejected);
     });
   }
-
 }
