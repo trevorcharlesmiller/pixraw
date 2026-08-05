@@ -125,12 +125,13 @@ class RawPhotosNotifier extends Notifier<RawPhotos> {
     state = state.copyWith(
       currentPhoto: 0,
       directory: selectedDir,
-      rawPhotos: paths
+      rawPhotos: paths,
+      ratingFilter: RatingFilter()
     );
   }
 
   Future<RawPhotoResult> loadThumbnail(int index) async {
-    RawPhotoResult result = await RawPhotoLoader().loadRawPhotoThumbnail(state.rawPhotos[index]);
+    RawPhotoResult result = await RawPhotoLoader().loadRawPhotoThumbnail(state.rawPhotoPaths[index].filePath);
     if(result.hasError) {
       throw Exception('Failed to read raw file');
     }
@@ -153,12 +154,12 @@ class RawPhotosNotifier extends Notifier<RawPhotos> {
       final colors = Set<RatingColor?>.from(state.ratingFilter.colors);
       colors.add(color);
       RatingFilter filter = state.ratingFilter.copyWith(colors: colors);
-      state = state.copyWith(ratingFilter: filter);
+      state = state.copyWith(ratingFilter: filter, currentPhoto: 0);
     } else {
       final colors = Set<RatingColor?>.from(state.ratingFilter.colors);
       colors.remove(color);
       RatingFilter filter = state.ratingFilter.copyWith(colors: colors);
-      state = state.copyWith(ratingFilter: filter);
+      state = state.copyWith(ratingFilter: filter, currentPhoto: 0);
     }
   }
 
@@ -167,13 +168,45 @@ class RawPhotosNotifier extends Notifier<RawPhotos> {
       final ratings = Set<int?>.from(state.ratingFilter.ratings);
       ratings.add(rating);
       RatingFilter filter = state.ratingFilter.copyWith(ratings: ratings);
-      state = state.copyWith(ratingFilter: filter);
+      state = state.copyWith(ratingFilter: filter, currentPhoto: 0);
     } else {
       final ratings = Set<int?>.from(state.ratingFilter.ratings);
       ratings.remove(rating);
       RatingFilter filter = state.ratingFilter.copyWith(ratings: ratings);
-      state = state.copyWith(ratingFilter: filter);
+      state = state.copyWith(ratingFilter: filter, currentPhoto: 0);
     }
+  }
+
+  void toggleRatingSelected() {
+    if(state.ratingFilter.selected != null) {
+      RatingFilter filter = state.ratingFilter.copyWith(selected: null);
+      state = state.copyWith(ratingFilter: filter, currentPhoto: 0);
+    } else {
+      RatingFilter filter = state.ratingFilter.copyWith(selected: true);
+      state = state.copyWith(ratingFilter: filter, currentPhoto: 0);
+    }
+  }
+  void toggleRatingRejected() {
+    if(state.ratingFilter.rejected != null) {
+      RatingFilter filter = state.ratingFilter.copyWith(rejected: null);
+      state = state.copyWith(ratingFilter: filter, currentPhoto: 0);
+    } else {
+      RatingFilter filter = state.ratingFilter.copyWith(rejected: true);
+      state = state.copyWith(ratingFilter: filter, currentPhoto: 0);
+    }
+  }
+  void toggleRatingNotRejectedOrSelected() {
+    if(state.ratingFilter.notSelectedOrRejected != null) {
+      RatingFilter filter = state.ratingFilter.copyWith(notSelectedOrRejected: null);
+      state = state.copyWith(ratingFilter: filter, currentPhoto: 0);
+    } else {
+      RatingFilter filter = state.ratingFilter.copyWith(notSelectedOrRejected: true);
+      state = state.copyWith(ratingFilter: filter, currentPhoto: 0);
+    }
+  }
+
+  void clearFilter() {
+    state = state.copyWith(ratingFilter: RatingFilter());
   }
 
 }

@@ -102,7 +102,7 @@ class ToolBar extends ConsumerWidget {
             ),
 
             //======================================================[ RATINGS ]
-            if (rawPhotos.directory != null && rawPhotos.rawPhotoPaths.isNotEmpty)
+            if (rawPhotos.directory != null || (rawPhotos.rawPhotoPaths.isEmpty && rawPhotos.ratingFilter.isNotEmpty))
               RatingToolbar(),
 
             Expanded(child: Container(),),

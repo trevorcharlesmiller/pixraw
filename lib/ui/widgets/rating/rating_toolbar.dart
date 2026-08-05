@@ -31,7 +31,7 @@ class RatingToolbar extends ConsumerWidget {
             ref.read(rawPhotosProvider.notifier).toggleRatingFilter(null);
           },
           tooltip: 'Show all unrated photos.',
-          color: (rawPhotos.ratingFilter != null && rawPhotos.ratingFilter!.ratings.contains(0))
+          color: (rawPhotos.ratingFilter.ratings.contains(null))
               ? Theme.of(context).colorScheme.primary
               : Theme.of(context).colorScheme.secondary,
         ),
@@ -42,7 +42,7 @@ class RatingToolbar extends ConsumerWidget {
             ref.read(rawPhotosProvider.notifier).toggleRatingFilter(1);
           },
           tooltip: 'Show photos rated with 1 star.',
-          color: (rawPhotos.ratingFilter != null && rawPhotos.ratingFilter!.ratings.contains(1))
+          color: (rawPhotos.ratingFilter.ratings.contains(1))
               ? Theme.of(context).colorScheme.primary
               : Theme.of(context).colorScheme.secondary,
         ),
@@ -53,7 +53,7 @@ class RatingToolbar extends ConsumerWidget {
             ref.read(rawPhotosProvider.notifier).toggleRatingFilter(2);
           },
           tooltip: 'Show photos rated with 2 stars.',
-          color: (rawPhotos.ratingFilter != null && rawPhotos.ratingFilter!.ratings.contains(2))
+          color: (rawPhotos.ratingFilter.ratings.contains(2))
               ? Theme.of(context).colorScheme.primary
               : Theme.of(context).colorScheme.secondary,
         ),
@@ -64,7 +64,7 @@ class RatingToolbar extends ConsumerWidget {
             ref.read(rawPhotosProvider.notifier).toggleRatingFilter(3);
           },
           tooltip: 'Show photos rated with 3 stars.',
-          color: (rawPhotos.ratingFilter != null && rawPhotos.ratingFilter!.ratings.contains(3))
+          color: (rawPhotos.ratingFilter.ratings.contains(3))
               ? Theme.of(context).colorScheme.primary
               : Theme.of(context).colorScheme.secondary,
         ),
@@ -75,7 +75,7 @@ class RatingToolbar extends ConsumerWidget {
             ref.read(rawPhotosProvider.notifier).toggleRatingFilter(4);
           },
           tooltip: 'Show photos rated with 4 stars.',
-          color: (rawPhotos.ratingFilter != null && rawPhotos.ratingFilter!.ratings.contains(4))
+          color: (rawPhotos.ratingFilter.ratings.contains(4))
               ? Theme.of(context).colorScheme.primary
               : Theme.of(context).colorScheme.secondary,
         ),
@@ -86,7 +86,7 @@ class RatingToolbar extends ConsumerWidget {
             ref.read(rawPhotosProvider.notifier).toggleRatingFilter(5);
           },
           tooltip: 'Show photos rated with 5 stars.',
-          color: (rawPhotos.ratingFilter != null && rawPhotos.ratingFilter!.ratings.contains(5))
+          color: (rawPhotos.ratingFilter.ratings.contains(5))
               ? Theme.of(context).colorScheme.primary
               : Theme.of(context).colorScheme.secondary,
         ),
@@ -142,24 +142,41 @@ class RatingToolbar extends ConsumerWidget {
             color: Colors.purple,),
         ),
         IconButton(
-          tooltip: 'Show photos neither selected nor rejected.',
-          onPressed: (){},
+          tooltip: 'Show photos not selected or rejected.',
+          color: (rawPhotos.ratingFilter.notSelectedOrRejected??false)
+              ? Theme.of(context).colorScheme.primary
+              : Theme.of(context).colorScheme.secondary,
+          onPressed: (){
+            ref.read(rawPhotosProvider.notifier).toggleRatingNotRejectedOrSelected();
+          },
           icon: FaIcon(FontAwesomeIcons.square,),
         ),
         IconButton(
           tooltip: 'Show photos that have been rejected.',
-          onPressed: (){},
+          color: (rawPhotos.ratingFilter.rejected??false)
+              ? Theme.of(context).colorScheme.primary
+              : Theme.of(context).colorScheme.secondary,
+          onPressed: (){
+            ref.read(rawPhotosProvider.notifier).toggleRatingRejected();
+          },
           icon: FaIcon(FontAwesomeIcons.squareXmark,),
         ),
         IconButton(
           tooltip: 'Show photos that have been selected.',
-          onPressed: (){},
+          color: (rawPhotos.ratingFilter.selected??false)
+              ? Theme.of(context).colorScheme.primary
+              : Theme.of(context).colorScheme.secondary,
+          onPressed: (){
+            ref.read(rawPhotosProvider.notifier).toggleRatingSelected();
+          },
           icon: FaIcon(FontAwesomeIcons.squareCheck,),
         ),
         SizedBox(width: 4,),
         OutlinedButton(
-          onPressed: (rawPhotos.ratingFilter == null || rawPhotos.ratingFilter!.isEmpty) ? null :
-              (){},
+          onPressed: (rawPhotos.ratingFilter.isEmpty) ? null :
+              (){
+                ref.read(rawPhotosProvider.notifier).clearFilter();
+              },
           child: Text('Clear'),
         ),
       ]

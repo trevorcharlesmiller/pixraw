@@ -122,8 +122,6 @@ class _MainWindowState extends ConsumerState<MainWindow> with WindowListener {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ToolBar(onSelectFolder: selectFolder, toggleGridView: _toggleGridView,),
-
-            //=================================================================================[Main View]
             Expanded(child: Row(
               children: [
                 Expanded(
@@ -135,8 +133,6 @@ class _MainWindowState extends ConsumerState<MainWindow> with WindowListener {
                   duration: const Duration(milliseconds: 250),
                   curve: Curves.easeInOut,
                   width: config.isPanelOpen ? 300 : 0,
-                  //color: Colors.blueGrey[900],
-                  //clipBehavior: Clip.hardEdge,
                   child: SizedBox(
                     width: 300,
                     child: SingleChildScrollView(
@@ -148,7 +144,6 @@ class _MainWindowState extends ConsumerState<MainWindow> with WindowListener {
                 ),
               ],
             ),),
-
             StatusBar(),
           ],
         ),

@@ -29,8 +29,8 @@ abstract class RatingFilter with _$RatingFilter {
       return true;
     }
     if(
-      ratings.contains(rawPhoto.rating) 
-      || colors.contains(rawPhoto.color)
+      (ratings.isNotEmpty && ratings.contains(rawPhoto.rating))
+      || (colors.isNotEmpty && colors.contains(rawPhoto.color))
       || (notSelectedOrRejected != null && notSelectedOrRejected==true && rawPhoto.selected==null)
       || (selected != null && selected==true && rawPhoto.selected==true)
       || (rejected != null && rejected==true && rawPhoto.selected==false)

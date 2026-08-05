@@ -18,7 +18,7 @@ class NoPhotos extends ConsumerWidget {
         mainAxisSize: MainAxisSize.min,
         spacing: 15,
         children: [
-          if (rawPhotos.directory != null && rawPhotos.rawPhotoPaths.isEmpty)
+          if (rawPhotos.directory != null && rawPhotos.rawPhotoPaths.isEmpty && rawPhotos.ratingFilter.isEmpty)
             Text('No RAW files were found in the\nfolder you selected.', style: TextStyle(fontSize: 26), textAlign: TextAlign.center,),
           ElevatedButton.icon(
             onPressed: selectFolder,

@@ -57,10 +57,10 @@ class RawPhotoLoader {
     );
   }
 
-  Future<RawPhotoResult> loadRawPhotoThumbnail(RawPhoto rawPhoto) async {
+  Future<RawPhotoResult> loadRawPhotoThumbnail(String filePath) async {
     try {
       Pointer<libraw_data_t> ptr = flutterLibRawBindings.libraw_init(0);
-      File rawFile = File(rawPhoto.filePath);
+      File rawFile = File(filePath);
       int result = flutterLibRawBindings.libraw_open_file(
         ptr,
         rawFile.absolute.path.toNativeUtf8().cast(),
@@ -69,11 +69,7 @@ class RawPhotoLoader {
         return RawPhotoResult(bytes: null, hasError: true, errorMessage: 'Failed to load raw file', info: null);
       }
 
-      RawPhotoInfo? info;
-      if(!rawPhoto.loaded) {
-        info = loadPhotoInfo(ptr);
-      }
-
+      RawPhotoInfo? info = loadPhotoInfo(ptr);
       int quarterTurns = convertFlipToQuarterTurns(ptr.ref.sizes.flip);
 
       flutterLibRawBindings.libraw_unpack_thumb(ptr);
