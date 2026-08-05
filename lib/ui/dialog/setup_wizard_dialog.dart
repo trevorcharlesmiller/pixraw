@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:pixraw/ui/widgets/setup/setup_progress.dart';
 import 'package:pixraw/ui/widgets/setup/tutorial_navigate.dart';
 
 import '../../state/app_config_notifier.dart';
@@ -25,7 +26,13 @@ class _SetupWizardDialogState extends ConsumerState<SetupWizardDialog> {
         height: 400,
         child: Padding(
           padding: EdgeInsetsGeometry.symmetric(vertical: 15),
-          child: _buildContent(context),
+          child: Column(
+            spacing: 5,
+            children: [
+              SetupProgress(currentPage: currentPage,),
+              Expanded(child: _buildContent(context),),
+            ],
+          ),
         ),
       ),
       actions: <Widget>[

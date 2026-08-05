@@ -1,18 +1,19 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
-import 'package:pixraw/model/raw_photo.dart';
 
 import '../../model/raw_photo_load_result.dart';
 import '../../state/raw_photos_notifier.dart';
 
 class PRawImage extends ConsumerStatefulWidget {
   final int index;
+  final String filePath;
   final int? cacheWidth;
   final VoidCallback onDoubleTap;
 
   const PRawImage({
     super.key,
     required this.index,
+    required this.filePath,
     this.cacheWidth,
     required this.onDoubleTap
   });
@@ -34,7 +35,7 @@ class _PRawImageState extends ConsumerState<PRawImage> {
   void didUpdateWidget(covariant PRawImage oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    if (oldWidget.index != widget.index) {
+    if (oldWidget.index != widget.index || oldWidget.filePath != widget.filePath) {
       _loadPRawImage();
     }
   }
@@ -47,7 +48,6 @@ class _PRawImageState extends ConsumerState<PRawImage> {
 
   @override
   Widget build(BuildContext context) {
-    RawPhoto rawPhoto = ref.read(rawPhotosProvider).rawPhotoPaths[widget.index];
     return FutureBuilder<RawPhotoResult>(
         key: ValueKey(widget.index),
         future: thumbnail,

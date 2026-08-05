@@ -88,6 +88,7 @@ class _LazyThumbnailCardState extends State<LazyThumbnailCard> {
                 child: Center(
                   child: PRawImage(
                     index: widget.index,
+                    filePath: widget.rawPhoto.filePath,
                     cacheWidth: 280,
                     onDoubleTap: widget.onDoubleTap,
                   ),

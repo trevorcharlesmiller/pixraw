@@ -15,6 +15,7 @@ class SinglePhotoView extends ConsumerWidget {
     return Center(
       child: PRawImage(
         index: rawPhotos.currentPhoto,
+        filePath: rawPhotos.rawPhotoPaths[rawPhotos.currentPhoto].filePath,
         cacheWidth: MediaQuery.of(context).size.width.toInt(),
         onDoubleTap: toggleGridView,
       ),

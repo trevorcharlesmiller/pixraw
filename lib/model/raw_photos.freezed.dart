@@ -14,7 +14,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$RawPhotos {
 
- Directory? get directory; List<RawPhoto> get rawPhotoPaths; int get currentPhoto;
+ Directory? get directory; List<RawPhoto> get rawPhotos; int get currentPhoto; RatingFilter get ratingFilter;
 /// Create a copy of RawPhotos
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +25,16 @@ $RawPhotosCopyWith<RawPhotos> get copyWith => _$RawPhotosCopyWithImpl<RawPhotos>
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is RawPhotos&&(identical(other.directory, directory) || other.directory == directory)&&const DeepCollectionEquality().equals(other.rawPhotoPaths, rawPhotoPaths)&&(identical(other.currentPhoto, currentPhoto) || other.currentPhoto == currentPhoto));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is RawPhotos&&(identical(other.directory, directory) || other.directory == directory)&&const DeepCollectionEquality().equals(other.rawPhotos, rawPhotos)&&(identical(other.currentPhoto, currentPhoto) || other.currentPhoto == currentPhoto)&&(identical(other.ratingFilter, ratingFilter) || other.ratingFilter == ratingFilter));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,directory,const DeepCollectionEquality().hash(rawPhotoPaths),currentPhoto);
+int get hashCode => Object.hash(runtimeType,directory,const DeepCollectionEquality().hash(rawPhotos),currentPhoto,ratingFilter);
 
 @override
 String toString() {
-  return 'RawPhotos(directory: $directory, rawPhotoPaths: $rawPhotoPaths, currentPhoto: $currentPhoto)';
+  return 'RawPhotos(directory: $directory, rawPhotos: $rawPhotos, currentPhoto: $currentPhoto, ratingFilter: $ratingFilter)';
 }
 
 
@@ -45,11 +45,11 @@ abstract mixin class $RawPhotosCopyWith<$Res>  {
   factory $RawPhotosCopyWith(RawPhotos value, $Res Function(RawPhotos) _then) = _$RawPhotosCopyWithImpl;
 @useResult
 $Res call({
- Directory? directory, List<RawPhoto> rawPhotoPaths, int currentPhoto
+ Directory? directory, List<RawPhoto> rawPhotos, int currentPhoto, RatingFilter ratingFilter
 });
 
 
-
+$RatingFilterCopyWith<$Res> get ratingFilter;
 
 }
 /// @nodoc
@@ -62,15 +62,25 @@ class _$RawPhotosCopyWithImpl<$Res>
 
 /// Create a copy of RawPhotos
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? directory = freezed,Object? rawPhotoPaths = null,Object? currentPhoto = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? directory = freezed,Object? rawPhotos = null,Object? currentPhoto = null,Object? ratingFilter = null,}) {
   return _then(_self.copyWith(
 directory: freezed == directory ? _self.directory : directory // ignore: cast_nullable_to_non_nullable
-as Directory?,rawPhotoPaths: null == rawPhotoPaths ? _self.rawPhotoPaths : rawPhotoPaths // ignore: cast_nullable_to_non_nullable
+as Directory?,rawPhotos: null == rawPhotos ? _self.rawPhotos : rawPhotos // ignore: cast_nullable_to_non_nullable
 as List<RawPhoto>,currentPhoto: null == currentPhoto ? _self.currentPhoto : currentPhoto // ignore: cast_nullable_to_non_nullable
-as int,
+as int,ratingFilter: null == ratingFilter ? _self.ratingFilter : ratingFilter // ignore: cast_nullable_to_non_nullable
+as RatingFilter,
   ));
 }
-
+/// Create a copy of RawPhotos
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$RatingFilterCopyWith<$Res> get ratingFilter {
+  
+  return $RatingFilterCopyWith<$Res>(_self.ratingFilter, (value) {
+    return _then(_self.copyWith(ratingFilter: value));
+  });
+}
 }
 
 
@@ -152,10 +162,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( Directory? directory,  List<RawPhoto> rawPhotoPaths,  int currentPhoto)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( Directory? directory,  List<RawPhoto> rawPhotos,  int currentPhoto,  RatingFilter ratingFilter)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _RawPhotos() when $default != null:
-return $default(_that.directory,_that.rawPhotoPaths,_that.currentPhoto);case _:
+return $default(_that.directory,_that.rawPhotos,_that.currentPhoto,_that.ratingFilter);case _:
   return orElse();
 
 }
@@ -173,10 +183,10 @@ return $default(_that.directory,_that.rawPhotoPaths,_that.currentPhoto);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( Directory? directory,  List<RawPhoto> rawPhotoPaths,  int currentPhoto)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( Directory? directory,  List<RawPhoto> rawPhotos,  int currentPhoto,  RatingFilter ratingFilter)  $default,) {final _that = this;
 switch (_that) {
 case _RawPhotos():
-return $default(_that.directory,_that.rawPhotoPaths,_that.currentPhoto);case _:
+return $default(_that.directory,_that.rawPhotos,_that.currentPhoto,_that.ratingFilter);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -193,10 +203,10 @@ return $default(_that.directory,_that.rawPhotoPaths,_that.currentPhoto);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( Directory? directory,  List<RawPhoto> rawPhotoPaths,  int currentPhoto)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( Directory? directory,  List<RawPhoto> rawPhotos,  int currentPhoto,  RatingFilter ratingFilter)?  $default,) {final _that = this;
 switch (_that) {
 case _RawPhotos() when $default != null:
-return $default(_that.directory,_that.rawPhotoPaths,_that.currentPhoto);case _:
+return $default(_that.directory,_that.rawPhotos,_that.currentPhoto,_that.ratingFilter);case _:
   return null;
 
 }
@@ -207,19 +217,20 @@ return $default(_that.directory,_that.rawPhotoPaths,_that.currentPhoto);case _:
 /// @nodoc
 
 
-class _RawPhotos implements RawPhotos {
-  const _RawPhotos({this.directory = null, final  List<RawPhoto> rawPhotoPaths = const [], this.currentPhoto = 0}): _rawPhotoPaths = rawPhotoPaths;
+class _RawPhotos extends RawPhotos {
+  const _RawPhotos({this.directory = null, final  List<RawPhoto> rawPhotos = const [], this.currentPhoto = 0, this.ratingFilter = const RatingFilter()}): _rawPhotos = rawPhotos,super._();
   
 
 @override@JsonKey() final  Directory? directory;
- final  List<RawPhoto> _rawPhotoPaths;
-@override@JsonKey() List<RawPhoto> get rawPhotoPaths {
-  if (_rawPhotoPaths is EqualUnmodifiableListView) return _rawPhotoPaths;
+ final  List<RawPhoto> _rawPhotos;
+@override@JsonKey() List<RawPhoto> get rawPhotos {
+  if (_rawPhotos is EqualUnmodifiableListView) return _rawPhotos;
   // ignore: implicit_dynamic_type
-  return EqualUnmodifiableListView(_rawPhotoPaths);
+  return EqualUnmodifiableListView(_rawPhotos);
 }
 
 @override@JsonKey() final  int currentPhoto;
+@override@JsonKey() final  RatingFilter ratingFilter;
 
 /// Create a copy of RawPhotos
 /// with the given fields replaced by the non-null parameter values.
@@ -231,16 +242,16 @@ _$RawPhotosCopyWith<_RawPhotos> get copyWith => __$RawPhotosCopyWithImpl<_RawPho
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RawPhotos&&(identical(other.directory, directory) || other.directory == directory)&&const DeepCollectionEquality().equals(other._rawPhotoPaths, _rawPhotoPaths)&&(identical(other.currentPhoto, currentPhoto) || other.currentPhoto == currentPhoto));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RawPhotos&&(identical(other.directory, directory) || other.directory == directory)&&const DeepCollectionEquality().equals(other._rawPhotos, _rawPhotos)&&(identical(other.currentPhoto, currentPhoto) || other.currentPhoto == currentPhoto)&&(identical(other.ratingFilter, ratingFilter) || other.ratingFilter == ratingFilter));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,directory,const DeepCollectionEquality().hash(_rawPhotoPaths),currentPhoto);
+int get hashCode => Object.hash(runtimeType,directory,const DeepCollectionEquality().hash(_rawPhotos),currentPhoto,ratingFilter);
 
 @override
 String toString() {
-  return 'RawPhotos(directory: $directory, rawPhotoPaths: $rawPhotoPaths, currentPhoto: $currentPhoto)';
+  return 'RawPhotos(directory: $directory, rawPhotos: $rawPhotos, currentPhoto: $currentPhoto, ratingFilter: $ratingFilter)';
 }
 
 
@@ -251,11 +262,11 @@ abstract mixin class _$RawPhotosCopyWith<$Res> implements $RawPhotosCopyWith<$Re
   factory _$RawPhotosCopyWith(_RawPhotos value, $Res Function(_RawPhotos) _then) = __$RawPhotosCopyWithImpl;
 @override @useResult
 $Res call({
- Directory? directory, List<RawPhoto> rawPhotoPaths, int currentPhoto
+ Directory? directory, List<RawPhoto> rawPhotos, int currentPhoto, RatingFilter ratingFilter
 });
 
 
-
+@override $RatingFilterCopyWith<$Res> get ratingFilter;
 
 }
 /// @nodoc
@@ -268,16 +279,26 @@ class __$RawPhotosCopyWithImpl<$Res>
 
 /// Create a copy of RawPhotos
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? directory = freezed,Object? rawPhotoPaths = null,Object? currentPhoto = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? directory = freezed,Object? rawPhotos = null,Object? currentPhoto = null,Object? ratingFilter = null,}) {
   return _then(_RawPhotos(
 directory: freezed == directory ? _self.directory : directory // ignore: cast_nullable_to_non_nullable
-as Directory?,rawPhotoPaths: null == rawPhotoPaths ? _self._rawPhotoPaths : rawPhotoPaths // ignore: cast_nullable_to_non_nullable
+as Directory?,rawPhotos: null == rawPhotos ? _self._rawPhotos : rawPhotos // ignore: cast_nullable_to_non_nullable
 as List<RawPhoto>,currentPhoto: null == currentPhoto ? _self.currentPhoto : currentPhoto // ignore: cast_nullable_to_non_nullable
-as int,
+as int,ratingFilter: null == ratingFilter ? _self.ratingFilter : ratingFilter // ignore: cast_nullable_to_non_nullable
+as RatingFilter,
   ));
 }
 
-
+/// Create a copy of RawPhotos
+/// with the given fields replaced by the non-null parameter values.
+@override
+@pragma('vm:prefer-inline')
+$RatingFilterCopyWith<$Res> get ratingFilter {
+  
+  return $RatingFilterCopyWith<$Res>(_self.ratingFilter, (value) {
+    return _then(_self.copyWith(ratingFilter: value));
+  });
+}
 }
 
 // dart format on
