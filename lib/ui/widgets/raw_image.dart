@@ -23,6 +23,7 @@ class PRawImage extends ConsumerStatefulWidget {
 }
 
 class _PRawImageState extends ConsumerState<PRawImage> {
+  final Widget brokenImage = Icon(Icons.broken_image, color: Colors.red, size: 48,);
   late Future<RawPhotoResult> thumbnail;
 
   @override
@@ -61,12 +62,15 @@ class _PRawImageState extends ConsumerState<PRawImage> {
                   snapshot.data!.bytes!,
                   cacheWidth: widget.cacheWidth,
                   fit: BoxFit.contain,
+                  errorBuilder: (BuildContext context, Object error, StackTrace? stackTrace) {
+                    return Center(child: brokenImage);
+                  },
                 ),
               ),
             );
           } else if (snapshot.hasError) {
-            return const Center(
-              child: Icon(Icons.broken_image, color: Colors.red),
+            return Center(
+              child: brokenImage,
             );
           } else {
             return Container();

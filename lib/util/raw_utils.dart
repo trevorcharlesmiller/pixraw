@@ -1,12 +1,18 @@
 const rawExtensions = {
   '.cr2',
   '.cr3',
+  '.crw',
   '.nef',
+  '.nrw',
   '.arw',
   '.dng',
+  '.raw',
   '.orf',
   '.rw2',
+  '.rwl',
   '.pef',
   '.raf',
   '.gpr',
+  '.fff',
+  '.3fr',
 };
